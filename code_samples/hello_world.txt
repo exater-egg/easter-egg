@@ -1,0 +1,24 @@
+program HelloWorld;
+consts
+  HELLO_WORLD = "Hello, World!"
+
+classes
+  HelloWorldClass
+  attributes
+    String : text = HELLO_WORLD
+  methods
+    method print()
+
+variables
+  HelloWorldClass : hello_world
+
+methods
+  HelloWorldClass.print
+  begin
+    Sys.write(this.text);
+  end
+
+begin
+  hello_world.print();
+end.
+

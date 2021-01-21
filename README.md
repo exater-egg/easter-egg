@@ -13,6 +13,12 @@
 lex <file>.l
 ```
 
+* compile lexical without sintax
+
+```bash
+gcc lex.yy.c -ll
+```
+
 * generate sintax code
 
 ```bash
