@@ -7,6 +7,36 @@
   // colno a gente define
   // int yylineno = 0;
   int colno = 1;
+  int errono = 0;
+
+  typedef struct{
+    int col;
+    int line;
+    char text;
+  }PosError;
+
+  PosError posError[200];
+
+  
+  void initPosError(PosError *posError){
+    for(int i = 0; i < 200; i++){
+      posError[i].col = 1;
+      posError[i].line = 0;
+      posError[i].text = "";
+    }
+
+    return;
+  }
+  void showErrors(PosError *posError){
+    int i = 0;
+
+    while(posError[i].col > 0 && posError[i].line > 0){
+        printf("ERROR: Invalid Character(%s) at line %i, column %i ", posError[i].text, posError[i].line, posError[i].col);
+        i++;
+    } 
+    
+  };
+
 %}
 
 %%
@@ -61,7 +91,7 @@
 ([0-9]+.[0-9]*|[0-9]*.[0-9]+)   { printf("FLOAT_LITERAL(%f) (%i, %i)", atof(yytext), yylineno, colno); colno = colno + yyleng; }
 [a-zA-Z_][a-zA-Z0-9_]*          { printf("ID(%s)(%i,%i) ", yytext, yylineno, colno); colno = colno + yyleng; }
 \".*\"                          { printf("STRING_LITERAL(%s) ", yytext); }
-.                               { /*yyerror("Invalid Character")*/ printf("ERROR: Invalid Character(%s) at line %i, column %i ", yytext, yylineno, colno); }
+.                               { /*yyerror("Invalid Character")*/posError[errono].col = colno; posError[errono].line = yylineno; posError[errono].text = yytext; errono += 1; }
 
 %%
 
@@ -70,8 +100,10 @@
 #else
 int main(void)
 {
+  initPosError(posError);
   yylex();
   printf("\n");
+  showErrors(posError);
   return 0;
 }
 #endif
