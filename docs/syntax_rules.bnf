@@ -1,0 +1,38 @@
+// TODO: It is in EBNF, needs to change to BNF
+<program> ::= "program" "identifier" ";" <program body> "."
+<program body> ::= <constant definition part> <class definition part> <variable declaration part> <methods definition part> <statement part>
+<constant definition part> ::= <empty> | "consts" <constant definition> { ";" <constant definition>}
+<constant definition> ::= <identifier> "=" <constant>
+<constant> ::= <number> | <sign> <number> | "identifier" | <sign> "identifier" | "string-literal"
+<number> ::= "integer-literal" | "float-literal"
+<sign> ::= ("+" | "-")
+<class definition part> ::= <empty> | "classes" <class definition> { ";" <class definition>}
+<class definition> ::= "identifier" ["=" "identifier"] <attributes declaration part> <methods declaration part>
+<attributes declaration part> ::= <empty> | "attributes" <attribute declaration> {";" <attribute declaration>}
+<attribute declaration> ::= "identifier" { "," "identifier"} ":" "identifier"
+<methods declaration part> ::= <empty> | "methods" <method declaration> {";" <method declaration>}
+<method declaration> ::= <method heading> <statements section>
+<method heading> ::= "method" "identifier" "(" [ <formal parameter section> {";" <formal parameter section>} ] ")" [":" "identifier"]
+<formal parameter section> ::= "identifier" "identifier" {"," "identifier" }
+<variable declaration part> ::= <empty> | ("variables" | "vars") <variable definition> {";" <variable definition> }
+<variable definition> ::= "identifier" ":" "identifier" ["=" <expression>] {"," "identifier"}
+<methods definition part> ::= "methods" <formal method definition> {";" <formal method definition>}
+<formal method definition> ::= "identifier" "." "identifier" <statements section>
+<statements section> ::= "begin" <statements> "end"
+<statements> ::= <statement> {";" <statement>}
+<statement> ::= <if statement> | <while statement> |  <return statement> | <assignment statement> | <expression> | <incrementation>
+<if statement> ::= "if" <condition> "then" <statements section> { ";" "else" [ <if statement> | <statements section> ] }
+<while statement> ::= "while" <condition> "do" <statements section>
+<assignment statement> ::= <identifiers> "." "identifier" ":=" <expression> 
+<identifiers> := <identifiers> "." "identifier" | "identifier" | "this"
+<expression> ::= <term-1> { [ ( “and” | “or” | “xor” ) <term-1> ] }
+<term-1> ::= <term-2> { [ ( “==” | “!=” | “<” | “>” | “<=” | “>=” ) <term-2> ] }
+<term-2> ::= <term-3> { [ ( “+” | “-” ) <term-3> ] }
+<term-3> ::= <term-4> { [ ( “*” | “/” | “mod” ) <term-4> ] }
+<term-4> ::= <factor> { [ ( “**” ), <factor> ] }
+<factor> ::= “identifier” | <literal> | "(" <expression> ")"
+<literal> ::= “integer-literal” | “float-literal” | “boolean-literal” | “string-literal” | <array-literal> 
+<array-literal> ::= “[” ( <empty> |  (“identifier” | <literal>) { “,” (“identifier” | <literal>) } ) “]” ":" "identifier"
+<incrementation> ::= ( “++” | “--” ), "identifier";
+<empty> ::= ;
+
