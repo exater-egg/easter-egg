@@ -12,7 +12,7 @@
   typedef struct{
     int col;
     int line;
-    char text;
+    char* text;
   }PosError;
 
   PosError posError[200];
