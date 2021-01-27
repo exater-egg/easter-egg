@@ -67,7 +67,7 @@
 
 <statement_list> ::= <empty> | ";" <statement> <statement_list>
 
-<statement> ::= <if_statement> | <while_statement> |  <return_statement> | <assignment_statement> | <expression> | <incrementation>
+<statement> ::= <if_statement> | <while_statement> | <for_statement> | <return_statement> | <assignment_statement> | <expression> | <incrementation>
 
 <if_statement> ::= "if" <condition> "then" <statements_section> <else_conditions>
 
@@ -77,13 +77,15 @@
 
 <while_statement> ::= "while" <condition> "do" <statements_section>
 
+<for_statement> ::= "for" <assignment_statement> "to" <expression> "do" <statements_section>
+
 <assignment_statement> ::= <identifiers> "." "identifier" ":=" <expression> 
 
 <identifiers> := <identifiers> "." "identifier" | "identifier" | "this"
 
 //======= Expressions ======//
 
-<expression> ::= <term_1> | <term_1> <op_1> <term_1>
+<expression> ::= <term_1> | <term_1> <op_1> <term_1> | "not" <term_1>
 
 <op_1> ::= "and" | "or" | "xor"
 

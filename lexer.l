@@ -36,7 +36,11 @@
 "else"                          { printf("ELSE(%i,%i)", yylineno, colno); colno = colno + yyleng; }
 "while"                         { printf("WHILE(%i,%i)", yylineno, colno); colno = colno + yyleng; }
 "do"                            { printf("DO(%i,%i)", yylineno, colno); colno = colno + yyleng; }
+"for"                           { printf("FOR(%i,%i)", yylineno, colno); colno = colno + yyleng; }
+"to"                            { printf("TO(%i,%i)", yylineno, colno); colno = colno + yyleng; }
 ":="                            { printf("ASSIGN_SIGN(%i,%i)", yylineno, colno); colno = colno + yyleng; }
+"this"                          { printf("THIS(%i,%i)", yylineno, colno); colno = colno + yyleng; }
+"not"                           { printf("NOT(%i,%i)", yylineno, colno); colno = colno + yyleng; }
 "and"                           { printf("AND(%i,%i)", yylineno, colno); colno = colno + yyleng; }
 "or"                            { printf("OR(%i,%i)", yylineno, colno); colno = colno + yyleng; }
 "xor"                           { printf("XOR(%i,%i)", yylineno, colno); colno = colno + yyleng; }
@@ -52,7 +56,6 @@
 "**"                            { printf("EXP_SIGN(%i,%i)", yylineno, colno); colno = colno + yyleng; }
 "true"                          { printf("BOOLEAN_LITERAL('true')(%i,%i)", yylineno, colno); colno = colno + yyleng; }
 "false"                         { printf("BOOLEAN_LITERAL('false')(%i,%i)", yylineno, colno); colno = colno + yyleng; }
-"Array"                         { printf("ARRAY_SIGN(%i,%i)", yylineno, colno); colno = colno + yyleng; }
 \[                              { printf("OPEN_BRAKET(%i,%i)", yylineno, colno); colno = colno + yyleng; }
 \]                              { printf("CLOSE_BRAKET(%i,%i)", yylineno, colno); colno = colno + yyleng; }
 "++"                            { printf("DOUBLE_PLUS_SIGN(%i,%i)", yylineno, colno); colno = colno + yyleng; }
