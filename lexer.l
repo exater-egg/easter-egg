@@ -1,16 +1,35 @@
 %{
   #include <stdio.h>
-  //#include "y.tab.h"
 
-  //extern int yyerror(char *msg);
-  // yylineno conta linhas
-  // colno a gente define
-  // int yylineno = 0;
   int colno = 1;
+  int errono = 0;
+
+  typedef struct{
+    int col;
+    int line;
+    char* text;
+  } PosError;
+
+  PosError posError[200];
+  
+  void showErrors(PosError *posError){
+    for (int i=0; i < errono; ++i)
+        fprintf(stderr, "ERROR: Invalid Character(%s) at line %i, column %i ", posError[i].text, posError[i].line, posError[i].col);
+  };
+
+  int lexerror(int line, int col, char *text){
+    posError[errono].col = colno;
+    posError[errono].line = yylineno;
+    posError[errono].text = yytext;
+    fprintf(stderr, "\nERROR: Invalid Character(%s) at line %i, column %i\n", text, line, col);
+  }
+
 %}
 
+%option yylineno
+
 %%
-\n                              { colno = 1; yyset_lineno(yylineno + 1); printf("\n");}
+\n                              { colno = 1; printf("\n");}
 [ \t]                           {/* Ignore spaces, tabs and end of line */; colno++;}
 "program"                       { printf("PROGRAM(%i,%i) ", yylineno, colno); colno = colno + yyleng;}
 \;                              { printf("SEP(%i,%i) ", yylineno, colno); colno++; /* Can be SEMICOLON also*/}
@@ -52,7 +71,6 @@
 "**"                            { printf("EXP_SIGN(%i,%i)", yylineno, colno); colno = colno + yyleng; }
 "true"                          { printf("BOOLEAN_LITERAL('true')(%i,%i)", yylineno, colno); colno = colno + yyleng; }
 "false"                         { printf("BOOLEAN_LITERAL('false')(%i,%i)", yylineno, colno); colno = colno + yyleng; }
-"Array"                         { printf("ARRAY_SIGN(%i,%i)", yylineno, colno); colno = colno + yyleng; }
 \[                              { printf("OPEN_BRAKET(%i,%i)", yylineno, colno); colno = colno + yyleng; }
 \]                              { printf("CLOSE_BRAKET(%i,%i)", yylineno, colno); colno = colno + yyleng; }
 "++"                            { printf("DOUBLE_PLUS_SIGN(%i,%i)", yylineno, colno); colno = colno + yyleng; }
@@ -60,8 +78,11 @@
 [0-9]+                          { printf("INT_LITERAL(%i) (%i, %i)", atoi(yytext), yylineno, colno); colno = colno + yyleng; }
 ([0-9]+.[0-9]*|[0-9]*.[0-9]+)   { printf("FLOAT_LITERAL(%f) (%i, %i)", atof(yytext), yylineno, colno); colno = colno + yyleng; }
 [a-zA-Z_][a-zA-Z0-9_]*          { printf("ID(%s)(%i,%i) ", yytext, yylineno, colno); colno = colno + yyleng; }
-\".*\"                          { printf("STRING_LITERAL(%s) ", yytext); }
-.                               { /*yyerror("Invalid Character")*/ printf("ERROR: Invalid Character(%s) at line %i, column %i ", yytext, yylineno, colno); }
+\".*\"                          { printf("STRING_LITERAL(%s)(%i,%i) ", yytext, yylineno, colno); colno = colno + yyleng; }
+.                               { 
+                                  lexerror(yylineno, colno, yytext);
+                                  errono += 1; 
+                                }
 
 %%
 
@@ -71,7 +92,8 @@
 int main(void)
 {
   yylex();
-  printf("\n");
+  //printf("\n");
   return 0;
 }
 #endif
+
