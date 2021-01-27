@@ -4,7 +4,7 @@ consts
 
 classes
   HelloWorldClass
-  attributes
+  attributes 
     String : text = HELLO_WORLD
   methods
     method print()
@@ -15,7 +15,7 @@ variables
 methods
   HelloWorldClass.print
   begin
-    Sys.write(this.text);
+    Sys.write(this.text);'
   end
 
 begin
