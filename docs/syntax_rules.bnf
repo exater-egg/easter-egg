@@ -1,5 +1,3 @@
-// TODO: It_is_in_EBNF, needs_to_change_to_BNF
-
 <program> ::= "program" "identifier" ";" <program_body> "."
 
 <program_body> ::= <constant_definition_part> <class_definition_part> <variable_declaration_part> <methods_definition_part> <statement_part>
@@ -32,7 +30,7 @@
 
 <identifier_list> ::= <empty> | "," "identifier" <identifier_list>
 
-<methods_declaration_part> ::= <empty> | "methods" <method_declaration> {";" <method_declaration>}
+<methods_declaration_part> ::= <empty> | "methods" <method_declaration> <method_declaration_list>
 
 <method_declaration_list> ::= <empty> | ";" <method_declaration> <method_declaration_list>
 

@@ -1,0 +1,280 @@
+%{
+#include <stdio.h>
+
+int yylex(void);
+int yyerror(char *s);
+extern int yylineno;
+extern char * yytext;
+
+%}
+
+%union {
+	int    iValue; 	/* integer value */
+	char   cValue; 	/* char value */
+	char * sValue;  /* string value */
+	};
+
+%token <sValue> ID
+%token <iValue> NUMBER
+%token WHILE BLOCK_BEGIN BLOCK_END DO IF THEN ELSE SEMI ASSIGN
+
+%start prog
+
+%type <sValue> stm
+
+%%
+program : "program" "identifier" ';' program_body '.'
+	;
+
+program_body : constant_definition_part class_definition_part variable_declaration_part methods_definition_part statement_part
+	;
+
+constant_definition_part : empty 
+	| "consts" constant_definition constant_definition_list
+	;
+
+constant_definition_list : empty 
+	| ';' constant_definition constant_definition_list
+	;
+
+constant_definition : identifier '=' constant
+	;
+
+constant : number 
+	| sign number 
+	| "identifier" 
+	| sign "identifier" 
+	| "string-literal"
+	;
+
+number : "integer-literal" 
+	| "float-literal"
+	;
+
+sign : '+' 
+	| '-'
+	;
+
+class_definition_part : empty 
+	| "classes" class_definition class_definition_list
+	;
+
+class_definition_list : empty 
+	| ';' class_definition class_definition_list
+	;
+
+class_definition : "identifier" class_type_declaration attributes_declaration_part methods_declaration_part
+	;
+
+class_type_declaration : empty 
+	| '=' "identifier"
+	;
+
+attributes_declaration_part : empty 
+	| "attributes" attribute_declaration attribute_declaration_list
+	;
+
+attribute_declaration_list : empty 
+	| ';' attribute_declaration attribute_declaration_list
+	;
+
+attribute_declaration : "identifier" identifier_list ":" "identifier"
+	;
+
+identifier_list : empty 
+	| "," "identifier" identifier_list
+	;
+
+methods_declaration_part : empty 
+	| "methods" method_declaration method_declaration_list
+	;
+
+method_declaration_list : empty 
+	| ';' method_declaration method_declaration_list
+	;
+
+method_declaration : method_heading statements_section
+	;
+
+method_heading : "method" "identifier" "(" method_parameters ")" method_return_class
+	;
+
+method_return_class : empty 
+	| ':' "identifier"
+	;
+
+method_parameters : empty 
+	| formal_parameter_section 
+	| formal_parameter_section ';' method_parameters
+	;
+
+// First identifier is the class name, the rest are parameters names
+	;
+formal_parameter_section : "identifier" "identifier" identifier_list
+	;
+
+variable_declaration_part : empty 
+	| variables_header variable_definition variable_definition_list
+	;
+
+variables_header : "variables" 
+	| "vars"
+	;
+
+variable_definition_list : empty 
+	| ';' variable_definition variable_definition_list
+	;
+
+variable_definition : "identifier" ':' "identifier" variable_assignment_part identifier_list
+	;
+
+variable_assignment_part : empty 
+	| "=" expression
+	;
+
+methods_definition_part : "methods" formal_method_definition formal_method_definition_list
+	;
+
+formal_method_definition_list : empty 
+	| ';' formal_method_definition formal_method_definition_list
+	;
+
+formal_method_definition : "identifier" '.' "identifier" statements_section
+	;
+
+statements_section : "begin" statements "end"
+	;
+
+statements : statement statement_list
+	;
+
+statement_list : empty 
+	| ';' statement statement_list
+	;
+
+statement : if_statement 
+	| while_statement 
+	|  return_statement 
+	| assignment_statement 
+	| expression 
+	| incrementation
+	;
+
+if_statement : "if" condition "then" statements_section else_conditions
+	;
+
+else_conditions : empty 
+	| ';' "else" else_body else_conditions
+	;
+
+else_body : if_statement 
+	| statements_section
+	;
+
+while_statement : "while" condition "do" statements_section
+	;
+
+assignment_statement : identifiers '.' "identifier" ":=" expression 
+	;
+
+identifiers := identifiers '.' "identifier" 
+	| "identifier" 
+	| "this"
+	;
+
+//======= Expressions ======//
+	;
+
+expression : term_1 
+	| term_1 op_1 term_1
+	;
+
+op_1 : "and" 
+	| "or" 
+	| "xor"
+	;
+
+term_1 : term_2 
+	| term_2 op_2 term_2
+	;
+
+op_2 : “==” 
+	| “!=” 
+	| “<” 
+	| “>” 
+	| “<=” 
+	| “>=”
+	;
+
+term_2 : term_3 
+	| term_3 op_3 term_3
+	;
+
+op_3 : “+” 
+	| “-”
+	;
+
+term_3 : term_4 
+	| term_4 op_4 term_4
+	;
+
+op_4 : “*” 
+	| “/” 
+	| “mod”
+	;
+
+term_4 : factor 
+	| factor "**" factor
+	;
+
+factor : “identifier” 
+	| literal 
+	| "(" expression ")"
+	;
+
+literal : “integer-literal” 
+	| “float-literal” 
+	| “boolean-literal” 
+	| “string-literal” 
+	| array-literal 
+	;
+
+array_literal : “[” element_list “]” array_type 
+	;
+
+array_type : empty 
+	| ":" "identifier"
+	;
+
+element_list : empty 
+	| array_element element_list_tail
+	;
+
+element_list_tail : empty 
+	| ',' array_element element_list_tail
+	;
+
+array_element : “identifier” 
+	| literal
+	;
+
+incrementation : op_una "identifier"
+	;
+	;
+
+op_una : "++" 
+	| "--"
+	;
+
+empty : 
+	;
+%%
+
+int main (void) {
+	return yyparse ( );
+}
+
+int yyerror (char *msg) {
+	fprintf (stderr, "%d: %s at '%s'\n", yylineno, msg, yytext);
+	return 0;
+}
