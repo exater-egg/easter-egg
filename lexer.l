@@ -1,10 +1,6 @@
 %{
   #include <stdio.h>
-  //#include "y.tab.h"
 
-  // yylineno conta linhas
-  // colno a gente define
-  // int yylineno = 0;
   int colno = 1;
   int errono = 0;
 
@@ -30,8 +26,10 @@
 
 %}
 
+%option yylineno
+
 %%
-\n                              { colno = 1; yyset_lineno(yylineno + 1); printf("\n");}
+\n                              { colno = 1; printf("\n");}
 [ \t]                           {/* Ignore spaces, tabs and end of line */; colno++;}
 "program"                       { printf("PROGRAM(%i,%i) ", yylineno, colno); colno = colno + yyleng;}
 \;                              { printf("SEP(%i,%i) ", yylineno, colno); colno++; /* Can be SEMICOLON also*/}
@@ -73,7 +71,6 @@
 "**"                            { printf("EXP_SIGN(%i,%i)", yylineno, colno); colno = colno + yyleng; }
 "true"                          { printf("BOOLEAN_LITERAL('true')(%i,%i)", yylineno, colno); colno = colno + yyleng; }
 "false"                         { printf("BOOLEAN_LITERAL('false')(%i,%i)", yylineno, colno); colno = colno + yyleng; }
-"Array"                         { printf("ARRAY_SIGN(%i,%i)", yylineno, colno); colno = colno + yyleng; }
 \[                              { printf("OPEN_BRAKET(%i,%i)", yylineno, colno); colno = colno + yyleng; }
 \]                              { printf("CLOSE_BRAKET(%i,%i)", yylineno, colno); colno = colno + yyleng; }
 "++"                            { printf("DOUBLE_PLUS_SIGN(%i,%i)", yylineno, colno); colno = colno + yyleng; }
@@ -81,7 +78,7 @@
 [0-9]+                          { printf("INT_LITERAL(%i) (%i, %i)", atoi(yytext), yylineno, colno); colno = colno + yyleng; }
 ([0-9]+.[0-9]*|[0-9]*.[0-9]+)   { printf("FLOAT_LITERAL(%f) (%i, %i)", atof(yytext), yylineno, colno); colno = colno + yyleng; }
 [a-zA-Z_][a-zA-Z0-9_]*          { printf("ID(%s)(%i,%i) ", yytext, yylineno, colno); colno = colno + yyleng; }
-\".*\"                          { printf("STRING_LITERAL(%s) ", yytext); }
+\".*\"                          { printf("STRING_LITERAL(%s)(%i,%i) ", yytext, yylineno, colno); colno = colno + yyleng; }
 .                               { 
                                   lexerror(yylineno, colno, yytext);
                                   errono += 1; 
@@ -99,3 +96,4 @@ int main(void)
   return 0;
 }
 #endif
+
