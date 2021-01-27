@@ -7,7 +7,7 @@
   typedef struct{
     int col;
     int line;
-    char* text;
+    char text[20];
   }PosError;
 
   PosError posError[200];
@@ -17,17 +17,17 @@
     for(int i = 0; i < 200; i++){
       posError[i].col = 1;
       posError[i].line = 0;
-      posError[i].text = "";
+      strcpy(posError[i].text, "");
     }
 
     return;
   }
   void showErrors(PosError *posError){
-    int i = 0;
+    int i;
+    printf("%i\n", errono);
 
-    while(posError[i].col > 0 && posError[i].line > 0){
+    for(i = 0; i < errono; i++ ){
         printf("ERROR: Invalid Character(%s) at line %i, column %i ", posError[i].text, posError[i].line, posError[i].col);
-        i++;
     } 
     
   };
@@ -79,7 +79,6 @@
 "**"                            { printf("EXP_SIGN(%i,%i)", yylineno, colno); colno = colno + yyleng; }
 "true"                          { printf("BOOLEAN_LITERAL('true')(%i,%i)", yylineno, colno); colno = colno + yyleng; }
 "false"                         { printf("BOOLEAN_LITERAL('false')(%i,%i)", yylineno, colno); colno = colno + yyleng; }
-"Array"                         { printf("ARRAY_SIGN(%i,%i)", yylineno, colno); colno = colno + yyleng; }
 \[                              { printf("OPEN_BRAKET(%i,%i)", yylineno, colno); colno = colno + yyleng; }
 \]                              { printf("CLOSE_BRAKET(%i,%i)", yylineno, colno); colno = colno + yyleng; }
 "++"                            { printf("DOUBLE_PLUS_SIGN(%i,%i)", yylineno, colno); colno = colno + yyleng; }
@@ -87,8 +86,8 @@
 [0-9]+                          { printf("INT_LITERAL(%i) (%i, %i)", atoi(yytext), yylineno, colno); colno = colno + yyleng; }
 ([0-9]+.[0-9]*|[0-9]*.[0-9]+)   { printf("FLOAT_LITERAL(%f) (%i, %i)", atof(yytext), yylineno, colno); colno = colno + yyleng; }
 [a-zA-Z_][a-zA-Z0-9_]*          { printf("ID(%s)(%i,%i) ", yytext, yylineno, colno); colno = colno + yyleng; }
-\".*\"                          { printf("STRING_LITERAL(%s) ", yytext); }
-.                               { /*yyerror("Invalid Character")*/posError[errono].col = colno; posError[errono].line = yylineno; posError[errono].text = yytext; errono += 1; showErrors(posError);}
+\".*\"                          { printf("STRING_LITERAL(%s)(%i,%i) ", yytext, yylineno, colno); colno = colno + yyleng; }
+.                               { /*yyerror("Invalid Character");*/ posError[errono].col = colno; posError[errono].line = yylineno; strcpy(posError[errono].text, yytext); errono++; }
 
 %%
 
