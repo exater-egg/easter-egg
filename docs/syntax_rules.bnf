@@ -1,125 +1,130 @@
-<program> ::= "program" "identifier" ";" <program_body> "."
+<program> ::= <package> <imports> "program" "identifier" ";" <program_body> "." ;
 
-<program_body> ::= <constant_definition_part> <class_definition_part> <variable_declaration_part> <methods_definition_part> <statement_part>
+<package> ::= <empty> | "package" "identifier" ;
 
-<constant_definition_part> ::= <empty> | "consts" <constant_definition> <constant_definition_list>
+<imports> ::= <empty> | <import> ";" <imports> | <import> ;
 
-<constant_definition_list> ::= <empty> | ";" <constant_definition> <constant_definition_list>
+<import> ::= "import" "string-literal" ;
 
-<constant_definition> ::= <identifier> "=" <constant>
+<program_body> ::= <constant_definition_part> <class_definition_part> <variable_declaration_part> <methods_definition_part> <statement_part> ;
 
-<constant> ::= <number> | <sign> <number> | "identifier" | <sign> "identifier" | "string-literal"
+<constant_definition_part> ::= <empty> | "consts" <constant_definition> <constant_definition_list> ;
 
-<number> ::= "integer-literal" | "float-literal"
+<constant_definition_list> ::= <empty> | ";" <constant_definition> <constant_definition_list> ;
 
-<sign> ::= "+" | "-"
+<constant_definition> ::= <identifier> "=" <constant> ;
 
-<class_definition_part> ::= <empty> | "classes" <class_definition> <class_definition_list>
+<constant> ::= <number> | <sign> <number> | "identifier" | <sign> "identifier" | "string-literal" ;
 
-<class_definition_list> ::= <empty> | ";" <class_definition> <class_definition_list>
+<number> ::= "integer-literal" | "float-literal" ;
 
-<class_definition> ::= "identifier" <class_type_declaration> <attributes_declaration_part> <methods_declaration_part>
+<sign> ::= "+" | "-" ;
 
-<class_type_declaration> ::= <empty> | "=" "identifier"
+<class_definition_part> ::= <empty> | "classes" <class_definition> <class_definition_list> ;
 
-<attributes_declaration_part> ::= <empty> | "attributes" <attribute_declaration> <attribute_declaration_list>
+<class_definition_list> ::= <empty> | ";" <class_definition> <class_definition_list> ;
 
-<attribute_declaration_list> ::= <empty> | ";" <attribute_declaration> <attribute_declaration_list>
+<class_definition> ::= "identifier" <class_type_declaration> <attributes_declaration_part> <methods_declaration_part> ;
 
-<attribute_declaration> ::= "identifier" <identifier_list> ":" "identifier"
+<class_type_declaration> ::= <empty> | "=" "identifier" ;
 
-<identifier_list> ::= <empty> | "," "identifier" <identifier_list>
+<attributes_declaration_part> ::= <empty> | "attributes" <attribute_declaration> <attribute_declaration_list> ;
 
-<methods_declaration_part> ::= <empty> | "methods" <method_declaration> <method_declaration_list>
+<attribute_declaration_list> ::= <empty> | ";" <attribute_declaration> <attribute_declaration_list> ;
 
-<method_declaration_list> ::= <empty> | ";" <method_declaration> <method_declaration_list>
+<attribute_declaration> ::= "identifier" <identifier_list> ":" "identifier" ;
 
-<method_declaration> ::= <method_heading> <statements_section>
+<identifier_list> ::= <empty> | "," "identifier" <identifier_list> ;
 
-<method_heading> ::= "method" "identifier" "(" <method_parameters> ")" <method_return_class>
+<methods_declaration_part> ::= <empty> | "methods" <method_declaration> <method_declaration_list> ;
 
-<method_return_class> ::= <empty> | ":" "identifier"
+<method_declaration_list> ::= <empty> | ";" <method_declaration> <method_declaration_list> ;
 
-<method_parameters> ::= <empty> | <formal_parameter_section> | <formal_parameter_section> ";" <method_parameters>
+<method_declaration> ::= <method_heading> <statements_section> ;
+
+<method_heading> ::= "method" "identifier" "(" <method_parameters> ")" <method_return_class> ;
+
+<method_return_class> ::= <empty> | ":" "identifier" ;
+
+<method_parameters> ::= <empty> | <formal_parameter_section> | <formal_parameter_section> ";" <method_parameters> ;
 
 // First identifier is the class name, the rest are parameters names
-<formal_parameter_section> ::= "identifier" "identifier" <identifier_list>
+<formal_parameter_section> ::= "identifier" "identifier" <identifier_list> ;
 
-<variable_declaration_part> ::= <empty> | <variables_header> <variable_definition> <variable_definition_list>
+<variable_declaration_part> ::= <empty> | <variables_header> <variable_definition> <variable_definition_list> ;
 
-<variables_header> ::= "variables" | "vars"
+<variables_header> ::= "variables" | "vars" ;
 
-<variable_definition_list> ::= <empty> | ";" <variable_definition> <variable_definition_list>
+<variable_definition_list> ::= <empty> | ";" <variable_definition> <variable_definition_list> ;
 
-<variable_definition> ::= "identifier" ":" "identifier" <variable_assignment_part> <identifier_list>
+<variable_definition> ::= "identifier" ":" "identifier" <variable_assignment_part> <identifier_list> ;
 
-<variable_assignment_part> ::= <empty> | "=" <expression>
+<variable_assignment_part> ::= <empty> | "=" <expression> ;
 
-<methods_definition_part> ::= "methods" <formal_method_definition> <formal_method_definition_list>
+<methods_definition_part> ::= "methods" <formal_method_definition> <formal_method_definition_list> ;
 
-<formal_method_definition_list> ::= <empty> | ";" <formal_method_definition> <formal_method_definition_list>
+<formal_method_definition_list> ::= <empty> | ";" <formal_method_definition> <formal_method_definition_list> ;
 
-<formal_method_definition> ::= "identifier" "." "identifier" <statements_section>
+<formal_method_definition> ::= "identifier" "." "identifier" <statements_section> ;
 
-<statements_section> ::= "begin" <statements> "end"
+<statements_section> ::= "begin" <statements> "end" ;
 
-<statements> ::= <statement> <statement_list>
+<statements> ::= <statement> <statement_list> ;
 
-<statement_list> ::= <empty> | ";" <statement> <statement_list>
+<statement_list> ::= <empty> | ";" <statement> <statement_list> ;
 
-<statement> ::= <if_statement> | <while_statement> | <for_statement> | <return_statement> | <assignment_statement> | <expression> | <incrementation>
+<statement> ::= <if_statement> | <while_statement> | <for_statement> | <return_statement> | <assignment_statement> | <expression> | <incrementation> ;
 
-<if_statement> ::= "if" <condition> "then" <statements_section> <else_conditions>
+<if_statement> ::= "if" <condition> "then" <statements_section> <else_conditions> ;
 
-<else_conditions> ::= <empty> | ";" "else" <else_body> <else_conditions>
+<else_conditions> ::= <empty> | ";" "else" <else_body> <else_conditions> ;
 
-<else_body> ::= <if_statement> | <statements_section>
+<else_body> ::= <if_statement> | <statements_section> ;
 
-<while_statement> ::= "while" <condition> "do" <statements_section>
+<while_statement> ::= "while" <condition> "do" <statements_section> ;
 
-<for_statement> ::= "for" <assignment_statement> "to" <expression> "do" <statements_section>
+<for_statement> ::= "for" <assignment_statement> "to" <expression> "do" <statements_section> ;
 
-<assignment_statement> ::= <identifiers> "." "identifier" ":=" <expression> 
+<assignment_statement> ::= <identifiers> "." "identifier" ":=" <expression> ;
 
-<identifiers> := <identifiers> "." "identifier" | "identifier" | "this"
+<identifiers> := <identifiers> "." "identifier" | "identifier" | "this" ;
 
 //======= Expressions ======//
 
-<expression> ::= <term_1> | <term_1> <op_1> <term_1> | "not" <term_1>
+<expression> ::= <term_1> | <term_1> <op_1> <term_1> | "not" <term_1> ;
 
-<op_1> ::= "and" | "or" | "xor"
+<op_1> ::= "and" | "or" | "xor" ;
 
-<term_1> ::= <term_2> | <term_2> <op_2> <term_2>
+<term_1> ::= <term_2> | <term_2> <op_2> <term_2> ;
 
-<op_2> ::= “==” | “!=” | “<” | “>” | “<=” | “>=”
+<op_2> ::= "==" | "!=" | "<" | ">" | "<=" | ">=" ;
 
-<term_2> ::= <term_3> | <term_3> <op_3> <term_3>
+<term_2> ::= <term_3> | <term_3> <op_3> <term_3> ;
 
-<op_3> ::= “+” | “-”
+<op_3> ::= "+" | "-" ;
 
-<term_3> ::= <term_4> | <term_4> <op_4> <term_4>
+<term_3> ::= <term_4> | <term_4> <op_4> <term_4> ;
 
-<op_4> ::= “*” | “/” | “mod”
+<op_4> ::= "*" | "/" | "mod" ;
 
-<term_4> ::= <factor> | <factor> "**" <factor>
+<term_4> ::= <factor> | <factor> "**" <factor> ;
 
-<factor> ::= “identifier” | <literal> | "(" <expression> ")"
+<factor> ::= "identifier" | <literal> | "(" <expression> ")" ;
 
-<literal> ::= “integer-literal” | “float-literal” | “boolean-literal” | “string-literal” | <array-literal> 
+<literal> ::= "integer-literal" | "float-literal" | "boolean-literal" | "string-literal" | <array-literal> ;
 
-<array_literal> ::= “[” <element_list> “]” <array_type> 
+<array_literal> ::= "[" <element_list> "]" <array_type> ;
 
-<array_type> ::= <empty> | ":" "identifier"
+<array_type> ::= <empty> | ":" "identifier" ;
 
-<element_list> ::= <empty> | <array_element> <element_list_tail>
+<element_list> ::= <empty> | <array_element> <element_list_tail> ;
 
-<element_list_tail> ::= <empty> | “,” <array_element> <element_list_tail>
+<element_list_tail> ::= <empty> | "," <array_element> <element_list_tail> ;
 
-<array_element> ::= “identifier” | <literal>
+<array_element> ::= "identifier" | <literal> ;
 
-<incrementation> ::= <op_una> "identifier";
+<incrementation> ::= <op_una> "identifier" ;
 
-<op_una> ::= "++" | "--"
+<op_una> ::= "++" | "--" ;
 
 <empty> ::= ;
-
