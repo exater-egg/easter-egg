@@ -10,11 +10,6 @@
   } PosError;
 
   PosError posError[200];
-  
-  void showErrors(PosError *posError){
-    for (int i=0; i < errono; ++i)
-        fprintf(stderr, "ERROR: Invalid Character(%s) at line %i, column %i ", posError[i].text, posError[i].line, posError[i].col);
-  };
 
   int lexerror(int line, int col, char *text){
     posError[errono].col = colno;
