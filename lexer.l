@@ -10,11 +10,6 @@
   } PosError;
 
   PosError posError[200];
-  
-  void showErrors(PosError *posError){
-    for (int i=0; i < errono; ++i)
-        fprintf(stderr, "ERROR: Invalid Character(%s) at line %i, column %i ", posError[i].text, posError[i].line, posError[i].col);
-  };
 
   int lexerror(int line, int col, char *text){
     posError[errono].col = colno;
@@ -34,6 +29,8 @@
 %%
 \n                              { colno = 1; /* printf("\n");*/ }
 [ \t]                           {/* Ignore spaces, tabs and end of line */; colno++;}
+"package"                       { printToken("PACKAGE"); colno = colno + yyleng; }
+"import"                        { printToken("IMPORT"); colno = colno + yyleng; }
 "program"                       { printToken("PROGRAM"); colno = colno + yyleng;}
 \;                              { printToken("SEP"); colno++; /* Can be SEMICOLON also*/}
 \.                              { printToken("DOT"); colno = colno + yyleng; }
@@ -90,7 +87,7 @@
 ([0-9]+\.[0-9]*|[0-9]*\.[0-9]+) { printToken("FLOAT_LITERAL"); colno = colno + yyleng; }
 [a-zA-Z_][a-zA-Z0-9_]*          { printToken("ID"); colno = colno + yyleng; }
 \"(\\.|[^"])*\"                 { printToken("STRING_LITERAL"); colno = colno + yyleng; }
-\{(\\.|[^}])*\}                       { printToken("COMMENT"); colno = colno + yyleng; }
+\{(\\.|[^}])*\}                 { printToken("COMMENT"); colno = colno + yyleng; }
 .                               { lexerror(yylineno, colno, yytext); errono += 1; }
 
 %%
