@@ -1,0 +1,81 @@
+program MergeSort;
+	
+classes
+	MergeSortClass
+	methods
+		method mergeSort(Array : vetor; Intenger : inicio, fim);
+		method merge(ArrayIntenger: vetor; Intenger: inicio,meio,fim)
+
+
+
+variables 
+	MergeSortClass : merge_sort;
+	ArrayInteger : vetor = [4,8,5,9,7];
+	ArrayInteger : vetorAuxiliar = []  
+
+methods 
+	MergeSortClass.mergeSort
+	vars
+		ArrayInteger : vetor;
+		Intenger : meio = vetor.size()/2;
+		Intenger : inicio = 0;
+		Intenger : fim = vetor.size()
+	begin 
+		if inicio < fim then
+		begin
+			merge_sort.mergeSort(vetor,inicio,meio);
+			merge_sort.mergeSort(vetor,meio+1,fim);
+			merge_sort.merge(vetor,inicio,meio,fim)
+		end 
+	end
+
+	MergeSortClass.merge
+	vars
+		ArrayIntenger: vetor;
+		Intenger: inicio,meio,fim
+		Intenger: ponteiroEsquerdo, ponteiroDireito, ponteiroAux, tamanho 
+	begin
+		ponteiroEsquerdo := inicio;
+		ponteiroDireito := meio+1;
+		ponteiroAux := 0;
+		tamanho:= vetor.size()
+
+		while ponteiroEsquerdo <= meio and ponteiroDireito <= fim do
+		
+			if vetor[ponteiroEsquerdo] < vetor[ponteiroDireito] then
+			
+				vetorAuxiliar[ponteiroAux] = vetor[ponteiroEsquerdo];
+				ponteiroEsquerdo++
+			
+			else
+			
+				vetorAuxiliar[ponteiroAux] = vetor[ponteiroDireito];
+				ponteiroDireito++
+			end
+			ponteiroAux++
+		end
+		
+		while ponteiroEsquerdo <= meio do
+		
+			vetAuxiliar[ponteiroAux] = vetor[ponteiroEsquerdo];
+			ponteiroAux++;
+			ponteiroEsquerdo++
+		end
+
+		while ponteiroDireito <= fim do
+		
+			vetAuxiliar[ponteiroAux] = vetor[ponteiroDireito];
+			ponteiroAux++;
+			ponteiroDireito++
+		end
+
+		for ponteiroAux := inicio to fim do
+		
+			vetor[ponteiroAux] = vetorAuxiliar[ponteiroAux]
+		end
+	end
+
+
+begin
+	merge_sort.mergeSort(vetor);
+end.
