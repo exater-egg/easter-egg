@@ -1,0 +1,75 @@
+program ClassInheritance;
+consts
+  HELLO_WORLD = "Hello, World!"
+
+classes
+  Complex
+  attributes 
+    r_part, i_part : Integer
+  methods
+    method add(Complex: other) : Complex;
+    method subtract(Complex: other) : Complex;
+    method new(Interger r, i) : Complex
+
+  ArrayComplex = Array
+  methods
+    method new() : ArrayComplex;
+
+variables
+  Integer: i;
+  ArrayComplex: ar_comp1, ar_comp2
+
+methods
+  Complex.add
+  variables
+    Complex: other
+  begin
+    return Complex.new( other.r_part + this.r_part, other.i_part + this.i_part )
+  end
+
+  Complex.subtract
+  variables
+    Complex: other
+  begin
+    return Complex.new( other.r_part - this.r_part, other.i_part - this.i_part ) {* Construtor parametrizado *}
+  end
+
+  Complex.new
+  variables
+    Integer: r, i;
+    Complex: newcomplex
+  begin
+    newcomplex = Complex.new(); {* "new()" é herdado da classe Object *}
+    newcomplex.r_part = r;
+    newcomplex.i_part = i;
+    return newcomplex
+  end
+
+  Complex.string {* Método herdado de Object *}
+  begin
+    return "(" + r_part.string() + ", " + i_part.string() + ")"
+  end
+
+{*  ArrayComplex Class methods *}
+
+  ArrayComplex.new
+  begin
+    this.type = "Complex" {* O atributo "type" e herdado da classe Array e faz verificacao ao inserir elemento *}
+  end
+
+begin
+  
+  for i = 1 to 10 do
+    ar_comp1.insert(Complex.new(i, 2))
+  end
+  
+  for i = 1 to 10 do
+    ar_comp2.insert(Complex.new(3, i))
+  end
+
+  for i = 1 to 10 do
+    System.print("Soma: " + i.string() + " " + (ar_comp1.get(i) + ar_comp2.get(i)).string() + "\n")
+  end
+
+end.
+
