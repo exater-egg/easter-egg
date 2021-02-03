@@ -1,7 +1,11 @@
+all: eac.out
 
-eac.out: lex.yy.c
+eac.out: lex.yy.c y.tab.c
 	# compile
-	gcc lex.yy.c y.tab.c
+	gcc lex.yy.c y.tab.c -o $@
+
+eac.lex: lex.yy.c
+	gcc lex.yy.c -lfl -o $@
 
 # generate lexical code
 lex.yy.c:
