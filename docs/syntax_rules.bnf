@@ -111,7 +111,7 @@
 
 <factor> ::= "identifier" | <literal> | "(" <expression> ")" ;
 
-<literal> ::= "integer-literal" | "float-literal" | "boolean-literal" | "string-literal" | <array-literal> ;
+<literal> ::= "integer-literal" | "float-literal" | "boolean-literal" | "string-literal" | <array-literal> | "null";
 
 <array_literal> ::= "[" <element_list> "]" <array_type> ;
 
