@@ -79,6 +79,7 @@
 "**"                            { printToken("EXP_SIGN"); colno = colno + yyleng; }
 "true"                          { printToken("BOOLEAN_LITERAL"); colno = colno + yyleng; }
 "false"                         { printToken("BOOLEAN_LITERAL"); colno = colno + yyleng; }
+"null"                          { printToken("NULL"); colno = colno + yyleng; }
 \[                              { printToken("OPEN_BRAKET"); colno = colno + yyleng; }
 \]                              { printToken("CLOSE_BRAKET"); colno = colno + yyleng; }
 "++"                            { printToken("DOUBLE_PLUS_SIGN"); colno = colno + yyleng; }
