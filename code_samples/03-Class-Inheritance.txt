@@ -9,6 +9,12 @@ classes
   methods
     method add(Complex: other) : Complex;
     method subtract(Complex: other) : Complex;
+    {*
+      @brief Construtor parametrizado
+
+      @param r Parte real do número complexo
+      @param i Parte imaginária do número complexo
+    *}
     method new(Interger r, i) : Complex
 
   ArrayComplex = Array
@@ -31,7 +37,7 @@ methods
   variables
     Complex: other
   begin
-    return Complex.new( other.r_part - this.r_part, other.i_part - this.i_part ) {* Construtor parametrizado *}
+    return Complex.new( other.r_part - this.r_part, other.i_part - this.i_part )
   end
 
   Complex.new
