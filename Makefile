@@ -5,11 +5,11 @@ eac.out: lex.yy.c y.tab.c
 	gcc lex.yy.c y.tab.c -o $@
 
 eac.lex: lex.yy.c
-	gcc lex.yy.c -lfl -o $@
+	gcc lex.yy.c -lfl -I ./ -o $@
 
 # generate lexical code
 lex.yy.c:
-	lex lexer.l --header-file=lex.yy.h
+	lex --header-file=lex.yy.h lexer.l 
 
 # generate sintax code
 y.tab.c:
