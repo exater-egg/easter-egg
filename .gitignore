@@ -4,5 +4,5 @@ y.tab.h
 lex.yy.c
 lex.yy.h
 
-eac.out
-eac.lex
+eac.*
+
