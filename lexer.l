@@ -53,6 +53,7 @@
 "if"                            { printToken("IF"); colno = colno + yyleng; }
 "then"                          { printToken("THEN"); colno = colno + yyleng; }
 "else"                          { printToken("ELSE"); colno = colno + yyleng; }
+"elseif"                        { printToken("ELSEIF"); colno = colno + yyleng; }
 "while"                         { printToken("WHILE"); colno = colno + yyleng; }
 "do"                            { printToken("DO"); colno = colno + yyleng; }
 "for"                           { printToken("FOR"); colno = colno + yyleng; }
