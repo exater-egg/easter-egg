@@ -20,9 +20,8 @@ enum tokens {
     OPEN_PARENT,
     CLOSE_PARENT,
     VARIABLES,
-    VARIABLES,
-    BEGIN,
-    END,
+    BEGIN_TOK,
+    END_TOK,
     IF,
     THEN,
     ELSE,
@@ -52,8 +51,7 @@ enum tokens {
     MOD,
     EXP_SIGN,
     BOOLEAN_LITERAL,
-    BOOLEAN_LITERAL,
-    NULL,
+    NULL_TOK,
     OPEN_BRAKET,
     CLOSE_BRAKET,
     DOUBLE_PLUS_SIGN,
@@ -63,7 +61,7 @@ enum tokens {
     ID,
     STRING_LITERAL,
     COMMENT   
-}
+};
 
 
 extern enum token getToken(void);

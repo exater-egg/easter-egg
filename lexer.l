@@ -50,8 +50,8 @@
 \)                              { colno = colno + yyleng; return CLOSE_PARENT; }
 "vars"                          { colno = colno + yyleng; return VARIABLES; }
 "variables"                     { colno = colno + yyleng; return VARIABLES; }
-"begin"                         { colno = colno + yyleng; return BEGIN; }
-"end"                           { colno = colno + yyleng; return END; }
+"begin"                         { colno = colno + yyleng; return BEGIN_TOK; }
+"end"                           { colno = colno + yyleng; return END_TOK; }
 "if"                            { colno = colno + yyleng; return IF; }
 "then"                          { colno = colno + yyleng; return THEN; }
 "else"                          { colno = colno + yyleng; return ELSE; }
@@ -82,7 +82,7 @@
 "**"                            { colno = colno + yyleng; return EXP_SIGN; }
 "true"                          { colno = colno + yyleng; return BOOLEAN_LITERAL; }
 "false"                         { colno = colno + yyleng; return BOOLEAN_LITERAL; }
-"null"                          { colno = colno + yyleng; return NULL; }
+"null"                          { colno = colno + yyleng; return NULL_TOK; }
 \[                              { colno = colno + yyleng; return OPEN_BRAKET; }
 \]                              { colno = colno + yyleng; return CLOSE_BRAKET; }
 "++"                            { colno = colno + yyleng; return DOUBLE_PLUS_SIGN; }
