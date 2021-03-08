@@ -64,7 +64,7 @@ enum tokens {
 };
 
 
-extern enum token getToken(void);
+extern int yylex(void);
 
 #endif /** __TOKENS_H__ **/
 

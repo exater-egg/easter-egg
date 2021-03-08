@@ -98,6 +98,8 @@
 
 #ifndef yywrap
    int yywrap (void) {return 1;}
+#elif parser
+
 #else
 int main(void)
 {
