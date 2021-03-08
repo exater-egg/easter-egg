@@ -9,7 +9,7 @@ eac.lex: lex.yy.c
 
 # generate lexical code
 lex.yy.c:
-	lex lexer.l
+	lex lexer.l --header-file=lex.yy.h
 
 # generate sintax code
 y.tab.c:
