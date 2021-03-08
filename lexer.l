@@ -1,5 +1,7 @@
 %{
   #include <stdio.h>
+  #include "tokens.h"
+
   int colno = 1;
   int errono = 0;
 
@@ -29,67 +31,67 @@
 %%
 \n                              { colno = 1; /* printf("\n");*/ }
 [ \t]                           {/* Ignore spaces, tabs and end of line */; colno++;}
-"package"                       { printToken("PACKAGE"); colno = colno + yyleng; }
-"import"                        { printToken("IMPORT"); colno = colno + yyleng; }
-"program"                       { printToken("PROGRAM"); colno = colno + yyleng;}
-\;                              { printToken("SEP"); colno++; /* Can be SEMICOLON also*/}
-\.                              { printToken("DOT"); colno = colno + yyleng; }
-"consts"                        { printToken("CONSTS"); colno = colno + yyleng;}
-"="                             { printToken("EQ_SIGN"); colno = colno + yyleng; }
-"+"                             { printToken("PLUS_SIGN"); colno = colno + yyleng; }
-"-"                             { printToken("MINUS_SIGN"); colno = colno + yyleng; }
-"classes"                       { printToken("CLASSES"); colno = colno + yyleng; }
-"attributes"                    { printToken("ATTRIBUTES"); colno = colno + yyleng; }
-\,                              { printToken("COMMA"); colno = colno + yyleng; }
-\:                              { printToken("COLLON"); colno = colno + yyleng; }
-"methods"                       { printToken("METHODS"); colno = colno + yyleng; }
-"method"                        { printToken("METHOD"); colno = colno + yyleng; }
-\(                              { printToken("OPEN_PARENT"); colno = colno + yyleng; }
-\)                              { printToken("CLOSE_PARENT"); colno = colno + yyleng; }
-"vars"                          { printToken("VARIABLES"); colno = colno + yyleng; }
-"variables"                     { printToken("VARIABLES"); colno = colno + yyleng; }
-"begin"                         { printToken("BEGIN"); colno = colno + yyleng; }
-"end"                           { printToken("END"); colno = colno + yyleng; }
-"if"                            { printToken("IF"); colno = colno + yyleng; }
-"then"                          { printToken("THEN"); colno = colno + yyleng; }
-"else"                          { printToken("ELSE"); colno = colno + yyleng; }
-"elseif"                        { printToken("ELSEIF"); colno = colno + yyleng; }
-"while"                         { printToken("WHILE"); colno = colno + yyleng; }
-"do"                            { printToken("DO"); colno = colno + yyleng; }
-"for"                           { printToken("FOR"); colno = colno + yyleng; }
-"to"                            { printToken("TO"); colno = colno + yyleng; }
-"raise"                         { printToken("RAISE"); colno = colno + yyleng; }
-"try"                           { printToken("TRY"); colno = colno + yyleng; }
-"except"                        { printToken("EXCEPT"); colno = colno + yyleng; }
-"on"                            { printToken("ON"); colno = colno + yyleng; }
-"this"                          { printToken("THIS"); colno = colno + yyleng; }
-"not"                           { printToken("NOT"); colno = colno + yyleng; }
-":="                            { printToken("ASSIGN_SIGN"); colno = colno + yyleng; }
-"and"                           { printToken("AND"); colno = colno + yyleng; }
-"or"                            { printToken("OR"); colno = colno + yyleng; }
-"xor"                           { printToken("XOR"); colno = colno + yyleng; }
-"=="                            { printToken("DOUB_EQ_SIGN"); colno = colno + yyleng; }
-"!="                            { printToken("NEG_EQ_SIGN"); colno = colno + yyleng; }
-"<"                             { printToken("LESS_THAN_SIGN"); colno = colno + yyleng; }
-">"                             { printToken("MORE_THAN_SIGN"); colno = colno + yyleng; }
-"<="                            { printToken("LESS_EQ_SIGN"); colno = colno + yyleng; }
-">="                            { printToken("MORE_EQ_SIGN"); colno = colno + yyleng; }
-"*"                             { printToken("MULTI_SIGN"); colno = colno + yyleng; }
-"/"                             { printToken("DIV_SIGN"); colno = colno + yyleng; }
-"mod"                           { printToken("MOD"); colno = colno + yyleng; }
-"**"                            { printToken("EXP_SIGN"); colno = colno + yyleng; }
-"true"                          { printToken("BOOLEAN_LITERAL"); colno = colno + yyleng; }
-"false"                         { printToken("BOOLEAN_LITERAL"); colno = colno + yyleng; }
-"null"                          { printToken("NULL"); colno = colno + yyleng; }
-\[                              { printToken("OPEN_BRAKET"); colno = colno + yyleng; }
-\]                              { printToken("CLOSE_BRAKET"); colno = colno + yyleng; }
-"++"                            { printToken("DOUBLE_PLUS_SIGN"); colno = colno + yyleng; }
-"--"                            { printToken("DOUBLE_MINUS_SIGN"); colno = colno + yyleng; }
-[0-9]+                          { printToken("INT_LITERAL"); colno = colno + yyleng; }
-([0-9]+\.[0-9]*|[0-9]*\.[0-9]+) { printToken("FLOAT_LITERAL"); colno = colno + yyleng; }
-[a-zA-Z_][a-zA-Z0-9_]*          { printToken("ID"); colno = colno + yyleng; }
-\"(\\.|[^"])*\"                 { printToken("STRING_LITERAL"); colno = colno + yyleng; }
-\{(\\.|[^}])*\}                 { printToken("COMMENT"); colno = colno + yyleng; }
+"package"                       { colno = colno + yyleng; return PACKAGE; }
+"import"                        { colno = colno + yyleng; return IMPORT; }
+"program"                       { colno = colno + yyleng; return PROGRAM; }
+\;                              { colno = colno + yyleng; return SEP; }
+\.                              { colno = colno + yyleng; return DOT; }
+"consts"                        { colno = colno + yyleng; return CONSTS; }
+"="                             { colno = colno + yyleng; return EQ_SIGN; }
+"+"                             { colno = colno + yyleng; return PLUS_SIGN; }
+"-"                             { colno = colno + yyleng; return MINUS_SIGN; }
+"classes"                       { colno = colno + yyleng; return CLASSES; }
+"attributes"                    { colno = colno + yyleng; return ATTRIBUTES; }
+\,                              { colno = colno + yyleng; return COMMA; }
+\:                              { colno = colno + yyleng; return COLLON; }
+"methods"                       { colno = colno + yyleng; return METHODS; }
+"method"                        { colno = colno + yyleng; return METHOD; }
+\(                              { colno = colno + yyleng; return OPEN_PARENT; }
+\)                              { colno = colno + yyleng; return CLOSE_PARENT; }
+"vars"                          { colno = colno + yyleng; return VARIABLES; }
+"variables"                     { colno = colno + yyleng; return VARIABLES; }
+"begin"                         { colno = colno + yyleng; return BEGIN; }
+"end"                           { colno = colno + yyleng; return END; }
+"if"                            { colno = colno + yyleng; return IF; }
+"then"                          { colno = colno + yyleng; return THEN; }
+"else"                          { colno = colno + yyleng; return ELSE; }
+"elseif"                        { colno = colno + yyleng; return ELSEIF; }
+"while"                         { colno = colno + yyleng; return WHILE; }
+"do"                            { colno = colno + yyleng; return DO; }
+"for"                           { colno = colno + yyleng; return FOR; }
+"to"                            { colno = colno + yyleng; return TO; }
+"raise"                         { colno = colno + yyleng; return RAISE; }
+"try"                           { colno = colno + yyleng; return TRY; }
+"except"                        { colno = colno + yyleng; return EXCEPT; }
+"on"                            { colno = colno + yyleng; return ON; }
+"this"                          { colno = colno + yyleng; return THIS; }
+"not"                           { colno = colno + yyleng; return NOT; }
+":="                            { colno = colno + yyleng; return ASSIGN_SIGN; }
+"and"                           { colno = colno + yyleng; return AND; }
+"or"                            { colno = colno + yyleng; return OR; }
+"xor"                           { colno = colno + yyleng; return XOR; }
+"=="                            { colno = colno + yyleng; return DOUB_EQ_SIGN; }
+"!="                            { colno = colno + yyleng; return NEG_EQ_SIGN; }
+"<"                             { colno = colno + yyleng; return LESS_THAN_SIGN; }
+">"                             { colno = colno + yyleng; return MORE_THAN_SIGN; }
+"<="                            { colno = colno + yyleng; return LESS_EQ_SIGN; }
+">="                            { colno = colno + yyleng; return MORE_EQ_SIGN; }
+"*"                             { colno = colno + yyleng; return MULTI_SIGN; }
+"/"                             { colno = colno + yyleng; return DIV_SIGN; }
+"mod"                           { colno = colno + yyleng; return MOD; }
+"**"                            { colno = colno + yyleng; return EXP_SIGN; }
+"true"                          { colno = colno + yyleng; return BOOLEAN_LITERAL; }
+"false"                         { colno = colno + yyleng; return BOOLEAN_LITERAL; }
+"null"                          { colno = colno + yyleng; return NULL; }
+\[                              { colno = colno + yyleng; return OPEN_BRAKET; }
+\]                              { colno = colno + yyleng; return CLOSE_BRAKET; }
+"++"                            { colno = colno + yyleng; return DOUBLE_PLUS_SIGN; }
+"--"                            { colno = colno + yyleng; return DOUBLE_MINUS_SIGN; }
+[0-9]+                          { colno = colno + yyleng; return INT_LITERAL; }
+([0-9]+\.[0-9]*|[0-9]*\.[0-9]+) { colno = colno + yyleng; return FLOAT_LITERAL; }
+[a-zA-Z_][a-zA-Z0-9_]*          { colno = colno + yyleng; return ID; }
+\"(\\.|[^"])*\"                 { colno = colno + yyleng; return STRING_LITERAL; }
+\{(\\.|[^}])*\}                 { colno = colno + yyleng; return COMMENT; }
 .                               { lexerror(yylineno, colno, yytext); errono += 1; }
 
 %%
