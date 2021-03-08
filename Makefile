@@ -7,6 +7,9 @@ eac.out: lex.yy.c y.tab.c
 eac.lex: lex.yy.c
 	gcc lex.yy.c -lfl -I ./ -o $@
 
+eac.pp: lex.yy.c
+	gcc lex.yy.c predictive_parser_ll1.c -o $@
+
 # generate lexical code
 lex.yy.c:
 	lex --header-file=lex.yy.h lexer.l 
