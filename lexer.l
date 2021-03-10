@@ -45,7 +45,6 @@
 \,                              { colno = colno + yyleng; return ','; }
 \:                              { colno = colno + yyleng; return ':'; }
 "methods"                       { colno = colno + yyleng; return METHODS; }
-"method"                        { colno = colno + yyleng; return METHOD; }
 \(                              { colno = colno + yyleng; return '('; }
 \)                              { colno = colno + yyleng; return ')'; }
 "vars"                          { colno = colno + yyleng; return VARIABLES; }
