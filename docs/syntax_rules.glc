@@ -1,0 +1,149 @@
+Prog -> Pack Impt program id ; ProgBody dot .
+
+Pack ->  | package id ; .
+
+Impt -> | import strLit Impts .
+
+Impts ->  | ; Impt .
+
+ProgBody -> ConstDefPart ClassDefPart VarDeclPart MethDefPart StmtsPart .
+
+ConstDefPart ->  | consts ConstDef .
+
+ConstDef -> id eqSign Const ConstDefs .
+
+ConstDefs -> | ; ConstDef .
+
+Const -> Num | id | strLit | SignedConst .
+
+SignedConst -> Sign const .
+
+Num -> intLit | floatLit .
+
+Sign -> plusSign | minusSign .
+
+ClassDefPart ->  | classes ClassDef .
+
+ClassDef -> id ClassInherance AttrDeclPart MethDeclPart ClassDefs .
+
+ClassInherance -> | eqSign id .
+
+ClassDefs -> | ClassDef .
+
+AttrDeclPart ->  | attributes AttrInit .
+
+AttrInit -> id : AttrDecl AttrInits.
+
+AttrInits -> | ; AttrInit .
+
+AttrDecl -> id AttrVal AttrDecls .
+
+AttrVal -> | eqSign Const .
+
+AttrDecls -> | comma AttrDecl .
+
+MethDeclPart -> methods MethHead .
+
+MethHead -> id ( ParSec ) MethType MethHeads .
+
+MethType -> | : id .
+
+MethHeads -> | ; MethHead .
+
+ParSec -> | id : Param ParSecs .
+
+Param -> id Params .
+
+Params -> | comma Param .
+
+ParSecs -> | ; ParSec .
+
+VarDeclPart ->  | VarKeywd VarDef .
+
+VarKeywd -> variables | var .
+
+VarDef -> id : Var VarDefs .
+
+Var -> id VarAssign VarList .
+
+VarList -> | comma Var .
+
+VarAssign -> | eqSign Exp .
+
+VarDefs -> | ; VarDef .
+
+MethDefPart -> methods MethDef .
+
+MethDef -> id dot id VarDeclPart StmtsPart MethDefs .
+
+MethDefs -> | ; MethDef .
+
+StmtsPart -> begin Stmts end .
+
+Stmts -> | Stmt StmtsList .
+
+StmtsList -> | ; Stmt StmtsList .
+
+Stmt -> IfStmt | WhileStmt | ForStmt |  ReturnStmt | Exp | IncrStmt | ErrorStmt .
+
+IfStmt -> if Exp then StmtsPart ElseIfStmt .
+
+ElseIfStmt -> ElseStmt | elseif StmtsPart ElseIfStmt.
+
+ElseStmt -> | else StmtsPart .
+
+WhileStmt -> while Exp do StmtsPart .
+
+ReturnStmt -> return Exp .
+
+ForStmt -> for AssignStmt to Exp do StmtsPart .
+
+AssignStmt -> Ids attrSign Exp .
+
+Ids -> id IdList | this IdList .
+
+IdList -> | dot id .
+
+Exp -> LogicExp .
+
+LogicExp -> TermoLogico LogicExp' .
+
+LogicExp' -> or LogicExp | xor LogicExp | .
+
+TermoLogico -> FatorLogico TermoLogico' .
+
+TermoLogico' -> and TermoLogico | .
+
+FatorLogico -> LogicAtom | not LogicAtom  .
+
+LogicAtom -> boollit | RelExp .
+
+RelExp -> ArithExp Comparacao .
+
+Comparacao -> less ArithExp | major ArithExp | lesseq ArithExp | majoreq ArithExp | eqeq ArithExp | ! eq ArithExp | .
+
+ArithExp -> Termo ArithExp' .
+
+ArithExp' -> plus Termo ArithExp' | minus Termo ArithExp' | .
+
+Termo -> Fator Termo' .
+
+Termo' -> * Fator Termo' | / Fator Termo' | mod Fator Termo' | .
+
+Fator -> minus Fator | plus Fator | strLit | floatLit | intLit | id | null | ( ArithExp ) .
+
+IncrStmt -> incSign id | decSign id .
+
+ErrorStmt -> RaiseStmt | TryBlk .
+
+RaiseStmt -> raise Exp .
+
+TryBlk -> try StmtsPart except ExceptBlk FinalBlk.
+
+ExceptBlk -> on id DoStmt ExceptBlks .
+
+DoStmt -> | do StmtsPart .
+
+ExceptBlks -> | ExceptBlk .
+
+FinalBlk -> | finally StmtsPart .
