@@ -82,6 +82,7 @@
 "true"                          { colno = colno + yyleng; return BOOLEAN_LITERAL; }
 "false"                         { colno = colno + yyleng; return BOOLEAN_LITERAL; }
 "null"                          { colno = colno + yyleng; return NULL_TOK; }
+"return"                        { colno = colno + yyleng; return RETURN; }
 \[                              { colno = colno + yyleng; return '['; }
 \]                              { colno = colno + yyleng; return ']'; }
 "++"                            { colno = colno + yyleng; return DOUBLE_PLUS_SIGN; }

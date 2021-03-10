@@ -38,6 +38,7 @@ enum token {
     EXP_SIGN,
     BOOLEAN_LITERAL,
     NULL_TOK,
+    RETURN,
     DOUBLE_PLUS_SIGN,
     DOUBLE_MINUS_SIGN,
     INT_LITERAL,
