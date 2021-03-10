@@ -1,5 +1,5 @@
-#ifndef __HEADERS_H__
-#define __HEADERS_H__
+#ifndef __DEFINITIONS_H__
+#define __DEFINITIONS_H__
 
 #include "tokens.h"
 
@@ -44,4 +44,4 @@ void MethDefPart (void);
 void MethDef (void);
 void MethDefs (void);
 
-#endif /** __HEADERS_H__ **/
+#endif /** __DEFINITIONS_H__ **/
