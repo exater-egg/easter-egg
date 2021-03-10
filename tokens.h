@@ -2,7 +2,7 @@
 #define __TOKENS_H__
 
 enum token {
-    PACKAGE,
+    PACKAGE = 177,
     IMPORT,
     PROGRAM,
     CONSTS,
@@ -44,7 +44,8 @@ enum token {
     INT_LITERAL,
     FLOAT_LITERAL,
     ID,
-    STRING_LITERAL
+    STRING_LITERAL,
+    FINALLY
 };
 
 
