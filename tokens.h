@@ -1,7 +1,7 @@
 #ifndef __TOKENS_H__
 #define __TOKENS_H__
 
-enum tokens {
+enum token {
     PACKAGE,
     IMPORT,
     PROGRAM,
@@ -65,6 +65,8 @@ enum tokens {
 
 
 extern int yylex(void);
+
+enum token tok;
 
 #endif /** __TOKENS_H__ **/
 
