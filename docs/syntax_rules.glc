@@ -14,13 +14,17 @@ ConstDef -> id eqSign Const ConstDefs .
 
 ConstDefs -> | ; ConstDef .
 
-Const -> Num | id | strLit | SignedConst .
+Const -> Num | id | strLit | SignedConst | ArrayLit | null .
 
-SignedConst -> Sign const .
+SignedConst -> Sign Const .
 
 Num -> intLit | floatLit .
 
 Sign -> plusSign | minusSign .
+
+ArrayLit -> openBkt ConstList closeBkt .
+
+ConstList -> | Const comma ConstList .
 
 ClassDefPart ->  | classes ClassDef .
 
@@ -130,7 +134,7 @@ Termo -> Fator Termo' .
 
 Termo' -> * Fator Termo' | / Fator Termo' | mod Fator Termo' | .
 
-Fator -> minus Fator | plus Fator | strLit | floatLit | intLit | id | null | ( ArithExp ) .
+Fator -> Const | ( ArithExp ) .
 
 IncrStmt -> incSign id | decSign id .
 
