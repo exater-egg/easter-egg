@@ -4,7 +4,7 @@
 
 extern int colno;
 
-void advance() {tok=yylex(); printf("Token %i found\n", tok); }
+void advance() {tok=yylex(); printf("Token %s found\n", token_to_str(tok)); }
 void eat(enum token t) {if (tok==t) advance(); else error();}
 void error() { 
     printf("Error!");
