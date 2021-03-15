@@ -3,6 +3,7 @@
 #include "definitions.h"
 
 int parser () {
+    advance();
     Prog();
     return 0;
 }
