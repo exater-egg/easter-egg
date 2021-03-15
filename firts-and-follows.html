@@ -136,8 +136,28 @@
                 <nonterm>minusSign</nonterm>
             </td>
             <td>
-                <nonterm>comma</nonterm>
+                <nonterm>*</nonterm>
+                <nonterm>/</nonterm>
+                <nonterm>mod</nonterm>
+                <nonterm>plus</nonterm>
+                <nonterm>minus</nonterm>
+                <nonterm>less</nonterm>
+                <nonterm>major</nonterm>
+                <nonterm>lesseq</nonterm>
+                <nonterm>majoreq</nonterm>
+                <nonterm>eqeq</nonterm>
+                <nonterm>!</nonterm>
+                <nonterm>)</nonterm>
+                <nonterm>and</nonterm>
+                <nonterm>or</nonterm>
+                <nonterm>xor</nonterm>
+                <nonterm>to</nonterm>
+                <nonterm>then</nonterm>
+                <nonterm>do</nonterm>
+                <nonterm>end</nonterm>
                 <nonterm>;</nonterm>
+                <nonterm>comma</nonterm>
+                <nonterm>begin</nonterm>
                 <nonterm>classes</nonterm>
                 <nonterm>variables</nonterm>
                 <nonterm>var</nonterm>
@@ -155,8 +175,28 @@
                 <nonterm>floatLit</nonterm>
             </td>
             <td>
-                <nonterm>comma</nonterm>
+                <nonterm>*</nonterm>
+                <nonterm>/</nonterm>
+                <nonterm>mod</nonterm>
+                <nonterm>plus</nonterm>
+                <nonterm>minus</nonterm>
+                <nonterm>less</nonterm>
+                <nonterm>major</nonterm>
+                <nonterm>lesseq</nonterm>
+                <nonterm>majoreq</nonterm>
+                <nonterm>eqeq</nonterm>
+                <nonterm>!</nonterm>
+                <nonterm>)</nonterm>
+                <nonterm>and</nonterm>
+                <nonterm>or</nonterm>
+                <nonterm>xor</nonterm>
+                <nonterm>to</nonterm>
+                <nonterm>then</nonterm>
+                <nonterm>do</nonterm>
+                <nonterm>end</nonterm>
                 <nonterm>;</nonterm>
+                <nonterm>comma</nonterm>
+                <nonterm>begin</nonterm>
                 <nonterm>classes</nonterm>
                 <nonterm>variables</nonterm>
                 <nonterm>var</nonterm>
@@ -176,12 +216,72 @@
             <td>
                 <nonterm>id</nonterm>
                 <nonterm>strLit</nonterm>
+                <nonterm>null</nonterm>
                 <nonterm>intLit</nonterm>
                 <nonterm>floatLit</nonterm>
+                <nonterm>openBkt</nonterm>
                 <nonterm>plusSign</nonterm>
                 <nonterm>minusSign</nonterm>
             </td>
             <td>no</td>
+            <td>no</td>
+        </tr>
+        <tr>
+            <td>
+                <nonterm>ArrayLit</nonterm>
+            </td>
+            <td>
+                <nonterm>openBkt</nonterm>
+            </td>
+            <td>
+                <nonterm>*</nonterm>
+                <nonterm>/</nonterm>
+                <nonterm>mod</nonterm>
+                <nonterm>plus</nonterm>
+                <nonterm>minus</nonterm>
+                <nonterm>less</nonterm>
+                <nonterm>major</nonterm>
+                <nonterm>lesseq</nonterm>
+                <nonterm>majoreq</nonterm>
+                <nonterm>eqeq</nonterm>
+                <nonterm>!</nonterm>
+                <nonterm>)</nonterm>
+                <nonterm>and</nonterm>
+                <nonterm>or</nonterm>
+                <nonterm>xor</nonterm>
+                <nonterm>to</nonterm>
+                <nonterm>then</nonterm>
+                <nonterm>do</nonterm>
+                <nonterm>end</nonterm>
+                <nonterm>;</nonterm>
+                <nonterm>comma</nonterm>
+                <nonterm>begin</nonterm>
+                <nonterm>classes</nonterm>
+                <nonterm>variables</nonterm>
+                <nonterm>var</nonterm>
+                <nonterm>methods</nonterm>
+            </td>
+            <td>no</td>
+            <td>no</td>
+        </tr>
+        <tr>
+            <td>
+                <nonterm>ConstList</nonterm>
+            </td>
+            <td>
+                <nonterm>id</nonterm>
+                <nonterm>strLit</nonterm>
+                <nonterm>null</nonterm>
+                <nonterm>intLit</nonterm>
+                <nonterm>floatLit</nonterm>
+                <nonterm>openBkt</nonterm>
+                <nonterm>plusSign</nonterm>
+                <nonterm>minusSign</nonterm>
+            </td>
+            <td>
+                <nonterm>closeBkt</nonterm>
+            </td>
+            <td>yes</td>
             <td>no</td>
         </tr>
         <tr>
@@ -295,29 +395,6 @@
                 <nonterm>methods</nonterm>
             </td>
             <td>yes</td>
-            <td>no</td>
-        </tr>
-        <tr>
-            <td>
-                <nonterm>Const</nonterm>
-            </td>
-            <td>
-                <nonterm>id</nonterm>
-                <nonterm>strLit</nonterm>
-                <nonterm>intLit</nonterm>
-                <nonterm>floatLit</nonterm>
-                <nonterm>plusSign</nonterm>
-                <nonterm>minusSign</nonterm>
-            </td>
-            <td>
-                <nonterm>comma</nonterm>
-                <nonterm>;</nonterm>
-                <nonterm>classes</nonterm>
-                <nonterm>variables</nonterm>
-                <nonterm>var</nonterm>
-                <nonterm>methods</nonterm>
-            </td>
-            <td>no</td>
             <td>no</td>
         </tr>
         <tr>
@@ -624,14 +701,15 @@
                 <nonterm>try</nonterm>
                 <nonterm>not</nonterm>
                 <nonterm>boollit</nonterm>
-                <nonterm>minus</nonterm>
-                <nonterm>plus</nonterm>
-                <nonterm>strLit</nonterm>
-                <nonterm>floatLit</nonterm>
-                <nonterm>intLit</nonterm>
-                <nonterm>id</nonterm>
-                <nonterm>null</nonterm>
                 <nonterm>(</nonterm>
+                <nonterm>id</nonterm>
+                <nonterm>strLit</nonterm>
+                <nonterm>null</nonterm>
+                <nonterm>intLit</nonterm>
+                <nonterm>floatLit</nonterm>
+                <nonterm>openBkt</nonterm>
+                <nonterm>plusSign</nonterm>
+                <nonterm>minusSign</nonterm>
             </td>
             <td>
                 <nonterm>end</nonterm>
@@ -667,14 +745,15 @@
                 <nonterm>try</nonterm>
                 <nonterm>not</nonterm>
                 <nonterm>boollit</nonterm>
-                <nonterm>minus</nonterm>
-                <nonterm>plus</nonterm>
-                <nonterm>strLit</nonterm>
-                <nonterm>floatLit</nonterm>
-                <nonterm>intLit</nonterm>
-                <nonterm>id</nonterm>
-                <nonterm>null</nonterm>
                 <nonterm>(</nonterm>
+                <nonterm>id</nonterm>
+                <nonterm>strLit</nonterm>
+                <nonterm>null</nonterm>
+                <nonterm>intLit</nonterm>
+                <nonterm>floatLit</nonterm>
+                <nonterm>openBkt</nonterm>
+                <nonterm>plusSign</nonterm>
+                <nonterm>minusSign</nonterm>
             </td>
             <td>
                 <nonterm>;</nonterm>
@@ -837,14 +916,15 @@
             <td>
                 <nonterm>not</nonterm>
                 <nonterm>boollit</nonterm>
-                <nonterm>minus</nonterm>
-                <nonterm>plus</nonterm>
-                <nonterm>strLit</nonterm>
-                <nonterm>floatLit</nonterm>
-                <nonterm>intLit</nonterm>
-                <nonterm>id</nonterm>
-                <nonterm>null</nonterm>
                 <nonterm>(</nonterm>
+                <nonterm>id</nonterm>
+                <nonterm>strLit</nonterm>
+                <nonterm>null</nonterm>
+                <nonterm>intLit</nonterm>
+                <nonterm>floatLit</nonterm>
+                <nonterm>openBkt</nonterm>
+                <nonterm>plusSign</nonterm>
+                <nonterm>minusSign</nonterm>
             </td>
             <td>
                 <nonterm>to</nonterm>
@@ -888,14 +968,15 @@
             <td>
                 <nonterm>not</nonterm>
                 <nonterm>boollit</nonterm>
-                <nonterm>minus</nonterm>
-                <nonterm>plus</nonterm>
-                <nonterm>strLit</nonterm>
-                <nonterm>floatLit</nonterm>
-                <nonterm>intLit</nonterm>
-                <nonterm>id</nonterm>
-                <nonterm>null</nonterm>
                 <nonterm>(</nonterm>
+                <nonterm>id</nonterm>
+                <nonterm>strLit</nonterm>
+                <nonterm>null</nonterm>
+                <nonterm>intLit</nonterm>
+                <nonterm>floatLit</nonterm>
+                <nonterm>openBkt</nonterm>
+                <nonterm>plusSign</nonterm>
+                <nonterm>minusSign</nonterm>
             </td>
             <td>
                 <nonterm>or</nonterm>
@@ -919,14 +1000,15 @@
             <td>
                 <nonterm>not</nonterm>
                 <nonterm>boollit</nonterm>
-                <nonterm>minus</nonterm>
-                <nonterm>plus</nonterm>
-                <nonterm>strLit</nonterm>
-                <nonterm>floatLit</nonterm>
-                <nonterm>intLit</nonterm>
-                <nonterm>id</nonterm>
-                <nonterm>null</nonterm>
                 <nonterm>(</nonterm>
+                <nonterm>id</nonterm>
+                <nonterm>strLit</nonterm>
+                <nonterm>null</nonterm>
+                <nonterm>intLit</nonterm>
+                <nonterm>floatLit</nonterm>
+                <nonterm>openBkt</nonterm>
+                <nonterm>plusSign</nonterm>
+                <nonterm>minusSign</nonterm>
             </td>
             <td>
                 <nonterm>and</nonterm>
@@ -950,14 +1032,15 @@
             </td>
             <td>
                 <nonterm>boollit</nonterm>
-                <nonterm>minus</nonterm>
-                <nonterm>plus</nonterm>
-                <nonterm>strLit</nonterm>
-                <nonterm>floatLit</nonterm>
-                <nonterm>intLit</nonterm>
-                <nonterm>id</nonterm>
-                <nonterm>null</nonterm>
                 <nonterm>(</nonterm>
+                <nonterm>id</nonterm>
+                <nonterm>strLit</nonterm>
+                <nonterm>null</nonterm>
+                <nonterm>intLit</nonterm>
+                <nonterm>floatLit</nonterm>
+                <nonterm>openBkt</nonterm>
+                <nonterm>plusSign</nonterm>
+                <nonterm>minusSign</nonterm>
             </td>
             <td>
                 <nonterm>and</nonterm>
@@ -980,14 +1063,15 @@
                 <nonterm>RelExp</nonterm>
             </td>
             <td>
-                <nonterm>minus</nonterm>
-                <nonterm>plus</nonterm>
-                <nonterm>strLit</nonterm>
-                <nonterm>floatLit</nonterm>
-                <nonterm>intLit</nonterm>
-                <nonterm>id</nonterm>
-                <nonterm>null</nonterm>
                 <nonterm>(</nonterm>
+                <nonterm>id</nonterm>
+                <nonterm>strLit</nonterm>
+                <nonterm>null</nonterm>
+                <nonterm>intLit</nonterm>
+                <nonterm>floatLit</nonterm>
+                <nonterm>openBkt</nonterm>
+                <nonterm>plusSign</nonterm>
+                <nonterm>minusSign</nonterm>
             </td>
             <td>
                 <nonterm>and</nonterm>
@@ -1069,14 +1153,15 @@
                 <nonterm>Termo</nonterm>
             </td>
             <td>
-                <nonterm>minus</nonterm>
-                <nonterm>plus</nonterm>
-                <nonterm>strLit</nonterm>
-                <nonterm>floatLit</nonterm>
-                <nonterm>intLit</nonterm>
-                <nonterm>id</nonterm>
-                <nonterm>null</nonterm>
                 <nonterm>(</nonterm>
+                <nonterm>id</nonterm>
+                <nonterm>strLit</nonterm>
+                <nonterm>null</nonterm>
+                <nonterm>intLit</nonterm>
+                <nonterm>floatLit</nonterm>
+                <nonterm>openBkt</nonterm>
+                <nonterm>plusSign</nonterm>
+                <nonterm>minusSign</nonterm>
             </td>
             <td>
                 <nonterm>plus</nonterm>
@@ -1142,14 +1227,15 @@
                 <nonterm>Fator</nonterm>
             </td>
             <td>
-                <nonterm>minus</nonterm>
-                <nonterm>plus</nonterm>
-                <nonterm>strLit</nonterm>
-                <nonterm>floatLit</nonterm>
-                <nonterm>intLit</nonterm>
-                <nonterm>id</nonterm>
-                <nonterm>null</nonterm>
                 <nonterm>(</nonterm>
+                <nonterm>id</nonterm>
+                <nonterm>strLit</nonterm>
+                <nonterm>null</nonterm>
+                <nonterm>intLit</nonterm>
+                <nonterm>floatLit</nonterm>
+                <nonterm>openBkt</nonterm>
+                <nonterm>plusSign</nonterm>
+                <nonterm>minusSign</nonterm>
             </td>
             <td>
                 <nonterm>*</nonterm>
@@ -1181,17 +1267,63 @@
         </tr>
         <tr>
             <td>
+                <nonterm>Const</nonterm>
+            </td>
+            <td>
+                <nonterm>id</nonterm>
+                <nonterm>strLit</nonterm>
+                <nonterm>null</nonterm>
+                <nonterm>intLit</nonterm>
+                <nonterm>floatLit</nonterm>
+                <nonterm>openBkt</nonterm>
+                <nonterm>plusSign</nonterm>
+                <nonterm>minusSign</nonterm>
+            </td>
+            <td>
+                <nonterm>*</nonterm>
+                <nonterm>/</nonterm>
+                <nonterm>mod</nonterm>
+                <nonterm>plus</nonterm>
+                <nonterm>minus</nonterm>
+                <nonterm>less</nonterm>
+                <nonterm>major</nonterm>
+                <nonterm>lesseq</nonterm>
+                <nonterm>majoreq</nonterm>
+                <nonterm>eqeq</nonterm>
+                <nonterm>!</nonterm>
+                <nonterm>)</nonterm>
+                <nonterm>and</nonterm>
+                <nonterm>or</nonterm>
+                <nonterm>xor</nonterm>
+                <nonterm>to</nonterm>
+                <nonterm>then</nonterm>
+                <nonterm>do</nonterm>
+                <nonterm>end</nonterm>
+                <nonterm>;</nonterm>
+                <nonterm>comma</nonterm>
+                <nonterm>begin</nonterm>
+                <nonterm>classes</nonterm>
+                <nonterm>variables</nonterm>
+                <nonterm>var</nonterm>
+                <nonterm>methods</nonterm>
+            </td>
+            <td>no</td>
+            <td>no</td>
+        </tr>
+        <tr>
+            <td>
                 <nonterm>ArithExp</nonterm>
             </td>
             <td>
-                <nonterm>minus</nonterm>
-                <nonterm>plus</nonterm>
-                <nonterm>strLit</nonterm>
-                <nonterm>floatLit</nonterm>
-                <nonterm>intLit</nonterm>
-                <nonterm>id</nonterm>
-                <nonterm>null</nonterm>
                 <nonterm>(</nonterm>
+                <nonterm>id</nonterm>
+                <nonterm>strLit</nonterm>
+                <nonterm>null</nonterm>
+                <nonterm>intLit</nonterm>
+                <nonterm>floatLit</nonterm>
+                <nonterm>openBkt</nonterm>
+                <nonterm>plusSign</nonterm>
+                <nonterm>minusSign</nonterm>
             </td>
             <td>
                 <nonterm>less</nonterm>
@@ -1267,14 +1399,15 @@
             <td>
                 <nonterm>not</nonterm>
                 <nonterm>boollit</nonterm>
-                <nonterm>minus</nonterm>
-                <nonterm>plus</nonterm>
-                <nonterm>strLit</nonterm>
-                <nonterm>floatLit</nonterm>
-                <nonterm>intLit</nonterm>
-                <nonterm>id</nonterm>
-                <nonterm>null</nonterm>
                 <nonterm>(</nonterm>
+                <nonterm>id</nonterm>
+                <nonterm>strLit</nonterm>
+                <nonterm>null</nonterm>
+                <nonterm>intLit</nonterm>
+                <nonterm>floatLit</nonterm>
+                <nonterm>openBkt</nonterm>
+                <nonterm>plusSign</nonterm>
+                <nonterm>minusSign</nonterm>
             </td>
             <td>
                 <nonterm>to</nonterm>
