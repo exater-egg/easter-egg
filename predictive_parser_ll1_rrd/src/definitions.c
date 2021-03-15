@@ -1,5 +1,6 @@
 #include "definitions.h"
 
+// Prog → Pack Impt program id ; ProgBody dot .
 void Prog(void)
 {
     switch (tok)
@@ -16,12 +17,15 @@ void Prog(void)
         eat('.');
         return;
 
+        // no follows
+
     default:
         error();
         return;
     }
 }
 
+// Pack → | package id ; .
 void Pack(void)
 {
     switch (tok)
@@ -31,6 +35,8 @@ void Pack(void)
         eat(ID);
         eat(';');
         return;
+
+    // follows - nullable
     case IMPORT:
     case PROGRAM:
         return;
@@ -41,6 +47,7 @@ void Pack(void)
     }
 }
 
+// Impt → | import strLit Impts .
 void Impt(void)
 {
     switch (tok)
@@ -50,6 +57,8 @@ void Impt(void)
         eat(STRING_LITERAL);
         Impts();
         return;
+
+    // follows - nullable
     case PROGRAM:
         return;
 
@@ -59,6 +68,7 @@ void Impt(void)
     }
 }
 
+// Impts → | ; Impt .
 void Impts(void)
 {
     switch (tok)
@@ -67,6 +77,8 @@ void Impts(void)
         eat(';');
         Impt();
         return;
+
+    // follows - nullable
     case PROGRAM:
         return;
 
@@ -76,6 +88,7 @@ void Impts(void)
     }
 }
 
+// ProgBody → ConstDefPart ClassDefPart VarDeclPart MethDefPart StmtsPart .
 void ProgBody(void)
 {
     switch (tok)
@@ -90,7 +103,10 @@ void ProgBody(void)
         MethDefPart();
         StmtsPart();
         return;
+
+    // follows - non-nullable
     case '.':
+        error();
         return;
 
     default:
@@ -99,6 +115,7 @@ void ProgBody(void)
     }
 }
 
+// ConstDefPart → | consts ConstDef .
 void ConstDefPart(void)
 {
     switch (tok)
@@ -107,6 +124,8 @@ void ConstDefPart(void)
         eat(CONSTS);
         ConstDef();
         return;
+
+    // follows - nullable
     case CLASSES:
     case VARIABLES:
     case METHODS:
@@ -118,6 +137,7 @@ void ConstDefPart(void)
     }
 }
 
+// ConstDef → id eqSign Const ConstDefs .
 void ConstDef(void)
 {
     switch (tok)
@@ -128,9 +148,12 @@ void ConstDef(void)
         Const();
         ConstDefs();
         return;
+
+    // follows - non-nullable
     case CLASSES:
     case VARIABLES:
     case METHODS:
+        error();
         return;
 
     default:
@@ -139,6 +162,7 @@ void ConstDef(void)
     }
 }
 
+// ConstDefs → | ; ConstDef .
 void ConstDefs(void)
 {
     switch (tok)
@@ -147,6 +171,8 @@ void ConstDefs(void)
         eat(';');
         ConstDef();
         return;
+
+    // follows - nullable
     case CLASSES:
     case VARIABLES:
     case METHODS:
@@ -158,6 +184,7 @@ void ConstDefs(void)
     }
 }
 
+// Const -> Num | id | strLit | SignedConst | ArrayLit | null .
 void Const(void)
 {
     switch (tok)
@@ -168,6 +195,9 @@ void Const(void)
     case STRING_LITERAL:
         eat(STRING_LITERAL);
         return;
+    case NULL_TOK:
+        eat(NULL_TOK);
+        return;
     case INT_LITERAL:
     case FLOAT_LITERAL:
         Num();
@@ -176,11 +206,18 @@ void Const(void)
     case '-':
         SignedConst();
         return;
+    case '[':
+        ArrayLit();
+        return;
+
+    // TODO follows - non-nullable
+    // 	* / mod plus minus less major lesseq majoreq eqeq ! ) and or xor to then do end ; comma begin classes variables var methods
     case ',':
     case ';':
     case CLASSES:
     case VARIABLES:
     case METHODS:
+        error();
         return;
 
     default:
@@ -189,6 +226,7 @@ void Const(void)
     }
 }
 
+// SignedConst → Sign Const .
 void SignedConst(void)
 {
     switch (tok)
@@ -198,11 +236,14 @@ void SignedConst(void)
         Sign();
         Const();
         return;
+
+    // follows - non-nullable
     case ',':
     case ';':
     case CLASSES:
     case VARIABLES:
     case METHODS:
+        error();
         return;
 
     default:
@@ -211,6 +252,7 @@ void SignedConst(void)
     }
 }
 
+//Num → intLit | floatLit .
 void Num(void)
 {
     switch (tok)
@@ -221,11 +263,14 @@ void Num(void)
     case FLOAT_LITERAL:
         eat(FLOAT_LITERAL);
         return;
+
+    // follows - non-nullable
     case ',':
     case ';':
     case CLASSES:
     case VARIABLES:
     case METHODS:
+        error();
         return;
 
     default:
@@ -234,6 +279,7 @@ void Num(void)
     }
 }
 
+// Sign → plusSign | minusSign .
 void Sign(void)
 {
     switch (tok)
@@ -244,10 +290,13 @@ void Sign(void)
     case '-':
         eat('-');
         return;
+
+    // follows - nullable
     case ID:
     case STRING_LITERAL:
     case INT_LITERAL:
     case FLOAT_LITERAL:
+        error();
         return;
 
     default:
@@ -256,6 +305,7 @@ void Sign(void)
     }
 }
 
+// ClassDefPart → | classes ClassDef .
 void ClassDefPart(void)
 {
     switch (tok)
@@ -264,6 +314,8 @@ void ClassDefPart(void)
         eat(CLASSES);
         ClassDef();
         return;
+
+    // follows - nullable
     case VARIABLES:
     case METHODS:
         return;
@@ -274,6 +326,7 @@ void ClassDefPart(void)
     }
 }
 
+// ClassDef → id ClassInherance AttrDeclPart MethDeclPart ClassDefs .
 void ClassDef(void)
 {
     switch (tok)
@@ -285,8 +338,11 @@ void ClassDef(void)
         MethDeclPart();
         ClassDefs();
         return;
+
+    // follows - non-nullable
     case VARIABLES:
     case METHODS:
+        error();
         return;
 
     default:
@@ -295,6 +351,7 @@ void ClassDef(void)
     }
 }
 
+// ClassInherance → | eqSign id .
 void ClassInherance(void)
 {
     switch (tok)
@@ -303,6 +360,8 @@ void ClassInherance(void)
         eat('=');
         eat(ID);
         return;
+
+    // follows - nullable
     case ATTRIBUTES:
     case METHODS:
         return;
@@ -313,6 +372,7 @@ void ClassInherance(void)
     }
 }
 
+// ClassDefs → | ClassDef .
 void ClassDefs(void)
 {
     switch (tok)
@@ -320,6 +380,8 @@ void ClassDefs(void)
     case ID:
         ClassDef();
         return;
+
+    // follows - nullable
     case VARIABLES:
     case METHODS:
         return;
@@ -330,6 +392,7 @@ void ClassDefs(void)
     }
 }
 
+// AttrDeclPart → | attributes AttrInit .
 void AttrDeclPart(void)
 {
     switch (tok)
@@ -338,6 +401,8 @@ void AttrDeclPart(void)
         eat(ATTRIBUTES);
         AttrInit();
         return;
+
+    // follows - nullable
     case METHODS:
         return;
 
@@ -347,6 +412,7 @@ void AttrDeclPart(void)
     }
 }
 
+// AttrInit → id : AttrDecl AttrInits.
 void AttrInit(void)
 {
     switch (tok)
@@ -357,7 +423,10 @@ void AttrInit(void)
         AttrDecl();
         AttrInits();
         return;
+
+    // follows - non-nullable
     case METHODS:
+        error();
         return;
 
     default:
@@ -366,6 +435,7 @@ void AttrInit(void)
     }
 }
 
+// AttrInits → | ; AttrInit .
 void AttrInits(void)
 {
     switch (tok)
@@ -374,6 +444,8 @@ void AttrInits(void)
         eat(';');
         AttrInit();
         return;
+
+    // follows - nullable
     case METHODS:
         return;
 
@@ -383,6 +455,7 @@ void AttrInits(void)
     }
 }
 
+// AttrDecl → id AttrVal AttrDecls .
 void AttrDecl(void)
 {
     switch (tok)
@@ -392,8 +465,11 @@ void AttrDecl(void)
         AttrVal();
         AttrDecls();
         return;
+
+    // follows - non-nullable
     case ';':
     case METHODS:
+        error();
         return;
 
     default:
@@ -402,6 +478,7 @@ void AttrDecl(void)
     }
 }
 
+// AttrVal → | eqSign Const .
 void AttrVal(void)
 {
     switch (tok)
@@ -410,6 +487,8 @@ void AttrVal(void)
         eat('=');
         Const();
         return;
+
+    // follows - nullable
     case ',':
     case ';':
     case METHODS:
@@ -421,6 +500,7 @@ void AttrVal(void)
     }
 }
 
+// AttrDecls → | comma AttrDecl .
 void AttrDecls(void)
 {
     switch (tok)
@@ -429,6 +509,8 @@ void AttrDecls(void)
         eat(',');
         AttrDecl();
         return;
+
+    // follows - nullable
     case ';':
     case METHODS:
         return;
@@ -439,6 +521,7 @@ void AttrDecls(void)
     }
 }
 
+// MethDeclPart → methods MethHead .
 void MethDeclPart(void)
 {
     switch (tok)
@@ -447,8 +530,11 @@ void MethDeclPart(void)
         eat(METHODS);
         MethHead();
         return;
+
+    // follows - non-nullable
     case ID:
     case VARIABLES:
+        error();
         return;
 
     default:
@@ -457,6 +543,7 @@ void MethDeclPart(void)
     }
 }
 
+// MethHead → id ( ParSec ) MethType MethHeads .
 void MethHead(void)
 {
     switch (tok)
@@ -469,8 +556,11 @@ void MethHead(void)
         MethType();
         MethHeads();
         return;
+
+    // follows - non-nullable
     case VARIABLES:
     case METHODS:
+        error();
         return;
 
     default:
@@ -479,6 +569,7 @@ void MethHead(void)
     }
 }
 
+// MethType → | : id .
 void MethType(void)
 {
     switch (tok)
@@ -487,6 +578,8 @@ void MethType(void)
         eat(':');
         eat(ID);
         return;
+
+    // follows - nullable
     case ';':
     case ID:
     case VARIABLES:
@@ -499,6 +592,7 @@ void MethType(void)
     }
 }
 
+// MethHeads → | ; MethHead .
 void MethHeads(void)
 {
     switch (tok)
@@ -507,6 +601,8 @@ void MethHeads(void)
         eat(';');
         MethHead();
         return;
+
+    // follows - nullable
     case ID:
     case VARIABLES:
     case METHODS:
@@ -518,6 +614,7 @@ void MethHeads(void)
     }
 }
 
+// ParSec → | id : Param ParSecs .
 void ParSec(void)
 {
     switch (tok)
@@ -528,6 +625,8 @@ void ParSec(void)
         Param();
         ParSecs();
         return;
+
+    // follows - nullable
     case ')':
         return;
 
@@ -537,6 +636,7 @@ void ParSec(void)
     }
 }
 
+// Param → id Params .
 void Param(void)
 {
     switch (tok)
@@ -545,8 +645,11 @@ void Param(void)
         eat(ID);
         Params();
         return;
+
+    // follows - non-nullable
     case ';':
     case ')':
+        error();
         return;
 
     default:
@@ -555,6 +658,7 @@ void Param(void)
     }
 }
 
+// Params → | comma Param .
 void Params(void)
 {
     switch (tok)
@@ -563,6 +667,8 @@ void Params(void)
         eat(',');
         Param();
         return;
+
+    // follows - nullable
     case ';':
     case ')':
         return;
@@ -573,6 +679,7 @@ void Params(void)
     }
 }
 
+// ParSecs → | ; ParSec .
 void ParSecs(void)
 {
     switch (tok)
@@ -581,6 +688,8 @@ void ParSecs(void)
         eat(';');
         ParSec();
         return;
+
+    // follows - nullable
     case ')':
         return;
 
@@ -590,6 +699,7 @@ void ParSecs(void)
     }
 }
 
+// VarDeclPart → | VarKeywd VarDef .
 void VarDeclPart(void)
 {
     switch (tok)
@@ -598,6 +708,8 @@ void VarDeclPart(void)
         eat(VARIABLES);
         VarDef();
         return;
+
+    // follows - nullable
     case METHODS:
     case BEGIN_TOK:
         return;
@@ -608,6 +720,7 @@ void VarDeclPart(void)
     }
 }
 
+// VarDef → id : Var VarDefs .
 void VarDef(void)
 {
     switch (tok)
@@ -618,8 +731,11 @@ void VarDef(void)
         Var();
         VarDefs();
         return;
+
+    // follows - non-nullable
     case METHODS:
     case BEGIN_TOK:
+        error();
         return;
 
     default:
@@ -628,6 +744,7 @@ void VarDef(void)
     }
 }
 
+// Var → id VarAssign VarList .
 void Var(void)
 {
     switch (tok)
@@ -637,9 +754,12 @@ void Var(void)
         VarAssign();
         VarList();
         return;
+
+    // follows - non-nullable
     case ';':
     case METHODS:
     case BEGIN_TOK:
+        error();
         return;
 
     default:
@@ -648,6 +768,7 @@ void Var(void)
     }
 }
 
+// VarList → | comma Var .
 void VarList(void)
 {
     switch (tok)
@@ -656,6 +777,8 @@ void VarList(void)
         eat(',');
         Var();
         return;
+
+    // follows - nullable
     case ';':
     case METHODS:
     case BEGIN_TOK:
@@ -667,6 +790,7 @@ void VarList(void)
     }
 }
 
+// VarAssign → | eqSign Exp .
 void VarAssign(void)
 {
     switch (tok)
@@ -675,6 +799,8 @@ void VarAssign(void)
         eat('=');
         Exp();
         return;
+
+    // follows - nullable
     case ',':
     case ';':
     case METHODS:
@@ -687,6 +813,7 @@ void VarAssign(void)
     }
 }
 
+// VarDefs → | ; VarDef .
 void VarDefs(void)
 {
     switch (tok)
@@ -695,6 +822,8 @@ void VarDefs(void)
         eat(';');
         VarDef();
         return;
+
+    // follows - nullable
     case METHODS:
     case BEGIN_TOK:
         return;
@@ -705,6 +834,7 @@ void VarDefs(void)
     }
 }
 
+// MethDefPart → methods MethDef .
 void MethDefPart(void)
 {
     switch (tok)
@@ -713,7 +843,10 @@ void MethDefPart(void)
         eat(METHODS);
         MethDef();
         return;
+
+    // follows - non-nullable
     case BEGIN_TOK:
+        error();
         return;
 
     default:
@@ -722,6 +855,7 @@ void MethDefPart(void)
     }
 }
 
+// MethDef → id dot id VarDeclPart StmtsPart MethDefs .
 void MethDef(void)
 {
     switch (tok)
@@ -734,7 +868,10 @@ void MethDef(void)
         StmtsPart();
         MethDefs();
         return;
+
+    // follows - non-nullable
     case BEGIN_TOK:
+        error();
         return;
 
     default:
@@ -743,6 +880,7 @@ void MethDef(void)
     }
 }
 
+// MethDefs → | ; MethDef .
 void MethDefs(void)
 {
     switch (tok)
@@ -751,6 +889,8 @@ void MethDefs(void)
         eat(';');
         MethDef();
         return;
+
+    // follows - nullable
     case BEGIN_TOK:
         return;
 

@@ -3,8 +3,8 @@ program MergeSort;
 classes
 	MergeSortClass
 	methods
-		method mergeSort(Array : vetor; Intenger : inicio, fim);
-		method merge(ArrayIntenger: vetor; Intenger: inicio,meio,fim)
+		mergeSort(Array : vetor; Intenger : inicio, fim);
+		merge(ArrayIntenger: vetor; Intenger: inicio,meio,fim)
 
 
 
