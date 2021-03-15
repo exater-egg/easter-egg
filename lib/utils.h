@@ -7,8 +7,8 @@ enum token tok;
 
 extern int yylex();
 
-void error() { printf("Error!"); }
-void advance() {tok=yylex(); printf("Token %i found\n", tok); }
-void eat(enum token t) {if (tok==t) advance(); else error();}
+void error();
+void advance();
+void eat(enum token t);
 
 #endif /** __UTILS_H__ **/
