@@ -92,7 +92,7 @@
 ([0-9]+\.[0-9]*|[0-9]*\.[0-9]+) { colno = colno + yyleng; return FLOAT_LITERAL; }
 [a-zA-Z_][a-zA-Z0-9_]*          { colno = colno + yyleng; return ID; }
 \"(\\.|[^"])*\"                 { colno = colno + yyleng; return STRING_LITERAL; }
-\{(\\.|[^}])*\}                 { colno = colno + yyleng; return COMMENT; }
+\{(\\.|[^}])*\}                 { colno = colno + yyleng; }
 .                               { lexerror(yylineno, colno, yytext); errono += 1; }
 
 %%
