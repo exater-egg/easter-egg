@@ -1,9 +1,7 @@
 #ifndef __SYNTAX_H__
 #define __SYNTAX_H__
 
-//#include "expressions.h"
-void Exp();
-
+#include "expressions.h"
 #include "body.h"
 #include "definitions.h"
 
