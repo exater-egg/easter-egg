@@ -1,9 +1,4 @@
 #include "body.h"
-void error();
-void advance();
-void eat(int t);
-
-enum tokens tok;
 
 //StmtsPart->begin Stmts end.
 void StmtsPart(void)

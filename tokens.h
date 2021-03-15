@@ -1,6 +1,8 @@
 #ifndef __TOKENS_H__
 #define __TOKENS_H__
 
+#include <stdio.h>
+
 enum token {
     PACKAGE = 177,
     IMPORT,

@@ -2,6 +2,7 @@
 #define __DEFINITIONS_H__
 
 #include "tokens.h"
+#include "body.h"
 
 void Prog (void);
 void Pack (void);
