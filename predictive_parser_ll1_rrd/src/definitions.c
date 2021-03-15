@@ -184,7 +184,7 @@ void ConstDefs(void)
     }
 }
 
-// Const → Num | id | strLit | SignedConst .
+// Const -> Num | id | strLit | SignedConst | ArrayLit | null .
 void Const(void)
 {
     switch (tok)
@@ -195,6 +195,9 @@ void Const(void)
     case STRING_LITERAL:
         eat(STRING_LITERAL);
         return;
+    case NULL_TOK:
+        eat(NULL_TOK);
+        return;
     case INT_LITERAL:
     case FLOAT_LITERAL:
         Num();
@@ -203,8 +206,12 @@ void Const(void)
     case '-':
         SignedConst();
         return;
+    case '[':
+        ArrayLit();
+        return;
 
-    // follows - non-nullable
+    // TODO follows - non-nullable
+    // 	* / mod plus minus less major lesseq majoreq eqeq ! ) and or xor to then do end ; comma begin classes variables var methods
     case ',':
     case ';':
     case CLASSES:
