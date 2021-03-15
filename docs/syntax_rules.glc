@@ -108,11 +108,9 @@ Ids -> id IdList | this IdList .
 
 IdList -> | dot id .
 
-Exp -> LogicExp .
+Exp -> TermoLogico LogicExp .
 
-LogicExp -> TermoLogico LogicExp' .
-
-LogicExp' -> or LogicExp | xor LogicExp | .
+LogicExp -> or Exp | xor Exp | .
 
 TermoLogico -> FatorLogico TermoLogico' .
 
@@ -124,7 +122,7 @@ LogicAtom -> boollit | RelExp .
 
 RelExp -> ArithExp Comparacao .
 
-Comparacao -> less ArithExp | major ArithExp | lesseq ArithExp | majoreq ArithExp | eqeq ArithExp | ! eq ArithExp | .
+Comparacao -> less ArithExp | major ArithExp | lesseq ArithExp | majoreq ArithExp | eqeq ArithExp | neq ArithExp | .
 
 ArithExp -> Termo ArithExp' .
 
