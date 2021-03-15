@@ -2,20 +2,27 @@
 #define __EXPRESSIONS_H__
 
 #include "tokens.h"
+#include "utils.h"
 
+void Const (void);
+void SignedConst (void);
+void Num (void);
+void Sign (void);
+void ArrayLit(void);
+void ConstList(void);
 void Exp(void);
 void LogicExp(void);
-void TermLogic_0(void);
+void TermLogic(void);
 void TermLogic_1(void);
-void FatorLogic(void);
+void FactorLogic(void);
 void LogicAtom(void);
 void RelExp(void);
 void Comparactive(void);
-void ArithExp_0(void);
+void ArithExp(void);
 void ArithExp_1(void);
-void Term_0(void);
+void Term(void);
 void Term_1(void);
-void Fator(void);
+void Factor(void);
 
 #endif
 
