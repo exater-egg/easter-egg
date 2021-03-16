@@ -51,7 +51,7 @@ void Const(void)
 	case CLASSES:
 	case VARIABLES:
 	case METHODS:
-		error_verbose(tok, 1, expected_tokens);
+		error_verbose(tok, 8, expected_tokens);
 		return;
 
 	default:
@@ -96,7 +96,7 @@ void SignedConst(void)
 	case CLASSES:
 	case VARIABLES:
 	case METHODS:
-		error_verbose(tok, 1, expected_tokens);
+		error_verbose(tok, 2, expected_tokens);
 		return;
 
 	default:
@@ -144,7 +144,7 @@ void Num(void)
 	case CLASSES:
 	case VARIABLES:
 	case METHODS:
-		error_verbose(tok, 1, expected_tokens);
+		error_verbose(tok, 2, expected_tokens);
 		return;
 
 	default:
@@ -173,7 +173,7 @@ void Sign(void)
 	case INT_LITERAL:
 	case FLOAT_LITERAL:
 	case '[':
-		error_verbose(tok, 1, expected_tokens);
+		error_verbose(tok, 2, expected_tokens);
 		return;
 
 	default:
@@ -284,7 +284,7 @@ void Exp()
 	case ';':
 	case METHODS:
 	case BEGIN_TOK:
-		error_verbose(tok, 1, expected_tokens);
+		error_verbose(tok, 10, expected_tokens);
 		return;
 	default:
 		error();
