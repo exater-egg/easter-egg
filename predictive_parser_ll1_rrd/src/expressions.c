@@ -3,6 +3,7 @@
 // Const -> Num | id | strLit | SignedConst | ArrayLit | null .
 void Const(void)
 {
+	int expected_tokens[] = {ID, STRING_LITERAL, NULL_TOK, INT_LITERAL, FLOAT_LITERAL, '+', '-', '['};
 	switch (tok)
 	{
 	case ID:
@@ -26,7 +27,7 @@ void Const(void)
 		ArrayLit();
 		return;
 
-	// TODO follows - non-nullable
+	// follows - non-nullable
 	case '*':
 	case '/':
 	case MOD:
@@ -50,7 +51,7 @@ void Const(void)
 	case CLASSES:
 	case VARIABLES:
 	case METHODS:
-		error();
+		error_verbose(tok, 1, expected_tokens);
 		return;
 
 	default:
@@ -62,6 +63,7 @@ void Const(void)
 // SignedConst → Sign Const .
 void SignedConst(void)
 {
+	int expected_tokens[] = {'+', '-'};
 	switch (tok)
 	{
 	case '+':
@@ -94,7 +96,7 @@ void SignedConst(void)
 	case CLASSES:
 	case VARIABLES:
 	case METHODS:
-		error();
+		error_verbose(tok, 1, expected_tokens);
 		return;
 
 	default:
@@ -106,6 +108,7 @@ void SignedConst(void)
 //Num → intLit | floatLit .
 void Num(void)
 {
+	int expected_tokens[] = {INT_LITERAL, FLOAT_LITERAL};
 	switch (tok)
 	{
 	case INT_LITERAL:
@@ -141,7 +144,7 @@ void Num(void)
 	case CLASSES:
 	case VARIABLES:
 	case METHODS:
-		error();
+		error_verbose(tok, 1, expected_tokens);
 		return;
 
 	default:
@@ -153,6 +156,7 @@ void Num(void)
 // Sign → plusSign | minusSign .
 void Sign(void)
 {
+	int expected_tokens[] = {'+', '-'};
 	switch (tok)
 	{
 	case '+':
@@ -162,14 +166,14 @@ void Sign(void)
 		eat('-');
 		return;
 
-	// follows - nullable
+	// follows - non-nullable
 	case ID:
 	case STRING_LITERAL:
 	case NULL_TOK:
 	case INT_LITERAL:
 	case FLOAT_LITERAL:
 	case '[':
-		error();
+		error_verbose(tok, 1, expected_tokens);
 		return;
 
 	default:
@@ -181,6 +185,7 @@ void Sign(void)
 //ArrayLit → openBkt ConstList closeBkt .
 void ArrayLit(void)
 {
+	int expected_tokens[] = {'['};
 	switch (tok)
 	{
 	case '[':
@@ -215,7 +220,7 @@ void ArrayLit(void)
 	case CLASSES:
 	case VARIABLES:
 	case METHODS:
-		error();
+		error_verbose(tok, 1, expected_tokens);
 		return;
 
 	default:
@@ -227,6 +232,7 @@ void ArrayLit(void)
 // ConstList → | Const comma ConstList .
 void ConstList(void)
 {
+	int expected_tokens[] = {ID, STRING_LITERAL, NULL_TOK, INT_LITERAL, FLOAT_LITERAL, '+', '-', '['};
 	switch (tok)
 	{
 	case ID:
@@ -254,6 +260,7 @@ void ConstList(void)
 
 void Exp()
 {
+	int expected_tokens[] = {'(', ID, BOOLEAN_LITERAL, STRING_LITERAL, NULL_TOK, INT_LITERAL, FLOAT_LITERAL, NOT, '+', '-'};
 	switch (tok)
 	{
 	case '(':
@@ -268,6 +275,16 @@ void Exp()
 	case '+':
 		TermLogic();
 		LogicExp();
+		return;
+	case TO:
+	case THEN:
+	case DO:
+	case END_TOK:
+	case ',':
+	case ';':
+	case METHODS:
+	case BEGIN_TOK:
+		error_verbose(tok, 1, expected_tokens);
 		return;
 	default:
 		error();
@@ -291,7 +308,7 @@ void LogicExp()
 	case THEN:
 	case DO:
 	case BEGIN_TOK:
-	case '.':
+	case ',':
 	case ';':
 	case METHODS:
 	case END_TOK:
@@ -316,6 +333,7 @@ void TermLogic()
 	case '-':
 	case '+':
 	case '(':
+	case '[':
 		FactorLogic();
 		TermLogic_1();
 		return;
