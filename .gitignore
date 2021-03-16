@@ -5,4 +5,5 @@ lex.yy.c
 lex.yy.h
 
 eac.*
+eec.*
 *.o

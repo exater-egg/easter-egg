@@ -4,6 +4,8 @@ BINDIR=bin
 LIBDIR=lib
 APPDIR=app
 
+BIN=eec
+
 PPRRD_DIR=predictive_parser_ll1_rrd
 PPRRD_LIBDIR=$(PPRRD_DIR)/lib
 PPRRD_SRCDIR=$(PPRRD_DIR)/src
@@ -23,13 +25,13 @@ PPRRD_OBJS=$(patsubst $(PPRRD_SRCDIR)/%.c,$(PPRRD_OBJDIR)/%.o,$(_PPRRD_OBJS))
 
 ALLOBJS=$(OBJS) $(PPRRD_OBJS)
 
-all: eac.out
+all: $(BIN).out
 
-eac.out: lex.yy.c y.tab.c
+$(BIN).out: lex.yy.c y.tab.c
 	# compile
 	gcc lex.yy.c y.tab.c -o $@
 
-eac.lex: lex.yy.c
+$(BIN).lex: lex.yy.c
 	gcc lex.yy.c -lfl -I ./ -o $@
 
 # generate lexical code
@@ -43,10 +45,10 @@ y.tab.c:
 $(OBJDIR)/%.o : $(SRCDIR)/%.c
 	gcc -c -I ./ -I $(LIBDIR) $< -o $@
 
-eac.pp: lex.yy.c
+$(BIN).pp: lex.yy.c
 	gcc lex.yy.c predictive_parser_ll1.c -o $@
 
-eac.pprrd: lex.yy.c mkdirs $(PPRRD_OBJS) $(OBJS)
+$(BIN).pprrd: lex.yy.c mkdirs $(PPRRD_OBJS) $(OBJS)
 	gcc lex.yy.c $(PPRRD_APP) $(PPRRD_OBJS) $(OBJS) -I ./ -I $(LIBDIR) -I $(PPRRD_LIBDIR) -o $@
 
 $(PPRRD_OBJDIR)/%.o : $(PPRRD_SRCDIR)/%.c
@@ -55,10 +57,10 @@ $(PPRRD_OBJDIR)/%.o : $(PPRRD_SRCDIR)/%.c
 mkdirs:
 	mkdir -p $(_DIRS)
 
-run: eac.out
-	./eac.out
+run: $(BIN).out
+	./$(BIN).out
 
 clean:
-	rm -f y.tab.c lex.yy.c eac.* $(ALLOBJS)
+	rm -f y.tab.c lex.yy.c $(BIN).* $(ALLOBJS)
 
 
