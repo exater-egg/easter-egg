@@ -4,104 +4,163 @@
 
 extern int colno;
 
-void advance() {tok=yylex(); printf("Token %s found\n", token_to_str(tok)); }
-void eat(enum token t) {if (tok==t) advance(); else error();}
-void error() { 
+void advance()
+{
+    tok = yylex();
+    printf("Token %s found\n", token_to_str(tok));
+}
+
+void eat(enum token t)
+{
+    if (tok == t)
+        advance();
+    else
+        error();
+}
+
+void error()
+{
     printf("Error!");
     printf("Line %d\n", yylineno);
     printf("Column %d\n", colno);
 }
-char* token_to_str(int tok){
+
+char *token_to_str(int tok)
+{
     switch (tok)
     {
     case PACKAGE:
-		return "package";break;
+        return "package";
+        break;
     case IMPORT:
-		return "import";break;
+        return "import";
+        break;
     case PROGRAM:
-		return "program";break;
+        return "program";
+        break;
     case CONSTS:
-		return "conts";break;
+        return "conts";
+        break;
     case CLASSES:
-		return "classes";break;
+        return "classes";
+        break;
     case ATTRIBUTES:
-		return "attributes";break;
+        return "attributes";
+        break;
     case METHODS:
-		return "methods";break;
+        return "methods";
+        break;
     case VARIABLES:
-		return "variables";break;
+        return "variables";
+        break;
     case BEGIN_TOK:
-		return "begin";break;
+        return "begin";
+        break;
     case END_TOK:
-		return "end";break;
+        return "end";
+        break;
     case IF:
-		return "if";break;
+        return "if";
+        break;
     case THEN:
-		return "then";break;
+        return "then";
+        break;
     case ELSE:
-		return "else";break;
+        return "else";
+        break;
     case ELSEIF:
-		return "elseif";break;
+        return "elseif";
+        break;
     case WHILE:
-		return "while";break;
+        return "while";
+        break;
     case DO:
-		return "do";break;
+        return "do";
+        break;
     case FOR:
-		return "for";break;
+        return "for";
+        break;
     case TO:
-		return "to";break;
+        return "to";
+        break;
     case RAISE:
-		return "raise";break;
+        return "raise";
+        break;
     case TRY:
-		return "try";break;
+        return "try";
+        break;
     case EXCEPT:
-		return "except";break;
+        return "except";
+        break;
     case ON:
-		return "on";break;
+        return "on";
+        break;
     case THIS:
-		return "this";break;
+        return "this";
+        break;
     case NOT:
-		return "not";break;
+        return "not";
+        break;
     case ASSIGN_SIGN:
-		return ":=";break;
+        return ":=";
+        break;
     case AND:
-		return "and";break;
+        return "and";
+        break;
     case OR:
-		return "or";break;
+        return "or";
+        break;
     case XOR:
-		return "xor";break;
+        return "xor";
+        break;
     case DOUB_EQ_SIGN:
-		return "==";break;
+        return "==";
+        break;
     case NEG_EQ_SIGN:
-		return "!=";break;
+        return "!=";
+        break;
     case LESS_EQ_SIGN:
-		return "<=";break;
+        return "<=";
+        break;
     case MORE_EQ_SIGN:
-		return ">=";break;
+        return ">=";
+        break;
     case MOD:
-		return "%";break;
+        return "%";
+        break;
     case EXP_SIGN:
-		return "**";break;
+        return "**";
+        break;
     case BOOLEAN_LITERAL:
-		return "boolean value";break;
+        return "boolean value";
+        break;
     case NULL_TOK:
-		return "null";break;
+        return "null";
+        break;
     case RETURN:
-		return "return";break;
+        return "return";
+        break;
     case DOUBLE_PLUS_SIGN:
-		return "++";break;
+        return "++";
+        break;
     case DOUBLE_MINUS_SIGN:
-		return "--";break;
+        return "--";
+        break;
     case INT_LITERAL:
-		return "int value";break;
+        return "int value";
+        break;
     case FLOAT_LITERAL:
-		return "float";break;
+        return "float";
+        break;
     case ID:
-		return "identifier";break;
+        return "identifier";
+        break;
     case STRING_LITERAL:
-		return "string value";break;
+        return "string value";
+        break;
     case FINALLY:
-        return "finally";break;
+        return "finally";
+        break;
     default:
     {
         // Return the string with the char atual value (e.g. char 'c' -> char* "c")
@@ -118,7 +177,8 @@ char* token_to_str(int tok){
  * @param tokc  The number of expected tokens options (i.e. expected "if" or "for" or "while" -> tokc=3)
  * @param tokv  The vector of expected tokens options as enums (i.e. tokv={IF, FOR, WHILE})
  */
-void error_verbose(int givenTok, int tokc, int* tokv) { 
+void error_verbose(int givenTok, int tokc, int tokv[])
+{
     printf("Error!");
     printf("Line %d\n", yylineno);
     if (tokc < 1)
