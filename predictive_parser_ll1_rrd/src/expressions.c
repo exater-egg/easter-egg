@@ -182,7 +182,7 @@ void Sign(void)
 	}
 }
 
-//ArrayLit → openBkt ConstList closeBkt .
+//ArrayLit → openBkt ExpList closeBkt .
 void ArrayLit(void)
 {
 	int expected_tokens[] = {'['};
@@ -190,7 +190,7 @@ void ArrayLit(void)
 	{
 	case '[':
 		eat('[');
-		ConstList();
+		ExpList();
 		eat(']');
 		return;
 
@@ -229,8 +229,8 @@ void ArrayLit(void)
 	}
 }
 
-// ConstList → | Const comma ConstList .
-void ConstList(void)
+// ExpList → | Const comma ExpList .
+void ExpList(void)
 {
 	int expected_tokens[] = {ID, STRING_LITERAL, NULL_TOK, INT_LITERAL, FLOAT_LITERAL, '+', '-', '['};
 	switch (tok)
@@ -245,7 +245,7 @@ void ConstList(void)
 	case '-':
 		Const();
 		eat(',');
-		ConstList();
+		ExpList();
 		return;
 
 	// follows - nullable
