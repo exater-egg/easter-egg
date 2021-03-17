@@ -22,9 +22,9 @@ Num -> intLit | floatLit .
 
 Sign -> plusSign | minusSign .
 
-ArrayLit -> openBkt ConstList closeBkt .
+ArrayLit -> openBkt ExpList closeBkt .
 
-ConstList -> | Const comma ConstList .
+ExpList -> | Exp comma ExpList .
 
 ClassDefPart ->  | classes ClassDef .
 
