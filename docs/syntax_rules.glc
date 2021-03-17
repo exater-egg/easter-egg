@@ -14,7 +14,7 @@ ConstDef -> id eqSign Const ConstDefs .
 
 ConstDefs -> | ; ConstDef .
 
-Const -> Num | id | strLit | SignedConst | ArrayLit | null .
+Const -> Num | Ids | strLit | SignedConst | ArrayLit | null .
 
 SignedConst -> Sign Const .
 
@@ -106,7 +106,9 @@ AssignStmt -> Ids attrSign Exp .
 
 Ids -> id IdList | this IdList .
 
-IdList -> | dot id .
+IdList -> | dot id MethCall .
+
+MethCall -> | ( ExpList ) .
 
 Exp -> TermoLogico LogicExp .
 
