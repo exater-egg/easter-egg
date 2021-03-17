@@ -106,7 +106,7 @@ AssignStmt -> Ids attrSign Exp .
 
 Ids -> id IdList | this IdList .
 
-IdList -> | dot id MethCall .
+IdList -> | dot id MethCall IdList .
 
 MethCall -> | ( ExpList ) .
 
