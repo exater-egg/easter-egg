@@ -1,9 +1,9 @@
 #include "expressions.h"
 
-// Const -> Num | id | strLit | SignedConst | ArrayLit | null .
+// Const -> Num | Ids | strLit | boolLit | SignedConst | ArrayLit | null .
 void Const(void)
 {
-	int expected_tokens[] = {ID, STRING_LITERAL, NULL_TOK, INT_LITERAL, FLOAT_LITERAL, '+', '-', '['};
+	int expected_tokens[] = {ID, STRING_LITERAL, NULL_TOK, INT_LITERAL, BOOLEAN_LITERAL,FLOAT_LITERAL, '+', '-', '['};
 	switch (tok)
 	{
 	case ID:
@@ -14,6 +14,9 @@ void Const(void)
 		return;
 	case NULL_TOK:
 		eat(NULL_TOK);
+		return;
+	case BOOLEAN_LITERAL:
+		eat(BOOLEAN_LITERAL);
 		return;
 	case INT_LITERAL:
 	case FLOAT_LITERAL:
@@ -172,6 +175,7 @@ void Sign(void)
 	case NULL_TOK:
 	case INT_LITERAL:
 	case FLOAT_LITERAL:
+	case BOOLEAN_LITERAL:
 	case '[':
 		error_verbose(tok, 2, expected_tokens);
 		return;
@@ -229,7 +233,7 @@ void ArrayLit(void)
 	}
 }
 
-// ExpList → | Const comma ExpList .
+// ExpList -> | Exp comma ExpList .
 void ExpList(void)
 {
 	int expected_tokens[] = {ID, STRING_LITERAL, NULL_TOK, INT_LITERAL, FLOAT_LITERAL, '+', '-', '['};
@@ -243,13 +247,14 @@ void ExpList(void)
 	case '[':
 	case '+':
 	case '-':
-		Const();
+		Exp();
 		eat(',');
 		ExpList();
 		return;
 
 	// follows - nullable
 	case ']':
+	case ')':
 		return;
 
 	default:
@@ -257,7 +262,7 @@ void ExpList(void)
 		return;
 	}
 }
-
+//Exp -> TermoLogico LogicExp .
 void Exp()
 {
 	int expected_tokens[] = {'(', ID, BOOLEAN_LITERAL, STRING_LITERAL, NULL_TOK, INT_LITERAL, FLOAT_LITERAL, NOT, '+', '-'};
@@ -276,6 +281,8 @@ void Exp()
 		TermLogic();
 		LogicExp();
 		return;
+
+	// follows - non-nullable
 	case TO:
 	case THEN:
 	case DO:
@@ -292,6 +299,7 @@ void Exp()
 	}
 }
 
+//LogicExp -> or Exp | xor Exp | .
 void LogicExp()
 {
 	switch (tok)
@@ -304,6 +312,8 @@ void LogicExp()
 		eat(XOR);
 		Exp();
 		return;
+
+	// follows nullable
 	case TO:
 	case THEN:
 	case DO:
@@ -319,6 +329,7 @@ void LogicExp()
 	}
 }
 
+//TermoLogico -> FatorLogico TermoLogico' .
 void TermLogic()
 {
 	switch (tok)
@@ -344,6 +355,7 @@ void TermLogic()
 	}
 }
 
+//TermoLogico' -> and TermoLogico | .
 void TermLogic_1()
 {
 	switch (tok)
@@ -352,6 +364,8 @@ void TermLogic_1()
 		eat(AND);
 		TermLogic();
 		return;
+
+	// follows nullable
 	case TO:
 	case THEN:
 	case OR:
@@ -368,6 +382,7 @@ void TermLogic_1()
 	}
 }
 
+//FatorLogico -> RelExp | not RelExp  .
 void FactorLogic()
 {
 	switch (tok)
@@ -381,33 +396,10 @@ void FactorLogic()
 	case '+':
 	case '(':
 	case NULL_TOK:
-		LogicAtom();
+		RelExp();
 		return;
 	case NOT:
 		eat(NOT);
-		LogicAtom();
-		return;
-	default:
-		error();
-		return;
-	}
-}
-
-void LogicAtom()
-{
-	switch (tok)
-	{
-	case BOOLEAN_LITERAL:
-		eat(BOOLEAN_LITERAL);
-		return;
-	case ID:
-	case INT_LITERAL:
-	case FLOAT_LITERAL:
-	case STRING_LITERAL:
-	case NULL_TOK:
-	case '-':
-	case '+':
-	case '(':
 		RelExp();
 		return;
 	default:
@@ -416,6 +408,7 @@ void LogicAtom()
 	}
 }
 
+//RelExp -> ArithExp Comparacao .
 void RelExp()
 {
 	switch (tok)
@@ -424,6 +417,8 @@ void RelExp()
 	case INT_LITERAL:
 	case FLOAT_LITERAL:
 	case STRING_LITERAL:
+	case BOOLEAN_LITERAL:
+	case THIS:
 	case NULL_TOK:
 	case '-':
 	case '+':
@@ -435,7 +430,8 @@ void RelExp()
 		error();
 	}
 }
-
+//Comparacao -> less ArithExp | major ArithExp | lesseq ArithExp 
+//| majoreq ArithExp | eqeq ArithExp | neq ArithExp | .
 void Comparactive()
 {
 	switch (tok)
@@ -464,15 +460,18 @@ void Comparactive()
 		eat(NEG_EQ_SIGN);
 		ArithExp();
 		return;
+
+	// Follows nullable
 	case TO:
 	case THEN:
 	case OR:
 	case XOR:
 	case DO:
 	case ';':
-	case '.':
+	case ',':
 	case METHODS:
 	case BEGIN_TOK:
+	case AND:
 		return;
 	default:
 		error();
@@ -480,12 +479,15 @@ void Comparactive()
 	}
 }
 
+
+//ArithExp -> Termo ArithExp' .
 void ArithExp()
 {
 	switch (tok)
 	{
 	case ID:
 	case INT_LITERAL:
+	case BOOLEAN_LITERAL:
 	case FLOAT_LITERAL:
 	case STRING_LITERAL:
 	case NULL_TOK:
@@ -501,6 +503,7 @@ void ArithExp()
 	}
 }
 
+//ArithExp' -> plus Termo ArithExp' | minus Termo ArithExp' | .
 void ArithExp_1()
 {
 	switch (tok)
@@ -515,6 +518,7 @@ void ArithExp_1()
 		Term();
 		ArithExp_1();
 		return;
+	// Follows nullable
 	case TO:
 	case THEN:
 	case AND:
@@ -540,6 +544,7 @@ void ArithExp_1()
 	}
 }
 
+//Termo -> Fator Termo' .
 void Term()
 {
 	switch (tok)
@@ -548,6 +553,7 @@ void Term()
 	case INT_LITERAL:
 	case FLOAT_LITERAL:
 	case STRING_LITERAL:
+	case BOOLEAN_LITERAL:
 	case NULL_TOK:
 	case '-':
 	case '+':
@@ -562,6 +568,8 @@ void Term()
 	}
 }
 
+//Termo' -> * Fator Termo' 
+// | / Fator Termo' | mod Fator Termo' | .
 void Term_1()
 {
 	switch (tok)
@@ -581,6 +589,7 @@ void Term_1()
 		Factor();
 		Term_1();
 		return;
+	// Follows nullable
 	case '+':
 	case '-':
 	case TO:
@@ -607,6 +616,7 @@ void Term_1()
 	}
 }
 
+//Fator -> Const | ( ArithExp ) .
 void Factor()
 {
 	switch (tok)
