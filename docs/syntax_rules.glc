@@ -14,7 +14,7 @@ ConstDef -> id eqSign Const ConstDefs .
 
 ConstDefs -> | ; ConstDef .
 
-Const -> Num | Ids | strLit | SignedConst | ArrayLit | null .
+Const -> Num | Ids | strLit | boolLit | SignedConst | ArrayLit | null .
 
 SignedConst -> Sign Const .
 
@@ -118,9 +118,7 @@ TermoLogico -> FatorLogico TermoLogico' .
 
 TermoLogico' -> and TermoLogico | .
 
-FatorLogico -> LogicAtom | not LogicAtom  .
-
-LogicAtom -> boollit | RelExp .
+FatorLogico -> RelExp | not RelExp  .
 
 RelExp -> ArithExp Comparacao .
 
