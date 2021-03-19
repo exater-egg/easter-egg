@@ -1,13 +1,11 @@
 #include "utils.h"
-#include "lex.yy.h"
-#include "tokens.h"
 
 extern int colno;
 
 void advance()
 {
     tok = yylex();
-    printf("Token %s found\n", token_to_str(tok));
+    printf("Token %s found (%i, %i)\n", token_to_str(tok), yylineno, colno);
 }
 
 void eat(enum token t)
@@ -20,9 +18,8 @@ void eat(enum token t)
 
 void error()
 {
-    printf("Error!");
-    printf("Line %d\n", yylineno);
-    printf("Column %d\n", colno);
+    printf("Error! Line %d, Column %d\n", yylineno, colno);
+    abort();
 }
 
 char *token_to_str(int tok)

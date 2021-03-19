@@ -1,7 +1,9 @@
 #ifndef __UTILS_H__
 #define __UTILS_H__
 
+#include "lex.yy.h"
 #include "tokens.h"
+#include <stdlib.h>
 
 enum token tok;
 
