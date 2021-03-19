@@ -23,10 +23,6 @@ void ReturnStmt(void);
 void ForStmt(void);
 //AssignStmt -> Ids attrSign Exp .
 void AssignStmt(void);
-//Ids -> id IdList | this IdList .
-void Ids(void);
-//IdList -> | dot id .
-void IdList(void);
 //IncrStmt -> incSign id | decSign id .
 void IncrStmt(void);
 //ErrorStmt -> RaiseStmt | TryBlk .

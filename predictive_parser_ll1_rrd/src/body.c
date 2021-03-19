@@ -130,6 +130,7 @@ void ReturnStmt(void){
     switch (tok)
     {
     case RETURN:
+        eat(RETURN);
         Exp();
         break;
     default:
@@ -154,31 +155,6 @@ void AssignStmt(void){
     case ID:
     case THIS:
         Ids(); eat(ASSIGN_SIGN); Exp(); break;
-    default:
-        error();
-    }
-}
-//Ids -> id IdList | this IdList .
-void Ids(void){
-    switch (tok)
-    {
-    case ID:
-        eat(ID); IdList(); break;
-    case THIS:
-        eat(THIS); IdList(); break;
-    default:
-        error();
-    }
-}
-//IdList -> | dot id .
-// follow(IdList) = [assignSign]
-void IdList(void){
-    switch (tok)
-    {
-    case '.':
-        eat('.'); eat(ID); break;
-    case ASSIGN_SIGN:
-        break;
     default:
         error();
     }
