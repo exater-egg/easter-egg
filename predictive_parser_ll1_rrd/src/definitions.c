@@ -20,6 +20,7 @@ void Prog(void)
         // no follows
 
     default:
+        printf("[ERROR] Prog\n");
         error();
         return;
     }
@@ -42,6 +43,7 @@ void Pack(void)
         return;
 
     default:
+        printf("[ERROR] Pack\n");
         error();
         return;
     }
@@ -63,6 +65,7 @@ void Impt(void)
         return;
 
     default:
+        printf("[ERROR] Impt\n");
         error();
         return;
     }
@@ -83,6 +86,7 @@ void Impts(void)
         return;
 
     default:
+        printf("[ERROR] Impts\n");
         error();
         return;
     }
@@ -110,6 +114,7 @@ void ProgBody(void)
         return;
 
     default:
+        printf("[ERROR] ProgBody\n");
         error();
         return;
     }
@@ -132,6 +137,7 @@ void ConstDefPart(void)
         return;
 
     default:
+        printf("[ERROR] ConstDefPart\n");
         error();
         return;
     }
@@ -157,6 +163,7 @@ void ConstDef(void)
         return;
 
     default:
+        printf("[ERROR] ConstDef\n");
         error();
         return;
     }
@@ -179,6 +186,7 @@ void ConstDefs(void)
         return;
 
     default:
+        printf("[ERROR] ConstDefs\n");
         error();
         return;
     }
@@ -200,6 +208,7 @@ void ClassDefPart(void)
         return;
 
     default:
+        printf("[ERROR] ClassDefPart\n");
         error();
         return;
     }
@@ -225,6 +234,7 @@ void ClassDef(void)
         return;
 
     default:
+        printf("[ERROR] ClassDef\n");
         error();
         return;
     }
@@ -246,6 +256,7 @@ void ClassInherance(void)
         return;
 
     default:
+        printf("[ERROR] ClassInheritance\n");
         error();
         return;
     }
@@ -266,6 +277,7 @@ void ClassDefs(void)
         return;
 
     default:
+        printf("[ERROR] ClassDefs\n");
         error();
         return;
     }
@@ -286,6 +298,7 @@ void AttrDeclPart(void)
         return;
 
     default:
+        printf("[ERROR] AttrDeclPart\n");
         error();
         return;
     }
@@ -309,6 +322,7 @@ void AttrInit(void)
         return;
 
     default:
+        printf("[ERROR] AttrInit\n");
         error();
         return;
     }
@@ -329,6 +343,7 @@ void AttrInits(void)
         return;
 
     default:
+        printf("[ERROR] AttrInits\n");
         error();
         return;
     }
@@ -352,6 +367,7 @@ void AttrDecl(void)
         return;
 
     default:
+        printf("[ERROR] AttrDecl\n");
         error();
         return;
     }
@@ -374,6 +390,7 @@ void AttrVal(void)
         return;
 
     default:
+        printf("[ERROR] AttrVal\n");
         error();
         return;
     }
@@ -395,6 +412,7 @@ void AttrDecls(void)
         return;
 
     default:
+        printf("[ERROR] AttrDecls\n");
         error();
         return;
     }
@@ -417,6 +435,7 @@ void MethDeclPart(void)
         return;
 
     default:
+        printf("[ERROR] MethDeclPart\n");
         error();
         return;
     }
@@ -443,6 +462,7 @@ void MethHead(void)
         return;
 
     default:
+        printf("[ERROR] MethHead\n");
         error();
         return;
     }
@@ -466,6 +486,7 @@ void MethType(void)
         return;
 
     default:
+        printf("[ERROR] MethType\n");
         error();
         return;
     }
@@ -488,6 +509,7 @@ void MethHeads(void)
         return;
 
     default:
+        printf("[ERROR] MethHeads\n");
         error();
         return;
     }
@@ -510,6 +532,7 @@ void ParSec(void)
         return;
 
     default:
+        printf("[ERROR] ParSec\n");
         error();
         return;
     }
@@ -532,6 +555,7 @@ void Param(void)
         return;
 
     default:
+        printf("[ERROR] Param\n");
         error();
         return;
     }
@@ -553,6 +577,7 @@ void Params(void)
         return;
 
     default:
+        printf("[ERROR] Params\n");
         error();
         return;
     }
@@ -573,6 +598,7 @@ void ParSecs(void)
         return;
 
     default:
+        printf("[ERROR] ParSecs\n");
         error();
         return;
     }
@@ -594,6 +620,7 @@ void VarDeclPart(void)
         return;
 
     default:
+        printf("[ERROR] VarDeclPart\n");
         error();
         return;
     }
@@ -618,6 +645,7 @@ void VarDef(void)
         return;
 
     default:
+        printf("[ERROR] VarDef\n");
         error();
         return;
     }
@@ -642,6 +670,7 @@ void Var(void)
         return;
 
     default:
+        printf("[ERROR] Var\n");
         error();
         return;
     }
@@ -664,6 +693,7 @@ void VarList(void)
         return;
 
     default:
+        printf("[ERROR] VarList\n");
         error();
         return;
     }
@@ -687,6 +717,7 @@ void VarAssign(void)
         return;
 
     default:
+        printf("[ERROR] VarAssign\n");
         error();
         return;
     }
@@ -708,6 +739,7 @@ void VarDefs(void)
         return;
 
     default:
+        printf("[ERROR] VarDefs\n");
         error();
         return;
     }
@@ -729,6 +761,7 @@ void MethDefPart(void)
         return;
 
     default:
+        printf("[ERROR] MethDefPart\n");
         error();
         return;
     }
@@ -754,6 +787,7 @@ void MethDef(void)
         return;
 
     default:
+        printf("[ERROR] MethDef\n");
         error();
         return;
     }
@@ -774,6 +808,7 @@ void MethDefs(void)
         return;
 
     default:
+        printf("[ERROR] MethDefs\n");
         error();
         return;
     }

@@ -11,7 +11,9 @@ void StmtsPart(void)
         eat(END_TOK);
         return;
     default:
+        printf("[ERROR] IfStmt\n");
         error();
+        return;
     }
 }
 //Stmts -> | Stmt StmtsList .
@@ -46,6 +48,7 @@ void Stmts(void)
     case END_TOK:
         return;
     default:
+        printf("[ERROR] Stmts\n");
         error();
         return;
     }
@@ -64,17 +67,21 @@ void StmtsList(void)
         StmtsList();
         return;
     default:
+        printf("[ERROR] StmtList\n");
         error();
+        return;
     }
 }
 // Stmt -> IfStmt | WhileStmt | ForStmt |  ReturnStmt | Exp | IncrStmt | ErrorStmt .
 // Follow(Stmt) = [if, while, for, return, incSign, decSign, raise, try, not, (, boollit, id]
 void Stmt(void)
 {
+    int expected_tokens[] = {IF, WHILE, FOR, RETURN, DOUBLE_PLUS_SIGN, DOUBLE_MINUS_SIGN, RAISE, TRY, NOT, '(', STRING_LITERAL, BOOLEAN_LITERAL, NULL_TOK, INT_LITERAL, FLOAT_LITERAL, ID, THIS, '[', '+', '-'};
     switch (tok)
     {
     case END_TOK:
     case ';':
+        error();
         return;
     case IF:
         IfStmt();
@@ -108,8 +115,11 @@ void Stmt(void)
     case '(':
     case '[':
         Exp();
+
     default:
-        error();
+        printf("[ERROR] Stmt\n");
+        error_verbose(tok, 20, expected_tokens);
+        return;
     }
 }
 //IfStmt -> if Exp then StmtsPart ElseIfStmt .
@@ -125,7 +135,9 @@ void IfStmt(void)
         ElseIfStmt();
         return;
     default:
+        printf("[ERROR] IfStmt\n");
         error();
+        return;
     }
 }
 //ElseIfStmt -> ElseStmt | elseif StmtsPart ElseIfStmt.
@@ -145,7 +157,9 @@ void ElseIfStmt(void)
     case END_TOK:
         return;
     default:
+        printf("[ERROR] ElseIfStmt\n");
         error();
+        return;
     }
 }
 //ElseStmt -> | else StmtsPart .
@@ -160,7 +174,9 @@ void ElseStmt(void)
     case ';':
     case END_TOK:
     default:
+        printf("[ERROR] ElseStmt\n");
         error();
+        return;
     }
 }
 //WhileStmt -> while Exp do StmtsPart .
@@ -175,7 +191,9 @@ void WhileStmt(void)
         StmtsPart();
         return;
     default:
+        printf("[ERROR] WhileStmt\n");
         error();
+        return;
     }
 }
 //ReturnStmt -> return Exp .
@@ -188,7 +206,9 @@ void ReturnStmt(void)
         Exp();
         return;
     default:
+        printf("[ERROR] ReturnStmt\n");
         error();
+        return;
     }
 }
 //ForStmt -> for AssignStmt to Exp do StmtsPart .
@@ -204,7 +224,9 @@ void ForStmt(void)
         StmtsPart();
         return;
     default:
+        printf("[ERROR] ForStmt\n");
         error();
+        return;
     }
 }
 //AssignStmt -> Ids attrSign Exp .
@@ -219,7 +241,9 @@ void AssignStmt(void)
         Exp();
         return;
     default:
+        printf("[ERROR] AssignStmt\n");
         error();
+        return;
     }
 }
 //IncrStmt -> incSign id | decSign id .
@@ -236,7 +260,9 @@ void IncrStmt(void)
         eat(ID);
         return;
     default:
+        printf("[ERROR] IncrStmt\n");
         error();
+        return;
     }
 }
 //ErrorStmt -> RaiseStmt | TryBlk .
@@ -251,7 +277,9 @@ void ErrorStmt(void)
         TryBlk();
         return;
     default:
+        printf("[ERROR] ErrorStmt\n");
         error();
+        return;
     }
 }
 //RaiseStmt -> raise Exp .
@@ -264,7 +292,9 @@ void RaiseStmt(void)
         Exp();
         return;
     default:
+        printf("[ERROR] RaiseStmt\n");
         error();
+        return;
     }
 }
 //TryBlk -> try StmtsPart except ExceptBlk FinalBlk.
@@ -280,7 +310,9 @@ void TryBlk(void)
         FinalBlk();
         return;
     default:
+        printf("[ERROR] TryBlk\n");
         error();
+        return;
     }
 }
 //ExceptBlk -> on id DoStmt ExceptBlks .
@@ -295,7 +327,9 @@ void ExceptBlk(void)
         ExceptBlks();
         return;
     default:
+        printf("[ERROR] ExceptBlk\n");
         error();
+        return;
     }
 }
 //DoStmt -> | do StmtsPart .
@@ -313,7 +347,9 @@ void DoStmt(void)
     case END_TOK:
         return;
     default:
+        printf("[ERROR] DoStmt\n");
         error();
+        return;
     }
 }
 //ExceptBlks -> | ExceptBlk .
@@ -330,7 +366,9 @@ void ExceptBlks(void)
     case END_TOK:
         return;
     default:
+        printf("[ERROR] ExceptBlks\n");
         error();
+        return;
     }
 }
 //FinalBlk -> | finally StmtsPart .
@@ -346,6 +384,8 @@ void FinalBlk(void)
     case END_TOK:
         return;
     default:
+        printf("[ERROR] FinalBlk\n");
         error();
+        return;
     }
 }
