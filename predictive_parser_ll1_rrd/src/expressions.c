@@ -3,7 +3,7 @@
 // Const -> Num | Ids | strLit | boolLit | SignedConst | ArrayLit | null .
 void Const(void)
 {
-    int expected_tokens[] = {ID, STRING_LITERAL, NULL_TOK, INT_LITERAL, BOOLEAN_LITERAL,FLOAT_LITERAL, '+', '-', '['};
+    int expected_tokens[] = {ID, STRING_LITERAL, NULL_TOK, INT_LITERAL, BOOLEAN_LITERAL, FLOAT_LITERAL, '+', '-', '['};
     switch (tok)
     {
     case STRING_LITERAL:
@@ -276,7 +276,6 @@ void ExpList(void)
     }
 }
 
-
 // ExpList' -> | comma Exp ExpList' .
 void ExpList_1(void)
 {
@@ -302,13 +301,18 @@ void ExpList_1(void)
 }
 
 //Ids -> id IdList | this IdList .
-void Ids(void){
+void Ids(void)
+{
     switch (tok)
     {
     case ID:
-        eat(ID); IdList(); return;
+        eat(ID);
+        IdList();
+        return;
     case THIS:
-        eat(THIS); IdList(); return;
+        eat(THIS);
+        IdList();
+        return;
     default:
         printf("[ERROR] Ids\n");
         error();
@@ -317,12 +321,17 @@ void Ids(void){
 }
 
 // IdList -> | dot id MethCall IdList .
-void IdList(void){
+void IdList(void)
+{
     switch (tok)
     {
     case '.':
-        eat('.'); eat(ID); MethCall(); IdList(); return;
-    
+        eat('.');
+        eat(ID);
+        MethCall();
+        IdList();
+        return;
+
     case '*':
     case '/':
     case MOD:
@@ -344,6 +353,7 @@ void IdList(void){
     case ',':
     case THEN:
     case DO:
+    case ']':
     case ';':
     case BEGIN_TOK:
     case CLASSES:
@@ -359,7 +369,8 @@ void IdList(void){
 }
 
 // MethCall → |	( ExpList ) .
-void MethCall() {
+void MethCall()
+{
     switch (tok)
     {
     case '(':
@@ -367,7 +378,7 @@ void MethCall() {
         ExpList();
         eat(')');
         return;
-    
+
     // follows - nullable
     case '*':
     case '/':
@@ -639,7 +650,7 @@ void Comparactive()
     case BEGIN_TOK:
     case END_TOK:
     case AND:
-    case '[':
+    case ']':
     case ')':
     case ASSIGN_SIGN:
         return;
@@ -649,7 +660,6 @@ void Comparactive()
         return;
     }
 }
-
 
 //ArithExp -> Termo ArithExp' .
 void ArithExp()
@@ -711,6 +721,7 @@ void ArithExp_1()
     case DOUB_EQ_SIGN:
     case NEG_EQ_SIGN:
     case ')':
+    case ']':
     case ASSIGN_SIGN:
         return;
     default:

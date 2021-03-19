@@ -11,7 +11,7 @@ void StmtsPart(void)
         eat(END_TOK);
         return;
     default:
-        printf("[ERROR] IfStmt\n");
+        printf("[ERROR] StmtPart\n");
         error();
         return;
     }
@@ -102,6 +102,7 @@ void Stmt(void)
     case RAISE:
     case TRY:
         ErrorStmt();
+        return;
     case NOT:
     case BOOLEAN_LITERAL:
     case '-':
@@ -115,6 +116,7 @@ void Stmt(void)
     case '(':
     case '[':
         Exp();
+        return;
 
     default:
         printf("[ERROR] Stmt\n");
@@ -217,6 +219,7 @@ void ForStmt(void)
     switch (tok)
     {
     case FOR:
+        eat(FOR);
         AssignStmt();
         eat(TO);
         Exp();

@@ -60,21 +60,24 @@ methods
 
   ArrayComplex.new
   begin
-    this.type = "Complex" {* O atributo "type" e herdado da classe Array e faz verificacao ao inserir elemento *}
+    this.type := "Complex" {* O atributo "type" e herdado da classe Array e faz verificacao ao inserir elemento *}
   end
 
 begin
   
-  for i = 1 to 10 do
+  for i := 1 to 10 do
+  begin
     ar_comp1.insert(Complex.new(i, 2))
-  end
+  end;
   
-  for i = 1 to 10 do
+  for i := 1 to 10 do
+  begin
     ar_comp2.insert(Complex.new(3, i))
-  end
+  end;
 
-  for i = 1 to 10 do
-    System.print("Soma: " + i.string() + " " + (ar_comp1.get(i) + ar_comp2.get(i)).string() + "\n")
+  for i := 1 to 10 do
+  begin
+    System.print("Soma: " + i.string() + " " + String.cast(ar_comp1.get(i) + ar_comp2.get(i)) + "\n")
   end
 
 end.
