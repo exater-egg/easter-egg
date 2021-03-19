@@ -176,14 +176,14 @@ char *token_to_str(int tok)
  */
 void error_verbose(int givenTok, int tokc, int tokv[])
 {
-    printf("Error!");
-    printf("Line %d\n", yylineno);
     if (tokc < 1)
         return;
+    printf("Error! Line %d, Column %d\n", yylineno, colno);
     printf("Expected: \"%s\"", token_to_str(tokv[0]));
     for (size_t i = 1; i < tokc; i++)
     {
         printf(" or \"%s\"", token_to_str(tokv[i]));
     }
     printf(".\nGiven: \"%s\"\n", token_to_str(givenTok));
+    abort();
 }
