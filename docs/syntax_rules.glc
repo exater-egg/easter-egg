@@ -24,7 +24,9 @@ Sign -> plusSign | minusSign .
 
 ArrayLit -> openBkt ExpList closeBkt .
 
-ExpList -> | Exp comma ExpList .
+ExpList -> | Exp ExpList' .
+
+ExpList' -> | comma Exp ExpList' .
 
 ClassDefPart ->  | classes ClassDef .
 
@@ -126,7 +128,7 @@ Comparacao -> less ArithExp | major ArithExp | lesseq ArithExp | majoreq ArithEx
 
 ArithExp -> Termo ArithExp' .
 
-ArithExp' -> plus Termo ArithExp' | minus Termo ArithExp' | .
+ArithExp' -> plusSign Termo ArithExp' | minusSign Termo ArithExp' | .
 
 Termo -> Fator Termo' .
 
