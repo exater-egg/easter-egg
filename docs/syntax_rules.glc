@@ -114,7 +114,7 @@ MethCall -> | ( ExpList ) .
 
 Exp -> TermoLogico LogicExp .
 
-LogicExp -> or Exp | xor Exp | .
+LogicExp -> or Exp | xor Exp | attrSign Exp | .
 
 TermoLogico -> FatorLogico TermoLogico' .
 
