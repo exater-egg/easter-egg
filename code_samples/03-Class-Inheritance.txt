@@ -5,21 +5,21 @@ consts
 classes
   Complex
   attributes 
-    r_part, i_part : Integer
+    Integer : r_part, i_part
   methods
-    method add(Complex: other) : Complex;
-    method subtract(Complex: other) : Complex;
+    add(Complex: other) : Complex;
+    subtract(Complex: other) : Complex;
     {*
       @brief Construtor parametrizado
 
       @param r Parte real do número complexo
       @param i Parte imaginária do número complexo
     *}
-    method new(Interger r, i) : Complex
+    new(Interger r, i) : Complex
 
   ArrayComplex = Array
   methods
-    method new() : ArrayComplex;
+    new() : ArrayComplex;
 
 variables
   Integer: i;
