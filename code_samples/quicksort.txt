@@ -7,43 +7,49 @@ classes
 
 variables
 	QuickSortClass : quick_sort;
-	ArrayInteger : vetor = [4,8,5,9,7];
+	ArrayInteger : vetor = [4,8,5,9,7]
 
 methods
 	QuickSortClass.quickSort
 	vars
 		ArrayIntenger: vetor;
 		Intenger: inicio;
-		Intenger: fim 
+		Intenger: fim;
 		Intenger: i,j,pivo,aux
 	begin 
 		i := inicio;
 		j := fim-1;
-		pivo := vetor[(inicio+fim)/2]
+		pivo := vetor[(inicio+fim)/2];
 		while i <= j do
+		begin
 			while vetor[i] < pivo and i < fim do 
-				i++
-			end
+			begin
+				++i
+			end;
 			
 			while vetor[j] > pivo and j > inicio do
-				j--
-			end
+			begin
+				--j
+			end;
 
 			if i <= j then
+			begin
 				aux := vetor[i];
 				vetor[i] := vetor[j];
 				vetor[j] := aux;
-				i++;
-				j--
+				++i;
+				--j
 			end
 
-		end	 
+		end;
 		
-		if j > inicio then 
+		if j > inicio then
+		begin
 			quick_sort.quickSort(vetor,inicio, j+1)
-		end
+		end;
 
 		if i < fim then
+		begin
 			quick_sort.quickSort(vetor,i,fim)
 		end
 	end
