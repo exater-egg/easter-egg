@@ -9,21 +9,45 @@ void StmtsPart(void)
         eat(BEGIN_TOK);
         Stmts();
         eat(END_TOK);
-        break;
+        return;
     default:
         error();
     }
 }
 //Stmts -> | Stmt StmtsList .
 // Follow(Stmts) = [END_TOK]
-void Stmts(void) 
+void Stmts(void)
 {
     switch (tok)
     {
+    case IF:
+    case WHILE:
+    case FOR:
+    case RETURN:
+    case DOUBLE_PLUS_SIGN:
+    case DOUBLE_MINUS_SIGN:
+    case RAISE:
+    case TRY:
+    case NOT:
+    case '(':
+    case STRING_LITERAL:
+    case BOOLEAN_LITERAL:
+    case NULL_TOK:
+    case INT_LITERAL:
+    case FLOAT_LITERAL:
+    case ID:
+    case THIS:
+    case '[':
+    case '+':
+    case '-':
+        Stmt();
+        StmtsList();
+        return;
     case END_TOK:
-        break;
+        return;
     default:
-        Stmt(); StmtsList(); break;
+        error();
+        return;
     }
 }
 // StmtsList -> | ; Stmt StmtsList .
@@ -33,9 +57,12 @@ void StmtsList(void)
     switch (tok)
     {
     case END_TOK:
-        break;
+        return;
     case ';':
-        eat(';'); Stmt(); StmtsList(); break;
+        eat(';');
+        Stmt();
+        StmtsList();
+        return;
     default:
         error();
     }
@@ -48,23 +75,23 @@ void Stmt(void)
     {
     case END_TOK:
     case ';':
-        break;
+        return;
     case IF:
         IfStmt();
-        break;
+        return;
     case WHILE:
         WhileStmt();
-        break;
+        return;
     case FOR:
         ForStmt();
-        break;
+        return;
     case RETURN:
         ReturnStmt();
-        break;
+        return;
     case DOUBLE_PLUS_SIGN:
     case DOUBLE_MINUS_SIGN:
         IncrStmt();
-        break;
+        return;
     case RAISE:
     case TRY:
         ErrorStmt();
@@ -76,184 +103,248 @@ void Stmt(void)
     case FLOAT_LITERAL:
     case INT_LITERAL:
     case ID:
+    case THIS:
     case NULL_TOK:
     case '(':
+    case '[':
         Exp();
     default:
         error();
     }
 }
 //IfStmt -> if Exp then StmtsPart ElseIfStmt .
-void IfStmt(void){
-    switch (tok){
+void IfStmt(void)
+{
+    switch (tok)
+    {
     case IF:
-        eat(IF); Exp(); eat(THEN); StmtsPart(); ElseIfStmt(); break;
+        eat(IF);
+        Exp();
+        eat(THEN);
+        StmtsPart();
+        ElseIfStmt();
+        return;
     default:
         error();
-    } 
-
+    }
 }
 //ElseIfStmt -> ElseStmt | elseif StmtsPart ElseIfStmt.
-void ElseIfStmt(void){
+void ElseIfStmt(void)
+{
     switch (tok)
     {
     case ELSEIF:
-        eat(ELSEIF); StmtsPart(); ElseIfStmt(); break;
+        eat(ELSEIF);
+        StmtsPart();
+        ElseIfStmt();
+        return;
     case ELSE:
-        ElseStmt(); break;
+        ElseStmt();
+        return;
+    case ';':
+    case END_TOK:
+        return;
     default:
         error();
     }
 }
 //ElseStmt -> | else StmtsPart .
-void ElseStmt(void){
+void ElseStmt(void)
+{
     switch (tok)
     {
     case ELSE:
-        eat(ELSE); StmtsPart(); break;
+        eat(ELSE);
+        StmtsPart();
+        return;
+    case ';':
+    case END_TOK:
     default:
         error();
     }
 }
 //WhileStmt -> while Exp do StmtsPart .
-void WhileStmt(void){
+void WhileStmt(void)
+{
     switch (tok)
     {
     case WHILE:
-        eat(WHILE); Exp(); eat(DO); StmtsPart(); break;
+        eat(WHILE);
+        Exp();
+        eat(DO);
+        StmtsPart();
+        return;
     default:
         error();
     }
 }
 //ReturnStmt -> return Exp .
-void ReturnStmt(void){
+void ReturnStmt(void)
+{
     switch (tok)
     {
     case RETURN:
         eat(RETURN);
         Exp();
-        break;
+        return;
     default:
         error();
     }
 }
 //ForStmt -> for AssignStmt to Exp do StmtsPart .
-void ForStmt(void){
+void ForStmt(void)
+{
     switch (tok)
     {
     case FOR:
-        AssignStmt(); eat(TO); Exp(); eat(DO); StmtsPart();
-        break;
+        AssignStmt();
+        eat(TO);
+        Exp();
+        eat(DO);
+        StmtsPart();
+        return;
     default:
         error();
     }
 }
 //AssignStmt -> Ids attrSign Exp .
-void AssignStmt(void){
+void AssignStmt(void)
+{
     switch (tok)
     {
     case ID:
     case THIS:
-        Ids(); eat(ASSIGN_SIGN); Exp(); break;
+        Ids();
+        eat(ASSIGN_SIGN);
+        Exp();
+        return;
     default:
         error();
     }
 }
 //IncrStmt -> incSign id | decSign id .
-void IncrStmt(void){
+void IncrStmt(void)
+{
     switch (tok)
     {
     case DOUBLE_PLUS_SIGN:
-        eat(DOUBLE_PLUS_SIGN); eat(ID); break;
+        eat(DOUBLE_PLUS_SIGN);
+        eat(ID);
+        return;
     case DOUBLE_MINUS_SIGN:
-        eat(DOUBLE_MINUS_SIGN); eat(ID); break;
+        eat(DOUBLE_MINUS_SIGN);
+        eat(ID);
+        return;
     default:
         error();
     }
 }
 //ErrorStmt -> RaiseStmt | TryBlk .
-void ErrorStmt(void){
+void ErrorStmt(void)
+{
     switch (tok)
     {
     case RAISE:
-        RaiseStmt(); break;
+        RaiseStmt();
+        return;
     case TRY:
-        TryBlk(); break;
+        TryBlk();
+        return;
     default:
         error();
     }
 }
 //RaiseStmt -> raise Exp .
-void RaiseStmt(void){
+void RaiseStmt(void)
+{
     switch (tok)
     {
     case RAISE:
-        eat(RAISE); Exp(); break;
+        eat(RAISE);
+        Exp();
+        return;
     default:
         error();
     }
 }
 //TryBlk -> try StmtsPart except ExceptBlk FinalBlk.
-void TryBlk(void){
+void TryBlk(void)
+{
     switch (tok)
     {
     case TRY:
-        eat(TRY); StmtsPart(); eat(EXCEPT); ExceptBlk(); FinalBlk(); break;
+        eat(TRY);
+        StmtsPart();
+        eat(EXCEPT);
+        ExceptBlk();
+        FinalBlk();
+        return;
     default:
         error();
     }
 }
 //ExceptBlk -> on id DoStmt ExceptBlks .
-void ExceptBlk(void){
+void ExceptBlk(void)
+{
     switch (tok)
     {
     case ON:
-        eat(ON); eat(ID); DoStmt(); ExceptBlks(); break;
+        eat(ON);
+        eat(ID);
+        DoStmt();
+        ExceptBlks();
+        return;
     default:
         error();
     }
 }
 //DoStmt -> | do StmtsPart .
 // follow(DoStmt) = ["on", "finally", ';', "end"]
-void DoStmt(void){
+void DoStmt(void)
+{
     switch (tok)
     {
     case DO:
-        StmtsPart(); break;
+        StmtsPart();
+        return;
     case ON:
     case FINALLY:
     case ';':
     case END_TOK:
-        break;
+        return;
     default:
         error();
     }
 }
 //ExceptBlks -> | ExceptBlk .
 // follow(ExceptBlks) = ["finally", ';' "end"]
-void ExceptBlks(void){
+void ExceptBlks(void)
+{
     switch (tok)
     {
     case ON:
-        ExceptBlk(); break;
+        ExceptBlk();
+        return;
     case FINALLY:
     case ';':
     case END_TOK:
-        break;
+        return;
     default:
         error();
     }
 }
 //FinalBlk -> | finally StmtsPart .
 // follow(FinalBlk) = [';', "end"]
-void FinalBlk(void){
+void FinalBlk(void)
+{
     switch (tok)
     {
     case FINALLY:
-        StmtsPart(); break;
+        StmtsPart();
+        return;
     case ';':
     case END_TOK:
-        break;
+        return;
     default:
         error();
     }

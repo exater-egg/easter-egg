@@ -15,11 +15,11 @@ classes
       @param r Parte real do número complexo
       @param i Parte imaginária do número complexo
     *}
-    new(Interger r, i) : Complex
+    new(Interger: r, i) : Complex
 
   ArrayComplex = Array
   methods
-    new() : ArrayComplex;
+    new() : ArrayComplex
 
 variables
   Integer: i;
@@ -31,14 +31,14 @@ methods
     Complex: other
   begin
     return Complex.new( other.r_part + this.r_part, other.i_part + this.i_part )
-  end
+  end;
 
   Complex.subtract
   variables
     Complex: other
   begin
     return Complex.new( other.r_part - this.r_part, other.i_part - this.i_part )
-  end
+  end;
 
   Complex.new
   variables
@@ -49,12 +49,12 @@ methods
     newcomplex.r_part = r;
     newcomplex.i_part = i;
     return newcomplex
-  end
+  end;
 
   Complex.string {* Método herdado de Object *}
   begin
     return "(" + r_part.string() + ", " + i_part.string() + ")"
-  end
+  end;
 
 {*  ArrayComplex Class methods *}
 

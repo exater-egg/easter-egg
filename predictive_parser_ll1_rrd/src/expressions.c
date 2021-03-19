@@ -6,28 +6,29 @@ void Const(void)
 	int expected_tokens[] = {ID, STRING_LITERAL, NULL_TOK, INT_LITERAL, BOOLEAN_LITERAL,FLOAT_LITERAL, '+', '-', '['};
 	switch (tok)
 	{
-	case ID:
-		Ids();
-		return;
 	case STRING_LITERAL:
 		eat(STRING_LITERAL);
 		return;
-	case NULL_TOK:
-		eat(NULL_TOK);
-		return;
 	case BOOLEAN_LITERAL:
 		eat(BOOLEAN_LITERAL);
+		return;
+	case NULL_TOK:
+		eat(NULL_TOK);
 		return;
 	case INT_LITERAL:
 	case FLOAT_LITERAL:
 		Num();
 		return;
-	case '+':
-	case '-':
-		SignedConst();
+	case ID:
+	case THIS:
+		Ids();
 		return;
 	case '[':
 		ArrayLit();
+		return;
+	case '+':
+	case '-':
+		SignedConst();
 		return;
 
 	// follows - non-nullable
@@ -233,12 +234,16 @@ void ArrayLit(void)
 	}
 }
 
-// ExpList -> | Exp comma ExpList .
+// ExpList -> | Exp ExpList' .
 void ExpList(void)
 {
 	int expected_tokens[] = {ID, STRING_LITERAL, NULL_TOK, INT_LITERAL, FLOAT_LITERAL, '+', '-', '['};
 	switch (tok)
 	{
+	case NOT:
+	case '(':
+	case BOOLEAN_LITERAL:
+	case THIS:
 	case ID:
 	case STRING_LITERAL:
 	case NULL_TOK:
@@ -248,8 +253,31 @@ void ExpList(void)
 	case '+':
 	case '-':
 		Exp();
+		ExpList_1();
+		return;
+
+	// follows - nullable
+	case ']':
+	case ')':
+		return;
+
+	default:
+		error();
+		return;
+	}
+}
+
+
+// ExpList' -> | comma Exp ExpList' .
+void ExpList_1(void)
+{
+	int expected_tokens[] = {','};
+	switch (tok)
+	{
+	case ',':
 		eat(',');
-		ExpList();
+		Exp();
+		ExpList_1();
 		return;
 
 	// follows - nullable
@@ -282,8 +310,35 @@ void IdList(void){
     {
     case '.':
         eat('.'); eat(ID); MethCall(); IdList(); return;
+	
+	case '*':
+	case '/':
+	case MOD:
+	case '+':
+	case '-':
+	case '<':
+	case '>':
+	case LESS_EQ_SIGN:
+	case MORE_EQ_SIGN:
+	case DOUB_EQ_SIGN:
+	case NEG_EQ_SIGN:
+	case ')':
+	case AND:
+	case OR:
+	case XOR:
     case ASSIGN_SIGN:
+	case TO:
+	case END_TOK:
+	case ',':
+	case THEN:
+	case DO:
+	case ';':
+	case BEGIN_TOK:
+	case CLASSES:
+	case VARIABLES:
+	case METHODS:
         return;
+
     default:
         error();
     }
@@ -330,6 +385,7 @@ void MethCall() {
 		return;
 
 	default:
+		error();
 		return;
 	}
 }
@@ -337,7 +393,7 @@ void MethCall() {
 //Exp -> TermoLogico LogicExp .
 void Exp()
 {
-	int expected_tokens[] = {'(', ID, BOOLEAN_LITERAL, STRING_LITERAL, NULL_TOK, INT_LITERAL, FLOAT_LITERAL, NOT, '+', '-'};
+	int expected_tokens[] = {'(', '[', ID, THIS, BOOLEAN_LITERAL, STRING_LITERAL, NULL_TOK, INT_LITERAL, FLOAT_LITERAL, NOT, '+', '-'};
 	switch (tok)
 	{
 	case '(':
@@ -365,10 +421,13 @@ void Exp()
 	case ';':
 	case METHODS:
 	case BEGIN_TOK:
-		error_verbose(tok, 10, expected_tokens);
+	case ']':
+	case ')':
+		error_verbose(tok, 12, expected_tokens);
 		return;
 	default:
-		error();
+		printf("[ERROR] Exp\n");
+		abort();
 		return;
 	}
 }
@@ -396,9 +455,12 @@ void LogicExp()
 	case ';':
 	case METHODS:
 	case END_TOK:
+	case ']':
+	case ')':
 		return;
 	default:
-		error();
+		printf("[ERROR] LogicExp\n");
+		abort();
 		return;
 	}
 }
@@ -425,7 +487,8 @@ void TermLogic()
 		return;
 
 	default:
-		error();
+		printf("[ERROR] TermLogic\n");
+		abort();
 		return;
 	}
 }
@@ -451,9 +514,12 @@ void TermLogic_1()
 	case METHODS:
 	case BEGIN_TOK:
 	case END_TOK:
+	case ']':
+	case ')':
 		return;
 	default:
-		error();
+		printf("[ERROR] TermLogic'\n");
+		abort();
 		return;
 	}
 }
@@ -481,7 +547,8 @@ void FactorLogic()
 		RelExp();
 		return;
 	default:
-		error();
+		printf("[ERROR] FactorLogic\n");
+		abort();
 		return;
 	}
 }
@@ -506,7 +573,9 @@ void RelExp()
 		Comparactive();
 		return;
 	default:
-		error();
+		printf("[ERROR] RelExp\n");
+		abort();
+		return;
 	}
 }
 //Comparacao -> less ArithExp | major ArithExp | lesseq ArithExp | majoreq ArithExp | eqeq ArithExp | neq ArithExp | .
@@ -551,9 +620,12 @@ void Comparactive()
 	case BEGIN_TOK:
 	case END_TOK:
 	case AND:
+	case '[':
+	case ')':
 		return;
 	default:
-		error();
+		printf("[ERROR] Comparactive\n");
+		abort();
 		return;
 	}
 }
@@ -579,7 +651,8 @@ void ArithExp()
 		ArithExp_1();
 		return;
 	default:
-		error();
+		printf("[ERROR] ArithExp\n");
+		abort();
 		return;
 	}
 }
@@ -620,7 +693,8 @@ void ArithExp_1()
 	case ')':
 		return;
 	default:
-		error();
+		printf("[ERROR] ArithExp'\n");
+		abort();
 		return;
 	}
 }
@@ -650,8 +724,7 @@ void Term()
 	}
 }
 
-//Termo' -> * Fator Termo' 
-// | / Fator Termo' | mod Fator Termo' | .
+//Termo' -> * Fator Termo' | / Fator Termo' | mod Fator Termo' | .
 void Term_1()
 {
 	switch (tok)
