@@ -106,9 +106,11 @@ ForStmt -> for AssignStmt to Exp do StmtsPart .
 
 AssignStmt -> Ids attrSign Exp .
 
-Ids -> id IdList | this IdList .
+Ids -> id IdList AccessIndex | this IdList AccessIndex .
 
 IdList -> | dot id MethCall IdList .
+
+AccessIndex -> | ArrayLit AccessIndex .
 
 MethCall -> | ( ExpList ) .
 
