@@ -7,7 +7,7 @@ classes
   attributes 
     String : text = HELLO_WORLD
   methods
-    method print()
+    print()
 
 variables
   HelloWorldClass : hello_world
@@ -15,10 +15,10 @@ variables
 methods
   HelloWorldClass.print
   begin
-    Sys.write(this.text);'
+    Sys.write(this.text)
   end
 
 begin
-  hello_world.print();'
+  hello_world.print()
 end.
 
