@@ -45,9 +45,9 @@ methods
     Integer: r, i;
     Complex: newcomplex
   begin
-    newcomplex = Complex.new(); {* "new()" é herdado da classe Object *}
-    newcomplex.r_part = r;
-    newcomplex.i_part = i;
+    newcomplex := Complex.new(); {* "new()" é herdado da classe Object *}
+    newcomplex.r_part := r;
+    newcomplex.i_part := i;
     return newcomplex
   end;
 
