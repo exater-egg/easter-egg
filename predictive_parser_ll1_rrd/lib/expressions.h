@@ -13,6 +13,7 @@ void ExpList(void);
 void ExpList_1(void);
 void Ids(void);
 void IdList(void);
+void AccessIndex(void);
 void MethCall(void);
 void Exp(void);
 void LogicExp(void);

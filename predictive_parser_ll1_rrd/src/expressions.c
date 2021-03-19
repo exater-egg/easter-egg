@@ -232,6 +232,7 @@ void ArrayLit(void)
     case CLASSES:
     case VARIABLES:
     case METHODS:
+    case ']':
         error_verbose(tok, 1, expected_tokens);
         return;
 
@@ -300,7 +301,7 @@ void ExpList_1(void)
     }
 }
 
-//Ids -> id IdList | this IdList .
+//Ids -> id IdList AccessIndex | this IdList AccessIndex .
 void Ids(void)
 {
     switch (tok)
@@ -308,10 +309,12 @@ void Ids(void)
     case ID:
         eat(ID);
         IdList();
+        AccessIndex();
         return;
     case THIS:
         eat(THIS);
         IdList();
+        AccessIndex();
         return;
     default:
         printf("[ERROR] Ids\n");
@@ -359,11 +362,56 @@ void IdList(void)
     case CLASSES:
     case VARIABLES:
     case METHODS:
+    case '[':
         return;
 
     default:
         printf("[ERROR] IdList\n");
         error();
+        return;
+    }
+}
+
+// AccessIndex -> | ArrayLit AccessIndex .
+void AccessIndex()
+{
+    switch (tok)
+    {
+    case '[':
+        ArrayLit();
+        AccessIndex();
+        return;
+
+    case '*':
+    case '/':
+    case MOD:
+    case '+':
+    case '-':
+    case '<':
+    case '>':
+    case LESS_EQ_SIGN:
+    case MORE_EQ_SIGN:
+    case DOUB_EQ_SIGN:
+    case NEG_EQ_SIGN:
+    case ')':
+    case AND:
+    case OR:
+    case XOR:
+    case ASSIGN_SIGN:
+    case TO:
+    case END_TOK:
+    case ',':
+    case THEN:
+    case DO:
+    case ']':
+    case ';':
+    case BEGIN_TOK:
+    case CLASSES:
+    case VARIABLES:
+    case METHODS:
+        return;
+
+    default:
         return;
     }
 }
