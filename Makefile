@@ -15,7 +15,16 @@ PPRRD_APPDIR=$(PPRRD_DIR)/app
 
 PPRRD_APP=$(PPRRD_APPDIR)/*.c
 
-_DIRS=$(OBJDIR) $(BINDIR) $(PPRRD_OBJDIR) $(PPRRD_BINDIR)
+PPRDT_DIR=predictive_parser_ll1_rdt
+PPRDT_LIBDIR=$(PPRDT_DIR)/lib
+PPRDT_SRCDIR=$(PPRDT_DIR)/src
+PPRDT_OBJDIR=$(PPRDT_DIR)/obj
+PPRDT_BINDIR=$(PPRDT_DIR)/bin
+PPRDT_APPDIR=$(PPRDT_DIR)/app
+
+PPRDT_APP=$(PPRDT_APPDIR)/*.c
+
+_DIRS=$(OBJDIR) $(BINDIR) $(PPRRD_OBJDIR) $(PPRRD_BINDIR) $(PPRDT_OBJDIR) $(PPRDT_BINDIR)
 
 _OBJS=$(wildcard $(SRCDIR)/*.c)
 OBJS=$(patsubst $(SRCDIR)/%.c,$(OBJDIR)/%.o,$(_OBJS))
@@ -23,7 +32,10 @@ OBJS=$(patsubst $(SRCDIR)/%.c,$(OBJDIR)/%.o,$(_OBJS))
 _PPRRD_OBJS=$(wildcard $(PPRRD_SRCDIR)/*.c)
 PPRRD_OBJS=$(patsubst $(PPRRD_SRCDIR)/%.c,$(PPRRD_OBJDIR)/%.o,$(_PPRRD_OBJS))
 
-ALLOBJS=$(OBJS) $(PPRRD_OBJS)
+_PPRDT_OBJS=$(wildcard $(PPRDT_SRCDIR)/*.c)
+PPRDT_OBJS=$(patsubst $(PPRDT_SRCDIR)/%.c,$(PPRDT_OBJDIR)/%.o,$(_PPRDT_OBJS))
+
+ALLOBJS=$(OBJS) $(PPRRD_OBJS) $(PPRDT_OBJS)
 
 all: $(BIN).out
 
@@ -51,8 +63,14 @@ $(BIN).pp: lex.yy.c
 $(BIN).pprrd: lex.yy.c mkdirs $(PPRRD_OBJS) $(OBJS)
 	gcc lex.yy.c $(PPRRD_APP) $(PPRRD_OBJS) $(OBJS) -I ./ -I $(LIBDIR) -I $(PPRRD_LIBDIR) -o $@
 
+$(BIN).pprdt: lex.yy.c mkdirs $(PPRDT_OBJS) $(OBJS)
+	gcc lex.yy.c $(PPRDT_APP) $(PPRDT_OBJS) $(OBJS) -I ./ -I $(LIBDIR) -I $(PPRDT_LIBDIR) -o $@
+
 $(PPRRD_OBJDIR)/%.o : $(PPRRD_SRCDIR)/%.c
 	gcc -c -I ./ -I $(LIBDIR) -I $(PPRRD_LIBDIR) $< -o $@
+
+$(PPRDT_OBJDIR)/%.o : $(PPRDT_SRCDIR)/%.c
+	gcc -c -I ./ -I $(LIBDIR) -I $(PPRDT_LIBDIR) $< -o $@
 
 mkdirs:
 	mkdir -p $(_DIRS)
@@ -62,5 +80,3 @@ run: $(BIN).out
 
 clean:
 	rm -f y.tab.c lex.yy.c $(BIN).* $(ALLOBJS)
-
-
