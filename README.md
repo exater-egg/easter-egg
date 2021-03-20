@@ -20,7 +20,7 @@ make lex.yy.c
 make eeg.lex
 ```
 
-* create Descending Descending Recognizer (_portuguese_: _Reconhecedor Recursivo Descendente_) predictive parser
+* create Descending Recursive Recognizer (_portuguese_: _Reconhecedor Recursivo Descendente_) predictive parser
 
 ```bash
 make eeg.pprrd
