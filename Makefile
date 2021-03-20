@@ -4,7 +4,7 @@ BINDIR=bin
 LIBDIR=lib
 APPDIR=app
 
-BIN=eec
+BIN=eeg
 
 PPRRD_DIR=predictive_parser_ll1_rrd
 PPRRD_LIBDIR=$(PPRRD_DIR)/lib
@@ -39,12 +39,15 @@ ALLOBJS=$(OBJS) $(PPRRD_OBJS) $(PPRDT_OBJS)
 
 all: $(BIN).out
 
-$(BIN).out: lex.yy.c y.tab.c
+$(BIN).out: lex.yy.o y.tab.c
 	# compile
-	gcc lex.yy.c y.tab.c -o $@
+	gcc lex.yy.o y.tab.c -o $@
 
-$(BIN).lex: lex.yy.c
-	gcc lex.yy.c -lfl -I ./ -o $@
+$(BIN).lex: lex.yy.c $(OBJS)
+	gcc lex.yy.c $(OBJS) -I ./ -I $(LIBDIR) -lfl -D YY_SKIP_YYWRAP -o $@
+
+lex.yy.o: lex.yy.c
+	gcc -c -I ./ -I $(LIBDIR) $< -o $@
 
 # generate lexical code
 lex.yy.c:
@@ -57,14 +60,11 @@ y.tab.c:
 $(OBJDIR)/%.o : $(SRCDIR)/%.c
 	gcc -c -I ./ -I $(LIBDIR) $< -o $@
 
-$(BIN).pp: lex.yy.c
-	gcc lex.yy.c predictive_parser_ll1.c -o $@
+$(BIN).pprrd: lex.yy.o mkdirs $(PPRRD_OBJS) $(OBJS)
+	gcc $(PPRRD_APP) $(PPRRD_OBJS) $(OBJS) lex.yy.o -I ./ -I $(LIBDIR) -I $(PPRRD_LIBDIR) -o $@
 
-$(BIN).pprrd: lex.yy.c mkdirs $(PPRRD_OBJS) $(OBJS)
-	gcc lex.yy.c $(PPRRD_APP) $(PPRRD_OBJS) $(OBJS) -I ./ -I $(LIBDIR) -I $(PPRRD_LIBDIR) -o $@
-
-$(BIN).pprdt: lex.yy.c mkdirs $(PPRDT_OBJS) $(OBJS)
-	gcc lex.yy.c $(PPRDT_APP) $(PPRDT_OBJS) $(OBJS) -I ./ -I $(LIBDIR) -I $(PPRDT_LIBDIR) -o $@
+$(BIN).pprdt: lex.yy.o mkdirs $(PPRDT_OBJS) $(OBJS)
+	gcc $(PPRDT_APP) $(PPRDT_OBJS) $(OBJS) lex.yy.o -I ./ -I $(LIBDIR) -I $(PPRDT_LIBDIR) -o $@
 
 $(PPRRD_OBJDIR)/%.o : $(PPRRD_SRCDIR)/%.c
 	gcc -c -I ./ -I $(LIBDIR) -I $(PPRRD_LIBDIR) $< -o $@
@@ -79,4 +79,4 @@ run: $(BIN).out
 	./$(BIN).out
 
 clean:
-	rm -f y.tab.c lex.yy.c $(BIN).* $(ALLOBJS)
+	rm -f y.tab.c lex.yy.c lex.yy.h lex.yy.o $(BIN).* $(ALLOBJS)
