@@ -20,7 +20,6 @@ void LogicExp(void);
 void TermLogic(void);
 void TermLogic_1(void);
 void FactorLogic(void);
-void LogicAtom(void);
 void RelExp(void);
 void Comparactive(void);
 void ArithExp(void);
