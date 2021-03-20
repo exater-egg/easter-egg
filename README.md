@@ -2,32 +2,32 @@
 
 ## Requirements
 
-* Yacc (Linux distros: bison)
-* Lex (Linux distros: flex)
+* Yacc (Linux distros: [bison](https://www.gnu.org/software/bison/))
+* Lex (Linux distros: [flex](https://github.com/westes/flex/))
+* [GNU Make](https://www.gnu.org/software/make/)
 
 ## Basic commands
 
 * generate lexical code
 
 ```bash
-lex <file>.l
+make lex.yy.c
 ```
 
 * compile lexical without sintax
 
 ```bash
-gcc lex.yy.c -ll
+make eeg.lex
 ```
 
-* generate sintax code
+* create Descending Descending Recognizer (_portuguese_: _Reconhecedor Recursivo Descendente_) predictive parser
 
 ```bash
-yacc -d <file>.y
+make eeg.pprrd
 ```
 
-* compile
+* create Table-Driven Recognizer (_portuguese_: _Reconhecedor Dirigido por uma Tabela_) predictive parser
 
 ```bash
-gcc lex.yy.c y.tab.c
+make eeg.pprdt
 ```
-
