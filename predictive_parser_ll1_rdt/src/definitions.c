@@ -344,8 +344,11 @@ void MethType_to_stack(int col){
     case VARIABLES:
         break;
     case ':':
+        printf("Parsing MethType...\n");
+        // MethType → : id
         stack_push(stack, ID);
         stack_push(stack, ':');
+        break;
     
     default:
         error();
@@ -393,8 +396,8 @@ void Param_to_stack(int col){
     {
     case ID:
         //Param → id Params
-        stack_push(stack, ID);
         stack_push(stack, Params);
+        stack_push(stack, ID);
         break;
     
     default:
@@ -410,8 +413,8 @@ void Params_to_stack(int col){
         break;
     case ',':
         //Params → comma Param
-        stack_push(stack, ',');
         stack_push(stack, Param);
+        stack_push(stack, ',');
         break;
     
     default:
@@ -525,6 +528,7 @@ void VarAssign_to_stack(int col){
     //VarAssign → eqSign Exp
         stack_push(stack, Exp);
         stack_push(stack, '=');
+        break;
     
     default:
         error();
