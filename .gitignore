@@ -6,4 +6,5 @@ lex.yy.h
 
 eac.*
 eec.*
+eeg.*
 *.o
