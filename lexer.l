@@ -97,16 +97,18 @@
 
 %%
 
-#ifndef yywrap
-   int yywrap (void) {return 1;}
-#elif parser
+#ifdef YY_SKIP_YYWRAP
+  extern void advance(void);
+  extern enum token tok;
 
+  int main(void)
+  {
+    printf("Linha, Coluna, tamanho, nome do token, lexema\n");
+    do {
+      advance();
+    } while(tok);
+    return 0;
+  }
 #else
-int main(void)
-{
-  printf("Linha, Coluna, tamanho, nome do token, lexema\n");
-  yylex();
-  return 0;
-}
+  int yywrap (void) {return 1;}
 #endif
-
