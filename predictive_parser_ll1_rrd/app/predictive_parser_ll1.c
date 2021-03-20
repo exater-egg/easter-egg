@@ -1,9 +1,10 @@
-// rename main to parser
-#define parser main
+#ifndef YY_SKIP_YYWRAP
 #include "definitions.h"
 
-int parser () {
+int main () {
+    printf("Linha, Coluna, tamanho, nome do token, lexema\n");
     advance();
     Prog();
     return 0;
 }
+#endif
