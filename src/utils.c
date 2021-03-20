@@ -1,11 +1,14 @@
 #include "utils.h"
 
+extern int yylineno;
 extern int colno;
+extern int yyleng;
+extern char* yytext;
 
 void advance()
 {
     tok = yylex();
-    printf("Token %s found (%i, %i)\n", token_to_str(tok), yylineno, colno);
+    printf("%i, %i, %i, %s, \"%s\"\n", yylineno, colno, yyleng, token_to_str(tok), yytext);
 }
 
 void eat(enum token t)
@@ -158,6 +161,8 @@ char *token_to_str(int tok)
     case FINALLY:
         return "finally";
         break;
+    case '\0':
+        return "EOF";
     default:
     {
         // Return the string with the char atual value (e.g. char 'c' -> char* "c")
