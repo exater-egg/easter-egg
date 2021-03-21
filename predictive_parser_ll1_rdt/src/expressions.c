@@ -591,6 +591,8 @@ void TermLogic_1_to_stack(int col)
     case DO:
     case ']':
     case ')':
+    case METHODS:
+    case BEGIN_TOK:
         return;
 
     default:
