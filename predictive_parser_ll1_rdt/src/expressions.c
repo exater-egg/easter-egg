@@ -242,6 +242,11 @@ void Ids_to_stack(int col)
         stack_push(stack, IdList);
         stack_push(stack, ID);
         return;
+    case THIS:
+        stack_push(stack, AccessIndex);
+        stack_push(stack, IdList);
+        stack_push(stack, THIS);
+        return;
 
     /**
      * non-nullable
