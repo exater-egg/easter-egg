@@ -22,7 +22,7 @@ void eat(enum token t)
 void error()
 {
     printf("Error! Line %d, Column %d\n", yylineno, colno);
-    abort();
+    //abort();
 }
 
 char *token_to_str(int tok)
