@@ -1,5 +1,11 @@
 #ifndef __TABLE_H__
 #define __TABLE_H__
+#include "stack.h"
+#include "rules.h"
+#include "body.h"
+#include "definitions.h"
+#include "expressions.h"
+#include "utils.h"
 
 struct Stack* stack;
 

@@ -1,10 +1,5 @@
 #include "table.h"
-#include "stack.h"
-#include "rules.h"
-#include "body.h"
-#include "definitions.h"
-#include "expressions.h"
-#include "utils.h"
+
 #define RULES_START 255 // Rules starts at 255 and tokens go up to 255
 
 void parse_table()
@@ -76,7 +71,6 @@ void table_to_stack(int line, int col)
 	case TermLogic: TermLogic_to_stack(col);break;
 	case TermLogic_1: TermLogic_1_to_stack(col);break;
 	case FactorLogic: FactorLogic_to_stack(col);break;
-	case LogicAtom: LogicAtom_to_stack(col);break;
 	case RelExp: RelExp_to_stack(col);break;
 	case Comparactive: Comparactive_to_stack(col);break;
 	case ArithExp: ArithExp_to_stack(col);break;

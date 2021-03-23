@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "expressions.h": "c",
+        "table.h": "c",
+        "body.h": "c",
+        "definitions.h": "c"
+    }
+}

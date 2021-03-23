@@ -1,6 +1,4 @@
 #include "definitions.h"
-#include "table.h"
-#include "utils.h"
 
 void Prog_to_stack(int col)
 {

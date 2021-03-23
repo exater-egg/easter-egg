@@ -1,7 +1,4 @@
 #include "body.h"
-#include "table.h"
-#include "tokens.h"
-#include "rules.h"
 
 void StmtsPart_to_stack(int col){
     switch (col)

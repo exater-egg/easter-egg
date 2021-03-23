@@ -1,3 +1,11 @@
+#ifndef __BODY_H__
+#define __BODY_H__
+
+#include "table.h"
+#include "tokens.h"
+#include "rules.h"
+#include "stack.h"
+#include "utils.h"
 
 void StmtsPart_to_stack(int col);
 
@@ -36,3 +44,5 @@ void DoStmt_to_stack(int col);
 void ExceptBlks_to_stack(int col);
 
 void FinalBlk_to_stack(int col);
+
+#endif // __BODY_H__

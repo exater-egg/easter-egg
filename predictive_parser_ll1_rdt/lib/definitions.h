@@ -1,5 +1,11 @@
-#include "tokens.h"
+#ifndef __DEFINITIONS_H__
+#define __DEFINITIONS_H__
+
 #include "rules.h"
+#include "stack.h"
+#include "table.h"
+#include "tokens.h"
+#include "utils.h"
 
 void Prog_to_stack(int col);
 
@@ -72,3 +78,5 @@ void MethDefPart_to_stack(int col);
 void MethDef_to_stack(int col);
 
 void MethDefs_to_stack(int col);
+
+#endif

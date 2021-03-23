@@ -2,8 +2,10 @@
 #define __EXPRESSIONS_H__
 
 #include "table.h"
+#include "stack.h"
 #include "tokens.h"
 #include "rules.h"
+#include "utils.h"
 
 void Const_to_stack(int col);
 void SignedConst_to_stack(int col);
