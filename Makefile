@@ -50,11 +50,11 @@ lex.yy.o: lex.yy.c
 	gcc -c -I ./ -I $(LIBDIR) $< -o $@
 
 # generate lexical code
-lex.yy.c:
+lex.yy.c: lexer.l
 	lex --header-file=lex.yy.h lexer.l 
 
 # generate sintax code
-y.tab.c:
+y.tab.c: syntax_rules.y
 	yacc -d syntax_rules.y
 
 $(OBJDIR)/%.o : $(SRCDIR)/%.c
