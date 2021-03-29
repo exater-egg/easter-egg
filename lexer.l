@@ -1,6 +1,10 @@
 %{
   #include <stdio.h>
+  #ifdef YY_SKIP_YYWRAP
   #include "tokens.h"
+  #else
+  #include "y.tab.h"
+  #endif
 
   int colno = 1;
   int errono = 0;
