@@ -1,5 +1,6 @@
 %{
 #include <stdio.h>
+#include "tokens.h"
 
 int yylex(void);
 int yyerror(char *s);
@@ -14,260 +15,173 @@ extern char * yytext;
 	char * sValue;  /* string value */
 	};
 
-%token <sValue> ID
-%token <iValue> NUMBER
-%token WHILE BLOCK_BEGIN BLOCK_END DO IF THEN ELSE SEMI ASSIGN
+//%token <sValue> ID
+//%token <iValue> NUMBER
+//%token WHILE BLOCK_BEGIN BLOCK_END DO IF THEN ELSE SEMI ASSIGN
 
-%start prog
+%start Prog
 
 %type <sValue> stm
 
 %%
-program : "program" "identifier" ';' program_body '.'
+
+Prog : Pack Impt program ID ';' ProgBody '.'
 	;
 
-program_body : constant_definition_part class_definition_part variable_declaration_part methods_definition_part statement_part
-	;
+Pack :  | PACKAGE ID ';' ;
 
-constant_definition_part : empty 
-	| "consts" constant_definition constant_definition_list
-	;
+Impt : | IMPORT strLit Impts ;
 
-constant_definition_list : empty 
-	| ';' constant_definition constant_definition_list
-	;
+Impts :  | ';' Impt ;
 
-constant_definition : identifier '=' constant
-	;
+ProgBody : ConstDefPart ClassDefPart VarDeclPart MethDefPart StmtsPart ;
 
-constant : number 
-	| sign number 
-	| "identifier" 
-	| sign "identifier" 
-	| "string-literal"
-	;
+ConstDefPart :  | CONSTS ConstDef ;
 
-number : "integer-literal" 
-	| "float-literal"
-	;
+ConstDef : ID '=' Const ConstDefs ;
 
-sign : '+' 
-	| '-'
-	;
+ConstDefs : | ';' ConstDef ;
 
-class_definition_part : empty 
-	| "classes" class_definition class_definition_list
-	;
+Const : Num | Ids | strLit | boolLit | SignedConst | ArrayLit | null ;
 
-class_definition_list : empty 
-	| ';' class_definition class_definition_list
-	;
+SignedConst : Sign Const ;
 
-class_definition : "identifier" class_type_declaration attributes_declaration_part methods_declaration_part
-	;
+Num : intLit | floatLit ;
 
-class_type_declaration : empty 
-	| '=' "identifier"
-	;
+Sign : plusSign | minusSign ;
 
-attributes_declaration_part : empty 
-	| "attributes" attribute_declaration attribute_declaration_list
-	;
+ArrayLit : openBkt ExpList closeBkt ;
 
-attribute_declaration_list : empty 
-	| ';' attribute_declaration attribute_declaration_list
-	;
+ExpList : | Exp ExpList' ;
 
-attribute_declaration : "identifier" identifier_list ":" "identifier"
-	;
+ExpList' : | comma Exp ExpList' ;
 
-identifier_list : empty 
-	| "," "identifier" identifier_list
-	;
+ClassDefPart :  | classes ClassDef ;
 
-methods_declaration_part : empty 
-	| "methods" method_declaration method_declaration_list
-	;
+ClassDef : id ClassInherance AttrDeclPart MethDeclPart ClassDefs ;
 
-method_declaration_list : empty 
-	| ';' method_declaration method_declaration_list
-	;
+ClassInherance : | eqSign id ;
 
-method_declaration : method_heading statements_section
-	;
+ClassDefs : | ClassDef ;
 
-method_heading : "method" "identifier" "(" method_parameters ")" method_return_class
-	;
+AttrDeclPart :  | attributes AttrInit ;
 
-method_return_class : empty 
-	| ':' "identifier"
-	;
+AttrInit : id : AttrDecl AttrInits;
 
-method_parameters : empty 
-	| formal_parameter_section 
-	| formal_parameter_section ';' method_parameters
-	;
+AttrInits : | ';' AttrInit ;
 
-// First identifier is the class name, the rest are parameters names
-	;
-formal_parameter_section : "identifier" "identifier" identifier_list
-	;
+AttrDecl : id AttrVal AttrDecls ;
 
-variable_declaration_part : empty 
-	| variables_header variable_definition variable_definition_list
-	;
+AttrVal : | eqSign Const ;
 
-variables_header : "variables" 
-	| "vars"
-	;
+AttrDecls : | comma AttrDecl ;
 
-variable_definition_list : empty 
-	| ';' variable_definition variable_definition_list
-	;
+MethDeclPart : methods MethHead ;
 
-variable_definition : "identifier" ':' "identifier" variable_assignment_part identifier_list
-	;
+MethHead : id ( ParSec ) MethType MethHeads ;
 
-variable_assignment_part : empty 
-	| "=" expression
-	;
+MethType : | : id ;
 
-methods_definition_part : "methods" formal_method_definition formal_method_definition_list
-	;
+MethHeads : | ';' MethHead ;
 
-formal_method_definition_list : empty 
-	| ';' formal_method_definition formal_method_definition_list
-	;
+ParSec : | id : Param ParSecs ;
 
-formal_method_definition : "identifier" '.' "identifier" statements_section
-	;
+Param : id Params ;
 
-statements_section : "begin" statements "end"
-	;
+Params : | comma Param ;
 
-statements : statement statement_list
-	;
+ParSecs : | ';' ParSec ;
 
-statement_list : empty 
-	| ';' statement statement_list
-	;
+VarDeclPart :  | VarKeywd VarDef ;
 
-statement : if_statement 
-	| while_statement 
-	|  return_statement 
-	| assignment_statement 
-	| expression 
-	| incrementation
-	;
+VarKeywd : variables | var ;
 
-if_statement : "if" condition "then" statements_section else_conditions
-	;
+VarDef : id : Var VarDefs ;
 
-else_conditions : empty 
-	| ';' "else" else_body else_conditions
-	;
+Var : id VarAssign VarList ;
 
-else_body : if_statement 
-	| statements_section
-	;
+VarList : | comma Var ;
 
-while_statement : "while" condition "do" statements_section
-	;
+VarAssign : | eqSign Exp ;
 
-assignment_statement : identifiers '.' "identifier" ":=" expression 
-	;
+VarDefs : | ';' VarDef ;
 
-identifiers := identifiers '.' "identifier" 
-	| "identifier" 
-	| "this"
-	;
+MethDefPart : methods MethDef ;
 
-//======= Expressions ======//
-	;
+MethDef : id dot id VarDeclPart StmtsPart MethDefs ;
 
-expression : term_1 
-	| term_1 op_1 term_1
-	;
+MethDefs : | ';' MethDef ;
 
-op_1 : "and" 
-	| "or" 
-	| "xor"
-	;
+StmtsPart : begin Stmts end ;
 
-term_1 : term_2 
-	| term_2 op_2 term_2
-	;
+Stmts : | Stmt StmtsList ;
 
-op_2 : “==” 
-	| “!=” 
-	| “<” 
-	| “>” 
-	| “<=” 
-	| “>=”
-	;
+StmtsList : | ';' Stmt StmtsList ;
 
-term_2 : term_3 
-	| term_3 op_3 term_3
-	;
+Stmt : IfStmt | WhileStmt | ForStmt |  ReturnStmt | Exp | IncrStmt | ErrorStmt ;
 
-op_3 : “+” 
-	| “-”
-	;
+IfStmt : if Exp then StmtsPart ElseIfStmt ;
 
-term_3 : term_4 
-	| term_4 op_4 term_4
-	;
+ElseIfStmt : ElseStmt | elseif StmtsPart ElseIfStmt;
 
-op_4 : “*” 
-	| “/” 
-	| “mod”
-	;
+ElseStmt : | else StmtsPart ;
 
-term_4 : factor 
-	| factor "**" factor
-	;
+WhileStmt : while Exp do StmtsPart ;
 
-factor : “identifier” 
-	| literal 
-	| "(" expression ")"
-	;
+ReturnStmt : return Exp ;
 
-literal : “integer-literal” 
-	| “float-literal” 
-	| “boolean-literal” 
-	| “string-literal” 
-	| array-literal 
-	;
+ForStmt : for AssignStmt to Exp do StmtsPart ;
 
-array_literal : “[” element_list “]” array_type 
-	;
+AssignStmt : Ids attrSign Exp ;
 
-array_type : empty 
-	| ":" "identifier"
-	;
+Ids : id IdList AccessIndex | this IdList AccessIndex ;
 
-element_list : empty 
-	| array_element element_list_tail
-	;
+IdList : | dot id MethCall IdList ;
 
-element_list_tail : empty 
-	| ',' array_element element_list_tail
-	;
+AccessIndex : | ArrayLit AccessIndex ;
 
-array_element : “identifier” 
-	| literal
-	;
+MethCall : | ( ExpList ) ;
 
-incrementation : op_una "identifier"
-	;
-	;
+Exp : TermoLogico LogicExp ;
 
-op_una : "++" 
-	| "--"
-	;
+LogicExp : or Exp | xor Exp | attrSign Exp | ;
 
-empty : 
-	;
+TermoLogico : FatorLogico TermoLogico' ;
+
+TermoLogico' : and TermoLogico | ;
+
+FatorLogico : RelExp | not RelExp  ;
+
+RelExp : ArithExp Comparacao ;
+
+Comparacao : less ArithExp | major ArithExp | lesseq ArithExp | majoreq ArithExp | eqeq ArithExp | neq ArithExp | ;
+
+ArithExp : Termo ArithExp' ;
+
+ArithExp' : plusSign Termo ArithExp' | minusSign Termo ArithExp' | ;
+
+Termo : Fator Termo' ;
+
+Termo' : * Fator Termo' | / Fator Termo' | mod Fator Termo' | ;
+
+Fator : Const | ( ArithExp ) ;
+
+IncrStmt : incSign id | decSign id ;
+
+ErrorStmt : RaiseStmt | TryBlk ;
+
+RaiseStmt : raise Exp ;
+
+TryBlk : try StmtsPart except ExceptBlk FinalBlk;
+
+ExceptBlk : on id DoStmt ExceptBlks ;
+
+DoStmt : | do StmtsPart ;
+
+ExceptBlks : | ExceptBlk ;
+
+FinalBlk : | finally StmtsPart ;
+
 %%
 
 int main (void) {
