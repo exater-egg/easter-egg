@@ -55,7 +55,7 @@ lex.yy.c:
 
 # generate sintax code
 y.tab.c:
-	yacc -d parser.y
+	yacc -d syntax_rules.y
 
 $(OBJDIR)/%.o : $(SRCDIR)/%.c
 	gcc -c -I ./ -I $(LIBDIR) $< -o $@
