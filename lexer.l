@@ -83,8 +83,8 @@
 "/"                             { colno = colno + yyleng; return '/'; }
 "mod"                           { colno = colno + yyleng; return MOD; }
 "**"                            { colno = colno + yyleng; return EXP_SIGN; }
-"true"                          { colno = colno + yyleng; return BOOLEAN_LITERAL; }
-"false"                         { colno = colno + yyleng; return BOOLEAN_LITERAL; }
+"true"                          { colno = colno + yyleng; yylval.boolVal = atoi(yytext); return BOOLEAN_LITERAL; }
+"false"                         { colno = colno + yyleng; yylval.boolVal = atoi(yytext); return BOOLEAN_LITERAL; }
 "null"                          { colno = colno + yyleng; return NULL_TOK; }
 "return"                        { colno = colno + yyleng; return RETURN; }
 "finally"                       { colno = colno + yyleng; return FINALLY; }
@@ -92,9 +92,9 @@
 \]                              { colno = colno + yyleng; return ']'; }
 "++"                            { colno = colno + yyleng; return DOUBLE_PLUS_SIGN; }
 "--"                            { colno = colno + yyleng; return DOUBLE_MINUS_SIGN; }
-[0-9]+                          { colno = colno + yyleng; return INT_LITERAL; }
-([0-9]+\.[0-9]*|[0-9]*\.[0-9]+) { colno = colno + yyleng; return FLOAT_LITERAL; }
-[a-zA-Z_][a-zA-Z0-9_]*          { colno = colno + yyleng; return ID; }
+[0-9]+                          { colno = colno + yyleng; yylval.intVal = atoi(yytext); return INT_LITERAL; }
+([0-9]+\.[0-9]*|[0-9]*\.[0-9]+) { colno = colno + yyleng; yylval.floatVal = atof(yytext); return FLOAT_LITERAL; }
+[a-zA-Z_][a-zA-Z0-9_]*          { colno = colno + yyleng; yylval.strVal = strdup(yytext); return ID; }
 \"(\\.|[^"])*\"                 { colno = colno + yyleng; return STRING_LITERAL; }
 \{(\\.|[^}])*\}                 { colno = colno + yyleng; }
 .                               { lexerror(yylineno, colno, yytext); errono += 1; }
