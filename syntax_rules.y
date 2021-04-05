@@ -33,37 +33,37 @@ char *token_to_str(int tok);
 
 Prog : Pack Impt PROGRAM ID ';' ProgBody '.' { printf("Prog\n"); } ;
 
-Pack : { printf("Pack(empty\n)"); }
+Pack : { printf("Pack(empty)\n"); }
 	 | PACKAGE ID ';' { printf("Pack(PACKAGE)\n"); } ;
 
-Impt : { printf("Impt(empty\n)"); }
+Impt : { printf("Impt(empty)\n"); }
 	 | IMPORT STRING_LITERAL Impts { printf("Impt(IMPORT)\n"); } ;
 
-Impts : { printf("Impts(empty\n)"); } 
+Impts : { printf("Impts(empty)\n"); } 
 	  | ';' Impt  { printf("Impts(;)\n"); } ;
 
 ProgBody : ConstDefPart ClassDefPart VarDeclPart MethDefPart StmtsPart { printf("ProgBody\n"); } ;
 
-ConstDefPart : { printf("ConstDefPart(empty\n)"); }
+ConstDefPart : { printf("ConstDefPart(empty)\n"); }
 	| CONSTS ConstDef { printf("ConstDefPart(CONSTS)\n"); } ;
 
 ConstDef : ID '=' Const ConstDefs { printf("ConstDef(ID)\n"); } ;
 
-ConstDefs : { printf("ConstDefs(empty\n)"); }
+ConstDefs : { printf("ConstDefs(empty)\n"); }
 	| ';' ConstDef { printf("ConstDefs(;)\n"); } ;
 
 Const : Num { printf("Const(Num)\n"); }
 	| Ids { printf("Const(Ids)\n"); }
 	| STRING_LITERAL { printf("Const(STRING_LITERAL)\n"); }
 	| BOOLEAN_LITERAL { printf("Const(BOOLEAN_LITERAL)\n"); }
-	| SignedConst { printf("Const(SignedConst\n)"); }
+	| SignedConst { printf("Const(SignedConst)\n"); }
 	| ArrayLit { printf("Const(ArrayLit)\n"); }
 	| NULL_TOK { printf("Const(NULL_TOK)\n"); } ;
 
 SignedConst : Sign Const { printf("SignedConst\n"); } ;
 
 Num : INT_LITERAL { printf("Num(INT_LITERA\nL)"); }
-	| FLOAT_LITERAL { printf("Num(FLOAT_LITERAL\n)"); } ;
+	| FLOAT_LITERAL { printf("Num(FLOAT_LITERAL)\n"); } ;
 
 Sign : '+' { printf("Sign(+)\n"); }
 	| '-' { printf("Sign(-)\n"); } ;
