@@ -81,29 +81,29 @@ ClassDefPart : { printf("ConstDefPart(empty)\n"); }
 
 ClassDef : ID ClassInherance AttrDeclPart MethDeclPart ClassDefs { printf("ClassDef\n"); } ;
 
-ClassInherance : 
-	| '=' ID ;
+ClassInherance : { printf("ClassInherance(empty)\n"); }
+	| '=' ID { printf("ClassInherance(=)\n"); } ;
 
-ClassDefs : 
-	| ClassDef ;
+ClassDefs : { printf("ClassDefs(empty)\n"); } 
+	| ClassDef { printf("ClassDefs(ClassDef)\n"); } ;
 
-AttrDeclPart :  
-	| ATTRIBUTES AttrInit ;
+AttrDeclPart : { printf("AttrDeclPart(empty)\n"); }
+	| ATTRIBUTES AttrInit { printf("AttrDeclPart(ATTRIBUTES)\n"); } ;
 
-AttrInit : ID ':' AttrDecl AttrInits;
+AttrInit : ID ':' AttrDecl AttrInits { printf("AttrInit\n"); } ;
 
-AttrInits : 
-	| ';' AttrInit ;
+AttrInits : { printf("AttrInits(empty)\n"); }
+	| ';' AttrInit { printf("AttrInits(;)\n"); };
 
-AttrDecl : ID AttrVal AttrDecls ;
+AttrDecl : ID AttrVal AttrDecls { printf("AttrDecl\n"); };
 
-AttrVal : 
-	| '=' Const ;
+AttrVal : { printf("AttrVal(empty)\n"); }
+	| '=' Const { printf("AttrVal(=)\n"); } ;
 
-AttrDecls : 
-	| ',' AttrDecl ;
+AttrDecls : { printf("AttrDecls(empty)\n"); }
+	| ',' AttrDecl { printf("AttrDecls(,)\n"); } ;
 
-MethDeclPart : METHODS MethHead ;
+MethDeclPart : METHODS MethHead { printf("MethDeclPart\n"); } ;
 
 MethHead : ID '(' ParSec ')' MethType MethHeads ;
 
