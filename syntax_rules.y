@@ -31,50 +31,50 @@ char *token_to_str(int tok);
 
 %%
 
-Prog : Pack Impt PROGRAM ID ';' ProgBody '.' {/** sprintf($$, "%s %s %s %s %s %s %s ", $1, $2, token_to_str($3), $4, token_to_str($5), $6, token_to_str($7) ); **/} ;
+Prog : Pack Impt PROGRAM ID ';' ProgBody '.' { printf("Prog\n"); } ;
 
-Pack : {}
-	 | PACKAGE ID ';' {} ;
+Pack : { printf("Pack(empty\n)"); }
+	 | PACKAGE ID ';' { printf("Pack(PACKAGE)\n"); } ;
 
-Impt : {}
-	 | IMPORT STRING_LITERAL Impts {} ;
+Impt : { printf("Impt(empty\n)"); }
+	 | IMPORT STRING_LITERAL Impts { printf("Impt(IMPORT)\n"); } ;
 
-Impts :  
-	  | ';' Impt ;
+Impts : { printf("Impts(empty\n)"); } 
+	  | ';' Impt  { printf("Impts(;)\n"); };
 
-ProgBody : ConstDefPart ClassDefPart VarDeclPart MethDefPart StmtsPart ;
+ProgBody : ConstDefPart ClassDefPart VarDeclPart MethDefPart StmtsPart { printf("ProgBody\n"); } ;
 
-ConstDefPart :  
-	| CONSTS ConstDef ;
+ConstDefPart : { printf("ConstDefPart(empty\n)"); }
+	| CONSTS ConstDef { printf("ConstDefPart(CONSTS)\n"); } ;
 
-ConstDef : ID '=' Const ConstDefs ;
+ConstDef : ID '=' Const ConstDefs { printf("ConstDef(ID)\n"); } ;
 
-ConstDefs : 
-	| ';' ConstDef ;
+ConstDefs : { printf("ConstDefs(empty\n)"); }
+	| ';' ConstDef { printf("ConstDefs(;)\n"); } ;
 
-Const : Num 
-	| Ids 
-	| STRING_LITERAL 
-	| BOOLEAN_LITERAL 
-	| SignedConst 
-	| ArrayLit 
-	| NULL_TOK ;
+Const : Num { printf("Const(Num)\n"); }
+	| Ids { printf("Const(Ids)\n"); }
+	| STRING_LITERAL { printf("Const(STRING_LITERAL)\n"); }
+	| BOOLEAN_LITERAL { printf("Const(BOOLEAN_LITERAL)\n"); }
+	| SignedConst { printf("Const(SignedConst\n)"); }
+	| ArrayLit { printf("Const(ArrayLit)\n"); }
+	| NULL_TOK { printf("Const(NULL_TOK)\n"); } ;
 
-SignedConst : Sign Const ;
+SignedConst : Sign Const { printf("SignedConst\n"); } ;
 
-Num : INT_LITERAL 
-	| FLOAT_LITERAL ;
+Num : INT_LITERAL { printf("Num(INT_LITERA\nL)"); }
+	| FLOAT_LITERAL { printf("Num(FLOAT_LITERAL\n)"); };
 
-Sign : '+' 
-	| '-' ;
+Sign : '+' { printf("Sign(+)\n"); }
+	| '-' { printf("Sign(-)\n"); };
 
-ArrayLit : '[' ExpList ']' ;
+ArrayLit : '[' ExpList ']'  { printf("ArrayLit\n"); };
 
-ExpList : 
-	| Exp ExpList1 ;
+ExpList : { printf("ExpList(empty)\n"); }
+	| Exp ExpList1 { printf("ExpList(Exp)\n"); };
 
-ExpList1 : 
-	| ',' Exp ExpList1 ;
+ExpList1 : { printf("ExpList1(empty)\n"); }
+	| ',' Exp ExpList1 { printf("ExpList1(,)\n"); };
 
 ClassDefPart :  
 	| CLASSES ClassDef ;
