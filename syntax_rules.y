@@ -40,7 +40,7 @@ Impt : { printf("Impt(empty\n)"); }
 	 | IMPORT STRING_LITERAL Impts { printf("Impt(IMPORT)\n"); } ;
 
 Impts : { printf("Impts(empty\n)"); } 
-	  | ';' Impt  { printf("Impts(;)\n"); };
+	  | ';' Impt  { printf("Impts(;)\n"); } ;
 
 ProgBody : ConstDefPart ClassDefPart VarDeclPart MethDefPart StmtsPart { printf("ProgBody\n"); } ;
 
@@ -63,23 +63,23 @@ Const : Num { printf("Const(Num)\n"); }
 SignedConst : Sign Const { printf("SignedConst\n"); } ;
 
 Num : INT_LITERAL { printf("Num(INT_LITERA\nL)"); }
-	| FLOAT_LITERAL { printf("Num(FLOAT_LITERAL\n)"); };
+	| FLOAT_LITERAL { printf("Num(FLOAT_LITERAL\n)"); } ;
 
 Sign : '+' { printf("Sign(+)\n"); }
-	| '-' { printf("Sign(-)\n"); };
+	| '-' { printf("Sign(-)\n"); } ;
 
-ArrayLit : '[' ExpList ']'  { printf("ArrayLit\n"); };
+ArrayLit : '[' ExpList ']'  { printf("ArrayLit\n"); } ;
 
 ExpList : { printf("ExpList(empty)\n"); }
-	| Exp ExpList1 { printf("ExpList(Exp)\n"); };
+	| Exp ExpList1 { printf("ExpList(Exp)\n"); } ;
 
 ExpList1 : { printf("ExpList1(empty)\n"); }
-	| ',' Exp ExpList1 { printf("ExpList1(,)\n"); };
+	| ',' Exp ExpList1 { printf("ExpList1(,)\n"); } ;
 
-ClassDefPart :  
-	| CLASSES ClassDef ;
+ClassDefPart : { printf("ConstDefPart(empty)\n"); }
+	| CLASSES ClassDef { printf("ConstDefPart(empty)\n"); } ;
 
-ClassDef : ID ClassInherance AttrDeclPart MethDeclPart ClassDefs ;
+ClassDef : ID ClassInherance AttrDeclPart MethDeclPart ClassDefs { printf("ClassDef\n"); } ;
 
 ClassInherance : 
 	| '=' ID ;
