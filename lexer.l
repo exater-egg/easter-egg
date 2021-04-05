@@ -83,8 +83,8 @@
 "/"                             { colno = colno + yyleng; return '/'; }
 "mod"                           { colno = colno + yyleng; return MOD; }
 "**"                            { colno = colno + yyleng; return EXP_SIGN; }
-"true"                          { colno = colno + yyleng; yylval.boolVal = atoi(1); return BOOLEAN_LITERAL; }
-"false"                         { colno = colno + yyleng; yylval.boolVal = atoi(0); return BOOLEAN_LITERAL; }
+"true"                          { colno = colno + yyleng; yylval.boolVal = 1; return BOOLEAN_LITERAL; }
+"false"                         { colno = colno + yyleng; yylval.boolVal = 0; return BOOLEAN_LITERAL; }
 "null"                          { colno = colno + yyleng; return NULL_TOK; }
 "return"                        { colno = colno + yyleng; return RETURN; }
 "finally"                       { colno = colno + yyleng; return FINALLY; }
