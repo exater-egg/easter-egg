@@ -140,7 +140,7 @@ VarAssign :
 VarDefs : 
 	| ';' VarDef ;
 
-MethDefPart : METHODS MethDef ;
+MethDefPart : | METHODS MethDef ;
 
 MethDef : ID '.' ID VarDeclPart StmtsPart MethDefs ;
 
