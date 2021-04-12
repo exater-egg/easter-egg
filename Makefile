@@ -55,7 +55,11 @@ lex.yy.c: lexer.l
 
 # generate sintax code
 y.tab.c: syntax_rules.y
-	yacc -d syntax_rules.y
+	yacc -d syntax_rules.y -o y.tab.c
+
+graph.png: syntax_rules.y
+	yacc -d syntax_rules.y -g
+	dot -Tpng y.dot -o graph.png
 
 $(OBJDIR)/%.o : $(SRCDIR)/%.c
 	gcc -c -I ./ -I $(LIBDIR) $< -o $@
@@ -79,4 +83,4 @@ run: $(BIN).out
 	./$(BIN).out
 
 clean:
-	rm -f y.tab.c lex.yy.c lex.yy.h lex.yy.o $(BIN).* $(ALLOBJS)
+	rm -f y.tab.c lex.yy.c lex.yy.h lex.yy.o $(BIN).* $(ALLOBJS) y.dot graph.png
