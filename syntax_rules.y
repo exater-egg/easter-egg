@@ -218,60 +218,147 @@ AccessIndex :
 MethCall : 
 	| '(' ExpList ')' ;
 
-Exp : TermoLogico { TermoLogico.val = $$ } LogicExp { LogicExp.val = $$ } ;
+Exp : TermoLogico LogicExp { switch($2.sym){
+	case OR:
+		$$.val = $1.val || $2.val;
+		break;
+	case XOR:	
+		$$.val = $1.val * $2.val;
+		break;
+	case ASSIGN_SIGN:
+		$$.val = ($1.val = $2.val);
+		break;
+	case '\0':
+		$$.val =$1.val;
+		break;
+	default:
+		break;
+}} ;
 
-LogicExp : OR Exp 
-	| XOR Exp 
-	| ASSIGN_SIGN Exp 
+LogicExp : OR Exp { $$.sym = OR ; $$.val = $1.val; printf("%i %i %s,%i\n", yylineno,
+colno,token_to_str($$.sym),$$.val);}
+	| XOR Exp { $$.sym = XOR ;  $$.val = $1.val;}
+	| ASSIGN_SIGN Exp {$$.sym = ASSIGN_SIGN; $$.val = $1.val;}
 	| ;
 
-TermoLogico : FatorLogico TermoLogico1 { TermoLogico1.val == 0 ? TermoLogico.val = 0 : TermoLogico.val = FatorLogico.val & TermoLogico1.val  };
+TermoLogico : FatorLogico TermoLogico1 { switch($2.sym){
+	case AND:
+		$$.val = $1.val && $2.val;
+		break;
+	case '\0':
+		$$.val = $1.val;
+		break;  
+} };
 
-TermoLogico1 : AND TermoLogico 
+TermoLogico1 : AND TermoLogico { $$.sym = AND; $$.val = $1.val; printf("%i %i %s,%i\n", yylineno,
+colno,token_to_str($$.sym),$$.val);}
 	| ;
 
-FatorLogico : RelExp 
-	| NOT RelExp  ;
 
-RelExp : ArithExp Comparacao { switch(Comparacao.sym) {
+FatorLogico : RelExp { $$.val = $1.val;}
+	| NOT RelExp  {$$.sym = NOT ; $$.val = $1.val; printf("%i %i %s,%i\n", yylineno,
+colno,token_to_str($$.sym),$$.val);};
+
+}
+
+RelExp : ArithExp Comparacao { switch($2.sym) {
     case '<':
-        RelExp.val = ArithExp.val < Comparacao.val;
+        $$.val =  < Comparacao.val;
         break;
+    case '>':
+    	$$.val = ArithExp.val > Comparacao.val;
+    	break;
+    case LESS_EQ_SIGN:
+    	$$.val = ArithExp.val <= Comparacao.val;
+    	break;	
+    case MORE_EQ_SIGN:
+    	$$.val = ArithExp.val <= Comparacao.val;
+    	break;
+    case DOUB_EQ_SIGN:
+    	RelExp.val = ArithExp.val == Comparacao.val;
+    	break;
+    case NEG_EQ_SIGNs:
+    	RelExp.val = ArithExp.val != Comparacao.val;
+    	break;
+    default:
+    	yyerror(Comparacao.sym);
+    	break;
 } } ;
 
-Comparacao : '<' ArithExp 
-	| '>' ArithExp 
-	| LESS_EQ_SIGN ArithExp 
-	| MORE_EQ_SIGN ArithExp 
-	| DOUB_EQ_SIGN ArithExp 
-	| NEG_EQ_SIGN ArithExp 
+Comparacao : '<' ArithExp { $$.sym = '<' ; $$.val = $1.val;printf("%i %i %s,%i\n", yylineno,
+colno,token_to_str($$.sym),$$.val);}
+	| '>' ArithExp { $$.sym = '>' ; $$.val = $1.val;printf("%i %i %s,%i\n", yylineno,
+colno,token_to_str($$.sym),$$.val);}
+	| LESS_EQ_SIGN ArithExp { $$.sym = LESS_EQ_SIGN ; $$.val = $1.val;printf("%i %i %s,%i\n", yylineno,
+colno,token_to_str($$.sym),$$.val);}
+	| MORE_EQ_SIGN ArithExp { $$.sym = MORE_EQ_SIGN ; $$.val = $1.val;printf("%i %i %s,%i\n", yylineno,
+colno,token_to_str($$.sym),$$.val);}
+	| DOUB_EQ_SIGN ArithExp { $$.sym = DOUB_EQ_SIGN ; $$.val = $1.val;printf("%i %i %s,%i\n", yylineno,
+colno,token_to_str($$.sym),$$.val);}
+	| NEG_EQ_SIGN ArithExp { $$.sym = NEG_EQ_SIGN ; $$.val = $1;}
 	| { Comparacao.sym = '\0'; } ;
 
-ArithExp : Termo ArithExp1 ;
+ArithExp : Termo ArithExp1  { switch($2.sym){
+	case '+':
+		$$.val = $1.val + $2.val;
+		break;
+	case '-':
+		$$.val = $1.val - $2.val;
+		break;
+	default:
+		yyerror($$.sym);
+		break;
+} };
 
-ArithExp1 : '+' Termo ArithExp1 
-	| '-' Termo ArithExp1 
+ArithExp1 : '+' Termo ArithExp1 { $$.sym = '+'; $$.val = $1.val;printf("%i %i %s,%i\n", yylineno,}
+	| '-' Termo ArithExp1 { $$.sym = '-'; $$.val = $1.val;colno,token_to_str($$.sym),$$.val);}
+	| {$$.sym = '\0';};
+
+Termo : Fator  Termo1 ;{ swith($2.sym){
+	case '*':
+		$$.val = $1.val * $2.val;
+		printf("%i %i %s,%i\n", yylineno,colno,token_to_str($$.sym),$$.val);
+		break;
+	case '/':
+		$$.val = $1.val / $2.val;
+		printf("%i %i %s,%i\n", yylineno,colno,token_to_str($$.sym),$$.val);
+		break;
+	case MOD:	
+		$$.val = $1.val % $2.val;
+		printf("%i %i %s,%i\n", yylineno,colno,token_to_str($$.sym),$$.val);
+		break;
+	default:
+		yyerror($$.sym);
+		break;
+}}
+
+Termo1 : '*' Fator Termo1 { $$.sym = '*';
+						 $$.val = $1.val;printf("%i %i %s,%i\n", yylineno, colno,token_to_str($$.sym),$$.val);}
+	| '/' Fator Termo1 { $$.sym = '/'; 
+						 $$.val = $1.val;printf("%i %i %s,%i\n", yylineno, colno,token_to_str($$.sym),$$.val);}
+	| MOD Fator Termo1 { $$.sym = MOD; 
+						 $$.val = $1.val;printf("%i %i %s,%i\n", yylineno, colno,token_to_str($$.sym),$$.val);}
 	| ;
 
-Termo : Fator Termo1 ;
+Fator : Const { $$.val = $1.val;}
+	| '(' ArithExp ')' ;{ $$.sym = '('; printf("%i %i %s,%i\n", yylineno,colno,token_to_str($$.sym),$$.val); 
+						$$.val = $1.val ; 
+						$$.sym = ')'; printf("%i %i %s,%i\n", yylineno,colno,token_to_str($$.sym),$$.val);}
+}
 
-Termo1 : '*' Fator Termo1 
-	| '/' Fator Termo1 
-	| MOD Fator Termo1 
-	| ;
+IncrStmt : DOUBLE_PLUS_SIGN ID { $$.sym = DOUBLE_PLUS_SIGN; 
+								 $$.sym = ID; printf("%i %i %s,%i\n", yylineno,colno,token_to_str($$.sym),$$.val);}
+	| DOUBLE_MINUS_SIGN ID { $$.sym = DOUBLE_MINUS SIGN; 
+							 $$.sym = ID; printf("%i %i %s,%i\n", yylineno,colno,token_to_str($$.sym),$$.val);};
+}
 
-Fator : Const 
-	| '(' ArithExp ')' ;
+ErrorStmt : RaiseStmt {$$.val = $1.val;}
+	| TryBlk {$$.val = $1.val;};
+}
 
-IncrStmt : DOUBLE_PLUS_SIGN ID 
-	| DOUBLE_MINUS_SIGN ID ;
+RaiseStmt : RAISE Exp {$$.sym = RAISE; $$.val = $1.val;};
 
-ErrorStmt : RaiseStmt 
-	| TryBlk ;
-
-RaiseStmt : RAISE Exp ;
-
-TryBlk : TRY StmtsPart EXCEPT ExceptBlk FinalBlk;
+TryBlk : TRY StmtsPart EXCEPT ExceptBlk FinalBlk ;
 
 ExceptBlk : ON ID DoStmt ExceptBlks ;
 
