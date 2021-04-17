@@ -8,6 +8,15 @@ extern int colno;
 extern char * yytext;
 char *token_to_str(int tok);
 
+/**
+ * TODO
+ * struct TABLE
+ * TABLE* create_sym_table()
+ * int check_types(void* rsh, void* lsh)
+ * void* get_value(symbol)
+ * void* eval(expression)
+ */
+
 %}
 
 %union {
@@ -191,14 +200,14 @@ AccessIndex :
 MethCall : 
 	| '(' ExpList ')' ;
 
-Exp : TermoLogico LogicExp ;
+Exp : TermoLogico { TermoLogico.val = $$ } LogicExp { LogicExp.val = $$ } ;
 
 LogicExp : OR Exp 
 	| XOR Exp 
 	| ASSIGN_SIGN Exp 
 	| ;
 
-TermoLogico : FatorLogico TermoLogico1 ;
+TermoLogico : FatorLogico TermoLogico1 { TermoLogico1.val == 0 ? TermoLogico.val = 0 : TermoLogico.val = FatorLogico.val & TermoLogico1.val  };
 
 TermoLogico1 : AND TermoLogico 
 	| ;
@@ -206,7 +215,11 @@ TermoLogico1 : AND TermoLogico
 FatorLogico : RelExp 
 	| NOT RelExp  ;
 
-RelExp : ArithExp Comparacao ;
+RelExp : ArithExp Comparacao { switch(Comparacao.sym) {
+    case '<':
+        RelExp.val = ArithExp.val < Comparacao.val;
+        break;
+} } ;
 
 Comparacao : '<' ArithExp 
 	| '>' ArithExp 
@@ -214,7 +227,7 @@ Comparacao : '<' ArithExp
 	| MORE_EQ_SIGN ArithExp 
 	| DOUB_EQ_SIGN ArithExp 
 	| NEG_EQ_SIGN ArithExp 
-	| ;
+	| { Comparacao.sym = '\0'; } ;
 
 ArithExp : Termo ArithExp1 ;
 
