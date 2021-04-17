@@ -8,6 +8,11 @@ extern int colno;
 extern char * yytext;
 char *token_to_str(int tok);
 
+typedef struct nonTermStruct {
+	enum token sym;
+	void* val;
+} nonTerm;
+
 /**
  * TODO
  * struct TABLE
@@ -35,6 +40,19 @@ char *token_to_str(int tok);
 %token ON THIS NOT ASSIGN_SIGN AND OR XOR DOUB_EQ_SIGN NEG_EQ_SIGN LESS_EQ_SIGN
 %token MORE_EQ_SIGN MOD EXP_SIGN NULL_TOK RETURN
 %token DOUBLE_PLUS_SIGN DOUBLE_MINUS_SIGN FINALLY
+
+%type <nonTerm> Prog  Pack Impt Impts ProgBody ConstDefPart ConstDef ConstDefs
+%type <nonTerm> Const SignedConst Num Sign ArrayLit ExpList ExpList1
+%type <nonTerm> ClassDefPart ClassDef ClassInherance ClassDefs AttrDeclPart
+%type <nonTerm> AttrInit AttrInits AttrDecl AttrVal AttrDecls MethDeclPart
+%type <nonTerm> MethHead MethType MethHeads ParSec Param Params ParSecs
+%type <nonTerm> VarDeclPart VarDef Var VarList VarAssign VarDefs MethDefPart
+%type <nonTerm> MethDef MethDefs StmtsPart Stmts StmtsList Stmt IfStmt
+%type <nonTerm> ElseIfStmt ElseStmt WhileStmt ReturnStmt ForStmt AssignStmt Ids
+%type <nonTerm> IdList AccessIndex MethCall Exp LogicExp TermoLogico
+%type <nonTerm> TermoLogico1 FatorLogico RelExp Comparacao ArithExp ArithExp1
+%type <nonTerm> Termo Termo1 Fator IncrStmt ErrorStmt RaiseStmt TryBlk
+%type <nonTerm> ExceptBlk DoStmt ExceptBlks FinalBlk
 
 %start Prog
 
