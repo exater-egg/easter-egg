@@ -10,10 +10,10 @@ consts
   HELLO_WORLD = "Hello, World!"
 
 variables
-  Integer: i;
-  Float: r=2, area, a=3, b=4, c
+  Integer: i, c;
+  Float: r=2, area, a=3, b=4
 
 begin
-  c := 2*a + 3*b;
-  area := PI * Math.pow(r, 2)
+  c := 2.0 * a + 3.0 *b;
+  area := PI * r * r 
 end.

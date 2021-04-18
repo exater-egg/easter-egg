@@ -64,7 +64,6 @@ void insert_symtable(tableEntry value)
 }
 
 char* lookup_type(char* id){
-    printf("Entering Lookup\n");
     unsigned int idx = polynomialRollingHash(id) % BUCKETS;
 
     tableEntry* head = symtable[idx];
@@ -72,18 +71,12 @@ char* lookup_type(char* id){
     // Check if key is already present
     while (head != NULL)
     {
-        if (head->id == NULL)
-            printf("We have a problem\n");
-        else
-            printf("Problem: %s\n", head->id);
-
         if (!strcmp(head->id, id))
         {
-            printf("ID encontrado retornando tipo %s\n", head->id);
             return head->type;
         }
         head = head->next;
     }
 
-    return "NULL";
+    return NULL;
 }
