@@ -1,0 +1,21 @@
+package example;
+
+import "System";
+import "Math"
+
+program Expressions;
+
+consts
+  PI = 3.14159265;
+  HELLO_WORLD = "Hello, World!"
+
+variables
+  Integer: i;
+  Float: r=2, area, a=3, b=4, c
+
+begin
+  area := PI * Math.pow(r, 2);
+  c := 2*a + 3*b
+
+end.
+
