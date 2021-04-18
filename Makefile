@@ -39,9 +39,9 @@ ALLOBJS=$(OBJS) $(PPRRD_OBJS) $(PPRDT_OBJS)
 
 all: $(BIN).out
 
-$(BIN).out: lex.yy.o y.tab.c
+$(BIN).out: lex.yy.c y.tab.c
 	# compile
-	gcc lex.yy.o y.tab.c -o $@
+	gcc lex.yy.c y.tab.c -o $@
 
 $(BIN).lex: lex.yy.c $(OBJS)
 	gcc lex.yy.c $(OBJS) -I ./ -I $(LIBDIR) -lfl -D YY_SKIP_YYWRAP -o $@
@@ -83,4 +83,4 @@ run: $(BIN).out
 	./$(BIN).out
 
 clean:
-	rm -f y.tab.c lex.yy.c lex.yy.h lex.yy.o $(BIN).* $(ALLOBJS) y.dot graph.png
+	rm -f y.tab.c y.tab.h lex.yy.c lex.yy.h lex.yy.o $(BIN).* $(ALLOBJS) y.dot graph.png
