@@ -1,5 +1,6 @@
 %{
 #include <stdio.h>
+#include <string.h>
 
 int yylex(void);
 int yyerror(char *s);
@@ -9,7 +10,7 @@ extern char * yytext;
 char *token_to_str(int tok);
 
 typedef struct nonTermStruct {
-	enum token sym;
+	int sym;
 	void* val;
     char* c_code;
     char* id;
