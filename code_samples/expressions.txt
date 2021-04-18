@@ -14,8 +14,6 @@ variables
   Float: r=2, area, a=3, b=4, c
 
 begin
-  area := PI * Math.pow(r, 2);
-  c := 2*a + 3*b
-
+  c := 2*a + 3*b;
+  area := PI * Math.pow(r, 2)
 end.
-

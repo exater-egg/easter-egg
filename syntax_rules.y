@@ -327,194 +327,256 @@ MethCall : { $$.id = ""; /* Rever */ }
 
 Exp : TermoLogico LogicExp { switch($2.sym){
 	case OR:
-		printf("[%i,%i] Exp(%s)\n", yylineno, colno, token_to_str($$.sym));
+		printf("[%i,%i] Exp(%s)\n", yylineno, colno, token_to_str($2.sym));
 		tmps_int[0] = (*((int *)($1.val)));
 		tmps_int[1] = (*((int *)($2.val)));
 		tmps_int_result[0] = malloc(sizeof(int));
 		*tmps_int_result[0] = tmps_int[0] || tmps_int[1] ;
 		$$.val = tmps_int_result[0];
-		printf("[%i,%i] Exp(%s)=%i\n", yylineno,colno,token_to_str($$.sym),(*((int*)($$.val))));
+		printf("[%i,%i] Exp(%s)=%i\n", yylineno,colno,token_to_str($2.sym),(*((int*)($$.val))));
 		break;
 	case XOR:
-		printf("[%i,%i] Exp(%s)\n", yylineno, colno, token_to_str($$.sym));
+		printf("[%i,%i] Exp(%s)\n", yylineno, colno, token_to_str($2.sym));
 		tmps_int[0] = (*((int *)($1.val)));
 		tmps_int[1] = (*((int *)($2.val)));
 		tmps_int_result[0] = malloc(sizeof(int));
 		*tmps_int_result[0] = tmps_int[0] * tmps_int[1] ;
 		$$.val = tmps_int_result[0];
-		printf("[%i,%i] Exp(%s)=%i\n", yylineno,colno,token_to_str($$.sym),(*((int*)($$.val))));
+		printf("[%i,%i] Exp(%s)=%i\n", yylineno,colno,token_to_str($2.sym),(*((int*)($$.val))));
 		break;
 	case ASSIGN_SIGN:
-		printf("[%i,%i] Exp(%s)\n", yylineno, colno, token_to_str($$.sym));
+		printf("[%i,%i] Exp(%s)\n", yylineno, colno, token_to_str($2.sym));
 		tmps_int_result[1] = ((int *)($1.val));
 		tmps_int[2] = (*((int *)($2.val)));
 		tmps_int_result[0] = malloc(sizeof(int));
 		*tmps_int_result[0] = (*tmps_int_result[1] = tmps_int[2]) ;
 		$$.val = tmps_int_result[0];
-		printf("[%i,%i] Exp(%s)=%i\n", yylineno,colno,token_to_str($$.sym),(*((int*)($$.val))));
+		printf("[%i,%i] Exp(%s)=%i\n", yylineno,colno,token_to_str($2.sym),(*((int*)($$.val))));
 		break;
 	case '\0':
-		printf("[%i,%i] Exp(%s)\n", yylineno, colno, token_to_str($$.sym));
+		printf("[%i,%i] Exp(%s)\n", yylineno, colno, token_to_str($2.sym));
 		$$.val = $1.val;
-		printf("[%i,%i] Exp(%s)=%i\n", yylineno,colno,token_to_str($$.sym),(*((int*)($$.val))));
+		printf("[%i,%i] Exp(%s)=%i\n", yylineno,colno,token_to_str($2.sym),(*((int*)($$.val))));
 		break;
 	default:
-		yyerror(token_to_str($$.sym));
+		printf("[%i,%i] Exp(%s)\n", yylineno, colno, token_to_str($2.sym));
+		yyerror(token_to_str($2.sym));
 		break;
 }} ;
 
 LogicExp : OR Exp {
 					$$.sym = OR ;
-					tmps_int_result[0] = malloc(sizeof(int));
-					*tmps_int_result[0] = (*((int *)($2.val)));
-					$$.val = tmps_int_result[0];
-					printf("%i %i %s,%i\n", yylineno,colno,token_to_str($$.sym),(*((int*)($$.val))));
+					printf("[%i,%i] LogicExp(%s)\n", yylineno, colno, token_to_str($$.sym));
+					$$.val = $2.val;
+					printf("[%i,%i] LogicExp(%s)=%i\n", yylineno,colno,token_to_str($$.sym),(*((int*)($$.val))));
 				}
-	| XOR Exp { $$.sym = XOR ;  $$.val = $2.val;}
-	| ASSIGN_SIGN Exp {$$.sym = ASSIGN_SIGN; $$.val = $2.val;}
-	| {$$.val = ""; /*TODO: Resolver*/} ;
+	| XOR Exp {
+			$$.sym = XOR ;
+			printf("[%i,%i] LogicExp(%s)\n", yylineno, colno, token_to_str($$.sym));
+			$$.val = $2.val;
+			printf("[%i,%i] LogicExp(%s)=%i\n", yylineno,colno,token_to_str($$.sym),(*((int*)($$.val))));
+		}
+	| ASSIGN_SIGN Exp {
+			$$.sym = ASSIGN_SIGN;
+			printf("[%i,%i] LogicExp(%s)\n", yylineno, colno, token_to_str($$.sym));
+			$$.val = $2.val;
+			printf("[%i,%i] LogicExp(%s)=%i\n", yylineno,colno,token_to_str($$.sym),(*((int*)($$.val))));
+		}
+	| {$$.val = "";} ;
 
 TermoLogico : FatorLogico TermoLogico1 { switch($2.sym){
 	case AND:
+		printf("[%i,%i] TermoLogico(%s)\n", yylineno, colno, token_to_str($2.sym));
 		tmps_int[0] = (*((int *)($1.val)));
 		tmps_int[1] = (*((int *)($2.val)));
 		tmps_int_result[0] = malloc(sizeof(int));
 		*tmps_int_result[0] = tmps_int[0] && tmps_int[1] ;
 		$$.val = tmps_int_result[0];
+		printf("[%i,%i] TermoLogico(%s)=%i\n", yylineno,colno,token_to_str($2.sym),(*((int*)($$.val))));
 		break;
 	case '\0':
+		printf("[%i,%i] TermoLogico(%s)\n", yylineno, colno, token_to_str($2.sym));
 		$$.val = $1.val;
-		break;  
+		printf("[%i,%i] TermoLogico(%s)=%i\n", yylineno,colno,token_to_str($2.sym),(*((int*)($$.val))));
+		break;
+	default:
+		printf("[%i,%i] TermoLogico(%s)\n", yylineno, colno, token_to_str($2.sym));
+		yyerror(token_to_str($2.sym));
+		break;
 } };
 
 TermoLogico1 : AND TermoLogico {
 					$$.sym = AND ;
+					printf("[%i,%i] TermoLogico1(%s)\n", yylineno, colno, token_to_str($$.sym));
 					tmps_int_result[0] = malloc(sizeof(int));
 					*tmps_int_result[0] = (*((int *)($2.val)));
 					$$.val = tmps_int_result[0];
-					printf("%i %i %s,%i\n", yylineno,colno,token_to_str($$.sym),(*((int*)($$.val))));
+					printf("[%i,%i] TermoLogico1(%s)=%i\n", yylineno,colno,token_to_str($$.sym),(*((int*)($$.val))));
 				}
-	| {$$.val = ""; /*TODO:Resolver*/};
+	| {$$.val = "";};
 
 
-FatorLogico : RelExp { $$.val = $1.val;}
+FatorLogico : RelExp {
+		printf("[%i,%i] FatorLogico(%s)\n", yylineno, colno, token_to_str('\0'));
+		$$.val = $1.val;
+		printf("[%i,%i] FatorLogico(%s)=%i\n", yylineno,colno,token_to_str('\0'),(*((int*)($$.val))));
+	}
 	| NOT RelExp  {
 					$$.sym = NOT ;
+					printf("[%i,%i] FatorLogico(%s)\n", yylineno, colno, token_to_str($$.sym));
 					tmps_int_result[0] = malloc(sizeof(int));
-					*tmps_int_result[0] = (*((int *)($2.val)));
+					*tmps_int_result[0] = !(*((int *)($2.val)));
 					$$.val = tmps_int_result[0];
-					printf("%i %i %s,%i\n", yylineno,colno,token_to_str($$.sym),(*((int*)($$.val))));
+					printf("[%i,%i] FatorLogico(%s)=%i\n", yylineno,colno,token_to_str($$.sym),(*((int*)($$.val))));
 				}
 	;
 
 RelExp : ArithExp Comparacao { switch($2.sym) {
     case '<':
+		printf("[%i,%i] RelExp(%s)\n", yylineno, colno, token_to_str($2.sym));
 		tmps_int[0] = (*((int *)($1.val)));
 		tmps_int[1] = (*((int *)($2.val)));
 		tmps_int_result[0] = malloc(sizeof(int));
 		*tmps_int_result[0] = tmps_int[0] < tmps_int[1] ;
 		$$.val = tmps_int_result[0];
+		printf("[%i,%i] RelExp(%s)=%i\n", yylineno,colno,token_to_str($2.sym),(*((int*)($$.val))));
 		break;
     case '>':
+		printf("[%i,%i] RelExp(%s)\n", yylineno, colno, token_to_str($2.sym));
 		tmps_int[0] = (*((int *)($1.val)));
 		tmps_int[1] = (*((int *)($2.val)));
 		tmps_int_result[0] = malloc(sizeof(int));
 		*tmps_int_result[0] = tmps_int[0] > tmps_int[1] ;
 		$$.val = tmps_int_result[0];
+		printf("[%i,%i] RelExp(%s)=%i\n", yylineno,colno,token_to_str($2.sym),(*((int*)($$.val))));
 		break;
     case LESS_EQ_SIGN:
+		printf("[%i,%i] RelExp(%s)\n", yylineno, colno, token_to_str($2.sym));
 		tmps_int[0] = (*((int *)($1.val)));
 		tmps_int[1] = (*((int *)($2.val)));
 		tmps_int_result[0] = malloc(sizeof(int));
 		*tmps_int_result[0] = tmps_int[0] <= tmps_int[1] ;
 		$$.val = tmps_int_result[0];
+		printf("[%i,%i] RelExp(%s)=%i\n", yylineno,colno,token_to_str($2.sym),(*((int*)($$.val))));
 		break;
     case MORE_EQ_SIGN:
+		printf("[%i,%i] RelExp(%s)\n", yylineno, colno, token_to_str($2.sym));
 		tmps_int[0] = (*((int *)($1.val)));
 		tmps_int[1] = (*((int *)($2.val)));
 		tmps_int_result[0] = malloc(sizeof(int));
 		*tmps_int_result[0] = tmps_int[0] >= tmps_int[1] ;
 		$$.val = tmps_int_result[0];
+		printf("[%i,%i] RelExp(%s)=%i\n", yylineno,colno,token_to_str($2.sym),(*((int*)($$.val))));
 		break;
     case DOUB_EQ_SIGN:
+		printf("[%i,%i] RelExp(%s)\n", yylineno, colno, token_to_str($2.sym));
 		tmps_int[0] = (*((int *)($1.val)));
 		tmps_int[1] = (*((int *)($2.val)));
 		tmps_int_result[0] = malloc(sizeof(int));
 		*tmps_int_result[0] = tmps_int[0] == tmps_int[1] ;
 		$$.val = tmps_int_result[0];
+		printf("[%i,%i] RelExp(%s)=%i\n", yylineno,colno,token_to_str($2.sym),(*((int*)($$.val))));
 		break;
     case NEG_EQ_SIGN:
+		printf("[%i,%i] RelExp(%s)\n", yylineno, colno, token_to_str($2.sym));
 		tmps_int[0] = (*((int *)($1.val)));
 		tmps_int[1] = (*((int *)($2.val)));
 		tmps_int_result[0] = malloc(sizeof(int));
 		*tmps_int_result[0] = tmps_int[0] != tmps_int[1] ;
 		$$.val = tmps_int_result[0];
+		printf("[%i,%i] RelExp(%s)=%i\n", yylineno,colno,token_to_str($2.sym),(*((int*)($$.val))));
+		break;
+	case '\0':
+		printf("[%i,%i] RelExp(%s)\n", yylineno, colno, token_to_str($2.sym));
+		$$.val = $1.val;
+		printf("[%i,%i] RelExp(%s)=%i\n", yylineno,colno,token_to_str($2.sym),(*((int*)($$.val))));
 		break;
     default:
+		printf("[%i,%i] RelExp(%s)\n", yylineno, colno, token_to_str($2.sym));
     	yyerror(token_to_str($2.sym));
     	break;
 } } ;
 
 Comparacao : '<' ArithExp {
 					$$.sym = '<' ;
+					printf("[%i,%i] Comparacao(%s)\n", yylineno, colno, token_to_str($$.sym));
 					tmps_int_result[0] = malloc(sizeof(int));
 					*tmps_int_result[0] = (*((int *)($2.val)));
 					$$.val = tmps_int_result[0];
-					printf("%i %i %s,%i\n", yylineno,colno,token_to_str($$.sym),(*((int*)($$.val))));
+					printf("[%i,%i] Comparacao(%s)=%i\n", yylineno,colno,token_to_str($$.sym),(*((int*)($$.val))));
 				}
 	| '>' ArithExp {
 					$$.sym = '>' ;
+					printf("[%i,%i] Comparacao(%s)\n", yylineno, colno, token_to_str($$.sym));
 					tmps_int_result[0] = malloc(sizeof(int));
 					*tmps_int_result[0] = (*((int *)($2.val)));
 					$$.val = tmps_int_result[0];
-					printf("%i %i %s,%i\n", yylineno,colno,token_to_str($$.sym),(*((int*)($$.val))));
+					printf("[%i,%i] Comparacao(%s)=%i\n", yylineno,colno,token_to_str($$.sym),(*((int*)($$.val))));
 				}
 	| LESS_EQ_SIGN ArithExp {
 					$$.sym = LESS_EQ_SIGN ;
+					printf("[%i,%i] Comparacao(%s)\n", yylineno, colno, token_to_str($$.sym));
 					tmps_int_result[0] = malloc(sizeof(int));
 					*tmps_int_result[0] = (*((int *)($2.val)));
 					$$.val = tmps_int_result[0];
-					printf("%i %i %s,%i\n", yylineno,colno,token_to_str($$.sym),(*((int*)($$.val))));
+					printf("[%i,%i] Comparacao(%s)=%i\n", yylineno,colno,token_to_str($$.sym),(*((int*)($$.val))));
 				}
 	| MORE_EQ_SIGN ArithExp {
 					$$.sym = MORE_EQ_SIGN ;
+					printf("[%i,%i] Comparacao(%s)\n", yylineno, colno, token_to_str($$.sym));
 					tmps_int_result[0] = malloc(sizeof(int));
 					*tmps_int_result[0] = (*((int *)($2.val)));
 					$$.val = tmps_int_result[0];
-					printf("%i %i %s,%i\n", yylineno,colno,token_to_str($$.sym),(*((int*)($$.val))));
+					printf("[%i,%i] Comparacao(%s)=%i\n", yylineno,colno,token_to_str($$.sym),(*((int*)($$.val))));
 				}
 	| DOUB_EQ_SIGN ArithExp {
 					$$.sym = DOUB_EQ_SIGN ;
+					printf("[%i,%i] Comparacao(%s)\n", yylineno, colno, token_to_str($$.sym));
 					tmps_int_result[0] = malloc(sizeof(int));
 					*tmps_int_result[0] = (*((int *)($2.val)));
 					$$.val = tmps_int_result[0];
-					printf("%i %i %s,%i\n", yylineno,colno,token_to_str($$.sym),(*((int*)($$.val))));
+					printf("[%i,%i] Comparacao(%s)=%i\n", yylineno,colno,token_to_str($$.sym),(*((int*)($$.val))));
 				}
 	| NEG_EQ_SIGN ArithExp {
 					$$.sym = NEG_EQ_SIGN ;
+					printf("[%i,%i] Comparacao(%s)\n", yylineno, colno, token_to_str($$.sym));
 					tmps_int_result[0] = malloc(sizeof(int));
 					*tmps_int_result[0] = (*((int *)($2.val)));
 					$$.val = tmps_int_result[0];
-					printf("%i %i %s,%i\n", yylineno,colno,token_to_str($$.sym),(*((int*)($$.val))));
+					printf("[%i,%i] Comparacao(%s)=%i\n", yylineno,colno,token_to_str($$.sym),(*((int*)($$.val))));
 				}
-	| { $$.sym = '\0'; } ;
+	| {
+		$$.sym = '\0';
+		printf("[%i,%i] Comparacao(%s)\n", yylineno, colno, token_to_str($$.sym));
+		}
+	;
 
 ArithExp : Termo ArithExp1  { switch($2.sym){
 	case '+':
+		printf("[%i,%i] ArithExp(%s)\n", yylineno, colno, token_to_str($2.sym));
 		tmps_int[0] = (*((int *)($1.val)));
 		tmps_int[1] = (*((int *)($2.val)));
 		tmps_int_result[0] = malloc(sizeof(int));
 		*tmps_int_result[0] = tmps_int[0] + tmps_int[1] ;
 		$$.val = tmps_int_result[0];
+		printf("[%i,%i] ArithExp(%s)=%i\n", yylineno,colno,token_to_str($2.sym),(*((int*)($$.val))));
 		break;
 	case '-':
+		printf("[%i,%i] ArithExp(%s)\n", yylineno, colno, token_to_str($2.sym));
 		tmps_int[0] = (*((int *)($1.val)));
 		tmps_int[1] = (*((int *)($2.val)));
 		tmps_int_result[0] = malloc(sizeof(int));
 		*tmps_int_result[0] = tmps_int[0] - tmps_int[1] ;
 		$$.val = tmps_int_result[0];
+		printf("[%i,%i] ArithExp(%s)=%i\n", yylineno,colno,token_to_str($2.sym),(*((int*)($$.val))));
+		break;
+	case '\0':
+		printf("[%i,%i] ArithExp(%s)\n", yylineno, colno, token_to_str($2.sym));
+		$$.val = $1.val;
+		printf("[%i,%i] ArithExp(%s)=%i\n", yylineno,colno,token_to_str($2.sym),(*((int*)($$.val))));
 		break;
 	default:
+		printf("[%i,%i] ArithExp(%s)\n", yylineno, colno, token_to_str($2.sym));
 		yyerror(token_to_str($2.sym));
 		break;
 } };
@@ -537,30 +599,39 @@ ArithExp1 : '+' Termo ArithExp1 {
 
 Termo : Fator  Termo1 { switch($2.sym){
 	case '*':
+		printf("[%i,%i] Termo(%s)\n", yylineno, colno, token_to_str($2.sym));
 		tmps_int[0] = (*((int *)($1.val)));
 		tmps_int[1] = (*((int *)($2.val)));
 		tmps_int_result[0] = malloc(sizeof(int));
 		*tmps_int_result[0] = tmps_int[0] * tmps_int[1] ;
 		$$.val = tmps_int_result[0];
-		printf("%i %i %s,%i\n", yylineno,colno,token_to_str($$.sym),(*((int*)($$.val))));
+		printf("[%i,%i] Termo(%s)=%i\n", yylineno,colno,token_to_str($2.sym),(*((int*)($$.val))));
 		break;
 	case '/':
+		printf("[%i,%i] Termo(%s)\n", yylineno, colno, token_to_str($2.sym));
 		tmps_int[0] = (*((int *)($1.val)));
 		tmps_int[1] = (*((int *)($2.val)));
 		tmps_int_result[0] = malloc(sizeof(int));
 		*tmps_int_result[0] = tmps_int[0] / tmps_int[1] ;
 		$$.val = tmps_int_result[0];
-		printf("%i %i %s,%i\n", yylineno,colno,token_to_str($$.sym),(*((int*)($$.val))));
+		printf("[%i,%i] Termo(%s)=%i\n", yylineno,colno,token_to_str($2.sym),(*((int*)($$.val))));
 		break;
 	case MOD:
+		printf("[%i,%i] Termo(%s)\n", yylineno, colno, token_to_str($2.sym));
 		tmps_int[0] = (*((int *)($1.val)));
 		tmps_int[1] = (*((int *)($2.val)));
 		tmps_int_result[0] = malloc(sizeof(int));
 		*tmps_int_result[0] = tmps_int[0] % tmps_int[1] ;
 		$$.val = tmps_int_result[0];
-		printf("%i %i %s,%i\n", yylineno,colno,token_to_str($$.sym),(*((int*)($$.val))));
+		printf("[%i,%i] Termo(%s)=%i\n", yylineno,colno,token_to_str($2.sym),(*((int*)($$.val))));
+		break;
+	case '\0':
+		printf("[%i,%i] Termo(%s)\n", yylineno, colno, token_to_str($2.sym));
+		$$.val = $1.val;
+		printf("[%i,%i] Termo(%s)=%i\n", yylineno,colno,token_to_str($2.sym),(*((int*)($$.val))));
 		break;
 	default:
+		printf("[%i,%i] Termo(%s)\n", yylineno, colno, token_to_str($2.sym));
 		yyerror(token_to_str($$.sym));
 		break;
 }} ;
