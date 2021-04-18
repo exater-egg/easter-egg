@@ -11,6 +11,8 @@ char *token_to_str(int tok);
 typedef struct nonTermStruct {
 	enum token sym;
 	void* val;
+    char* c_code;
+    char* id;
 } nonTerm;
 
 /**
@@ -29,6 +31,7 @@ typedef struct nonTermStruct {
 	float   floatVal; 	/* float value */
 	short   boolVal;    /* boolean value */
 	char *  strVal;		/* string value */
+    nonTerm nonTermVal;
 	};
 
 %token <intVal> INT_LITERAL
@@ -41,18 +44,83 @@ typedef struct nonTermStruct {
 %token MORE_EQ_SIGN MOD EXP_SIGN NULL_TOK RETURN
 %token DOUBLE_PLUS_SIGN DOUBLE_MINUS_SIGN FINALLY
 
-%type <nonTerm> Prog  Pack Impt Impts ProgBody ConstDefPart ConstDef ConstDefs
-%type <nonTerm> Const SignedConst Num Sign ArrayLit ExpList ExpList1
-%type <nonTerm> ClassDefPart ClassDef ClassInherance ClassDefs AttrDeclPart
-%type <nonTerm> AttrInit AttrInits AttrDecl AttrVal AttrDecls MethDeclPart
-%type <nonTerm> MethHead MethType MethHeads ParSec Param Params ParSecs
-%type <nonTerm> VarDeclPart VarDef Var VarList VarAssign VarDefs MethDefPart
-%type <nonTerm> MethDef MethDefs StmtsPart Stmts StmtsList Stmt IfStmt
-%type <nonTerm> ElseIfStmt ElseStmt WhileStmt ReturnStmt ForStmt AssignStmt Ids
-%type <nonTerm> IdList AccessIndex MethCall Exp LogicExp TermoLogico
-%type <nonTerm> TermoLogico1 FatorLogico RelExp Comparacao ArithExp ArithExp1
-%type <nonTerm> Termo Termo1 Fator IncrStmt ErrorStmt RaiseStmt TryBlk
-%type <nonTerm> ExceptBlk DoStmt ExceptBlks FinalBlk
+%type <nonTermVal> Prog
+%type <nonTermVal> Pack
+%type <nonTermVal> Impt
+%type <nonTermVal> Impts
+%type <nonTermVal> ProgBody
+%type <nonTermVal> ConstDefPart
+%type <nonTermVal> ConstDef
+%type <nonTermVal> ConstDefs
+%type <nonTermVal> Const
+%type <nonTermVal> SignedConst
+%type <nonTermVal> Num
+%type <nonTermVal> Sign
+%type <nonTermVal> ArrayLit
+%type <nonTermVal> ExpList
+%type <nonTermVal> ExpList1
+%type <nonTermVal> ClassDefPart
+%type <nonTermVal> ClassDef
+%type <nonTermVal> ClassInherance
+%type <nonTermVal> ClassDefs
+%type <nonTermVal> AttrDeclPart
+%type <nonTermVal> AttrInit
+%type <nonTermVal> AttrInits
+%type <nonTermVal> AttrDecl
+%type <nonTermVal> AttrVal
+%type <nonTermVal> AttrDecls
+%type <nonTermVal> MethDeclPart
+%type <nonTermVal> MethHead
+%type <nonTermVal> MethType
+%type <nonTermVal> MethHeads
+%type <nonTermVal> ParSec
+%type <nonTermVal> Param
+%type <nonTermVal> Params
+%type <nonTermVal> ParSecs
+%type <nonTermVal> VarDeclPart
+%type <nonTermVal> VarDef
+%type <nonTermVal> Var
+%type <nonTermVal> VarList
+%type <nonTermVal> VarAssign
+%type <nonTermVal> VarDefs
+%type <nonTermVal> MethDefPart
+%type <nonTermVal> MethDef
+%type <nonTermVal> MethDefs
+%type <nonTermVal> StmtsPart
+%type <nonTermVal> Stmts
+%type <nonTermVal> StmtsList
+%type <nonTermVal> Stmt
+%type <nonTermVal> IfStmt
+%type <nonTermVal> ElseIfStmt
+%type <nonTermVal> ElseStmt
+%type <nonTermVal> WhileStmt
+%type <nonTermVal> ReturnStmt
+%type <nonTermVal> ForStmt
+%type <nonTermVal> AssignStmt
+%type <nonTermVal> Ids
+%type <nonTermVal> IdList
+%type <nonTermVal> AccessIndex
+%type <nonTermVal> MethCall
+%type <nonTermVal> Exp
+%type <nonTermVal> LogicExp
+%type <nonTermVal> TermoLogico
+%type <nonTermVal> TermoLogico1
+%type <nonTermVal> FatorLogico
+%type <nonTermVal> RelExp
+%type <nonTermVal> Comparacao
+%type <nonTermVal> ArithExp
+%type <nonTermVal> ArithExp1
+%type <nonTermVal> Termo
+%type <nonTermVal> Termo1
+%type <nonTermVal> Fator
+%type <nonTermVal> IncrStmt
+%type <nonTermVal> ErrorStmt
+%type <nonTermVal> RaiseStmt
+%type <nonTermVal> TryBlk
+%type <nonTermVal> ExceptBlk
+%type <nonTermVal> DoStmt
+%type <nonTermVal> ExceptBlks
+%type <nonTermVal> FinalBlk
 
 %start Prog
 
@@ -132,9 +200,9 @@ AttrDecls : { printf("AttrDecls(empty)\n"); }
 
 MethDeclPart : METHODS MethHead { printf("MethDeclPart\n"); } ;
 
-MethHead : ID '(' ParSec ')' MethType MethHeads ;
+MethHead : ID '(' ParSec ')' MethType MethHeads {} ;
 
-MethType : 
+MethType : {}
 	| ':' ID ;
 
 MethHeads : 
@@ -206,11 +274,24 @@ ForStmt : FOR AssignStmt TO Exp DO StmtsPart ;
 
 AssignStmt : Ids ASSIGN_SIGN Exp ;
 
-Ids : ID IdList AccessIndex 
-	| THIS IdList AccessIndex ;
+Ids : ID IdList AccessIndex {
+    $$.id = strcat($1.id, $2.id);
+    /* Resolver accessindex antes $$.val = get_val(symtable, $$.id)[AccessIndex]; */
+    $$.val = get_val(symtable, $$.id); }
+	| THIS IdList AccessIndex {
+        /*
+          PROBLEMA Como resolver o this?
+          SOLUÇÃO1 Usar algum método da hashtable que devolve o escopo da chamada e
+                     trasnformar o this em um "escopo_this"
+         */
+    } ;
 
-IdList : 
-	| '.' ID MethCall IdList ;
+IdList : { $$.id = ""; /* Rever */ }
+	| '.' ID MethCall IdList {
+        $$.id = strcat("_", $2.id);
+        /* Resolver MethCall */
+        $$.id = strcat($$.id, $3.id);
+    };
 
 AccessIndex : 
 	| ArrayLit AccessIndex ;
@@ -229,16 +310,16 @@ Exp : TermoLogico LogicExp { switch($2.sym){
 		$$.val = ($1.val = $2.val);
 		break;
 	case '\0':
-		$$.val =$1.val;
+		$$.val = $1.val;
 		break;
 	default:
 		break;
 }} ;
 
-LogicExp : OR Exp { $$.sym = OR ; $$.val = $1.val; printf("%i %i %s,%i\n", yylineno,
+LogicExp : OR Exp { $$.sym = OR ; $$.val = $2.val; printf("%i %i %s,%i\n", yylineno,
 colno,token_to_str($$.sym),$$.val);}
-	| XOR Exp { $$.sym = XOR ;  $$.val = $1.val;}
-	| ASSIGN_SIGN Exp {$$.sym = ASSIGN_SIGN; $$.val = $1.val;}
+	| XOR Exp { $$.sym = XOR ;  $$.val = $2.val;}
+	| ASSIGN_SIGN Exp {$$.sym = ASSIGN_SIGN; $$.val = $2.val;}
 	| ;
 
 TermoLogico : FatorLogico TermoLogico1 { switch($2.sym){
@@ -250,16 +331,13 @@ TermoLogico : FatorLogico TermoLogico1 { switch($2.sym){
 		break;  
 } };
 
-TermoLogico1 : AND TermoLogico { $$.sym = AND; $$.val = $1.val; printf("%i %i %s,%i\n", yylineno,
+TermoLogico1 : AND TermoLogico { $$.sym = AND; $$.val = $2.val; printf("%i %i %s,%i\n", yylineno,
 colno,token_to_str($$.sym),$$.val);}
 	| ;
 
 
 FatorLogico : RelExp { $$.val = $1.val;}
-	| NOT RelExp  {$$.sym = NOT ; $$.val = $1.val; printf("%i %i %s,%i\n", yylineno,
-colno,token_to_str($$.sym),$$.val);};
-
-}
+	| NOT RelExp  {$$.sym = NOT ; $$.val = $2.val; printf("%i %i %s,%i\n", yylineno,colno,token_to_str($$.sym),$$.val);};
 
 RelExp : ArithExp Comparacao { switch($2.sym) {
     case '<':
@@ -285,17 +363,17 @@ RelExp : ArithExp Comparacao { switch($2.sym) {
     	break;
 } } ;
 
-Comparacao : '<' ArithExp { $$.sym = '<' ; $$.val = $1.val;printf("%i %i %s,%i\n", yylineno,
+Comparacao : '<' ArithExp { $$.sym = '<' ; $$.val = $2.val;printf("%i %i %s,%i\n", yylineno,
 colno,token_to_str($$.sym),$$.val);}
-	| '>' ArithExp { $$.sym = '>' ; $$.val = $1.val;printf("%i %i %s,%i\n", yylineno,
+	| '>' ArithExp { $$.sym = '>' ; $$.val = $2.val;printf("%i %i %s,%i\n", yylineno,
 colno,token_to_str($$.sym),$$.val);}
-	| LESS_EQ_SIGN ArithExp { $$.sym = LESS_EQ_SIGN ; $$.val = $1.val;printf("%i %i %s,%i\n", yylineno,
+	| LESS_EQ_SIGN ArithExp { $$.sym = LESS_EQ_SIGN ; $$.val = $2.val;printf("%i %i %s,%i\n", yylineno,
 colno,token_to_str($$.sym),$$.val);}
-	| MORE_EQ_SIGN ArithExp { $$.sym = MORE_EQ_SIGN ; $$.val = $1.val;printf("%i %i %s,%i\n", yylineno,
+	| MORE_EQ_SIGN ArithExp { $$.sym = MORE_EQ_SIGN ; $$.val = $2.val;printf("%i %i %s,%i\n", yylineno,
 colno,token_to_str($$.sym),$$.val);}
-	| DOUB_EQ_SIGN ArithExp { $$.sym = DOUB_EQ_SIGN ; $$.val = $1.val;printf("%i %i %s,%i\n", yylineno,
+	| DOUB_EQ_SIGN ArithExp { $$.sym = DOUB_EQ_SIGN ; $$.val = $2.val;printf("%i %i %s,%i\n", yylineno,
 colno,token_to_str($$.sym),$$.val);}
-	| NEG_EQ_SIGN ArithExp { $$.sym = NEG_EQ_SIGN ; $$.val = $1;}
+	| NEG_EQ_SIGN ArithExp { $$.sym = NEG_EQ_SIGN ; $$.val = $2.val;}
 	| { Comparacao.sym = '\0'; } ;
 
 ArithExp : Termo ArithExp1  { switch($2.sym){
@@ -310,11 +388,11 @@ ArithExp : Termo ArithExp1  { switch($2.sym){
 		break;
 } };
 
-ArithExp1 : '+' Termo ArithExp1 { $$.sym = '+'; $$.val = $1.val;printf("%i %i %s,%i\n", yylineno,}
-	| '-' Termo ArithExp1 { $$.sym = '-'; $$.val = $1.val;colno,token_to_str($$.sym),$$.val);}
+ArithExp1 : '+' Termo ArithExp1 { $$.sym = '+'; $$.val = $2.val;printf("%i %i %s,%i\n", yylineno,}
+	| '-' Termo ArithExp1 { $$.sym = '-'; $$.val = $2.val;colno,token_to_str($$.sym),$$.val);}
 	| {$$.sym = '\0';};
 
-Termo : Fator  Termo1 ;{ swith($2.sym){
+Termo : Fator  Termo1 { switch($2.sym){
 	case '*':
 		$$.val = $1.val * $2.val;
 		printf("%i %i %s,%i\n", yylineno,colno,token_to_str($$.sym),$$.val);
@@ -330,33 +408,35 @@ Termo : Fator  Termo1 ;{ swith($2.sym){
 	default:
 		yyerror($$.sym);
 		break;
-}}
+}} ;
 
 Termo1 : '*' Fator Termo1 { $$.sym = '*';
-						 $$.val = $1.val;printf("%i %i %s,%i\n", yylineno, colno,token_to_str($$.sym),$$.val);}
+						 $$.val = $2.val;printf("%i %i %s,%i\n", yylineno, colno,token_to_str($$.sym),$$.val);}
 	| '/' Fator Termo1 { $$.sym = '/'; 
-						 $$.val = $1.val;printf("%i %i %s,%i\n", yylineno, colno,token_to_str($$.sym),$$.val);}
+						 $$.val = $2.val;printf("%i %i %s,%i\n", yylineno, colno,token_to_str($$.sym),$$.val);}
 	| MOD Fator Termo1 { $$.sym = MOD; 
-						 $$.val = $1.val;printf("%i %i %s,%i\n", yylineno, colno,token_to_str($$.sym),$$.val);}
+						 $$.val = $2.val;printf("%i %i %s,%i\n", yylineno, colno,token_to_str($$.sym),$$.val);}
 	| ;
 
 Fator : Const { $$.val = $1.val;}
-	| '(' ArithExp ')' ;{ $$.sym = '('; printf("%i %i %s,%i\n", yylineno,colno,token_to_str($$.sym),$$.val); 
-						$$.val = $1.val ; 
-						$$.sym = ')'; printf("%i %i %s,%i\n", yylineno,colno,token_to_str($$.sym),$$.val);}
-}
+	| '(' ArithExp ')' { $$.sym = '('; printf("%i %i %s,%i\n", yylineno,colno,token_to_str($$.sym),$$.val); 
+						$$.val = $2.val ; 
+						$$.sym = ')'; printf("%i %i %s,%i\n", yylineno,colno,token_to_str($$.sym),$$.val);
+                        }
+    ;
 
 IncrStmt : DOUBLE_PLUS_SIGN ID { $$.sym = DOUBLE_PLUS_SIGN; 
 								 $$.sym = ID; printf("%i %i %s,%i\n", yylineno,colno,token_to_str($$.sym),$$.val);}
 	| DOUBLE_MINUS_SIGN ID { $$.sym = DOUBLE_MINUS SIGN; 
-							 $$.sym = ID; printf("%i %i %s,%i\n", yylineno,colno,token_to_str($$.sym),$$.val);};
-}
+							 $$.sym = ID; printf("%i %i %s,%i\n", yylineno,colno,token_to_str($$.sym),$$.val);
+                             }
+    ;
 
 ErrorStmt : RaiseStmt {$$.val = $1.val;}
-	| TryBlk {$$.val = $1.val;};
-}
+	| TryBlk {$$.val = $1.val;}
+    ;
 
-RaiseStmt : RAISE Exp {$$.sym = RAISE; $$.val = $1.val;};
+RaiseStmt : RAISE Exp {$$.sym = RAISE; $$.val = $2.val;};
 
 TryBlk : TRY StmtsPart EXCEPT ExceptBlk FinalBlk ;
 
