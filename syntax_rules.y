@@ -162,7 +162,7 @@ Const : Num { $$.type = strdup($1.type); printf("[%i,%i] Const(Num)\n", yylineno
     | Ids { 
 		printf("[%i,%i] Const()\n", yylineno, colno);
 		/* Lookup in the symtable for ID type eg: lookup_type(symtable, $1.id)*/
-		printf("Lookup: %s\n", lookup_type($1.id));
+		$$.type = strdup(lookup_type($1.id));
 		//if ($$.type != NULL) printf("ID encontrado\n");
 		printf("[%i,%i] Const(Ids)\n", yylineno, colno); }
     | STRING_LITERAL { $$.type = strdup("String"); printf("[%i,%i] Const(STRING_LITERAL)\n", yylineno, colno); }
