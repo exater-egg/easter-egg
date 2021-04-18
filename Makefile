@@ -39,9 +39,9 @@ ALLOBJS=$(OBJS) $(PPRRD_OBJS) $(PPRDT_OBJS)
 
 all: $(BIN).out
 
-$(BIN).out: lex.yy.c y.tab.c
+$(BIN).out: lex.yy.c y.tab.c mkdirs $(OBJS)
 	# compile
-	gcc lex.yy.c y.tab.c -o $@
+	gcc lex.yy.c y.tab.c $(OBJS) -o $@ -I $(LIBDIR)
 
 $(BIN).lex: lex.yy.c $(OBJS)
 	gcc lex.yy.c $(OBJS) -I ./ -I $(LIBDIR) -lfl -D YY_SKIP_YYWRAP -o $@

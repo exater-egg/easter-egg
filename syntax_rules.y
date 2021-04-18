@@ -7,11 +7,13 @@ int yylex(void);
 int yyerror(char *s);
 extern int yylineno;
 extern int colno;
+//extern char* lookup_type(char*);
 extern char * yytext;
 char *token_to_str(int tok);
 
 int tmps_int[4];
 int* tmps_int_result[3];
+char* tmp_type;
 
 /**
  * TODO
@@ -25,6 +27,7 @@ int* tmps_int_result[3];
 %}
 
 %code requires {
+#include "symtable.h"
     typedef struct nonTermStruct{
         int sym;
         void* val;
@@ -104,7 +107,7 @@ int* tmps_int_result[3];
 //%type <nonTermVal> WhileStmt
 //%type <nonTermVal> ReturnStmt
 //%type <nonTermVal> ForStmt
-//%type <nonTermVal> AssignStmt
+%type <nonTermVal> AssignStmt
 %type <nonTermVal> Ids
 %type <nonTermVal> IdList
 //%type <nonTermVal> AccessIndex
@@ -156,7 +159,12 @@ ConstDefs : { printf("[%i,%i] ConstDefs(empty)\n", yylineno, colno); }
     | ';' ConstDef { printf("[%i,%i] ConstDefs(;)\n", yylineno, colno); } ;
 
 Const : Num { $$.type = strdup($1.type); printf("[%i,%i] Const(Num)\n", yylineno, colno); }
-    | Ids { $$.type = strdup($1.type); printf("[%i,%i] Const(Ids)\n", yylineno, colno); }
+    | Ids { 
+		printf("[%i,%i] Const()\n", yylineno, colno);
+		/* Lookup in the symtable for ID type eg: lookup_type(symtable, $1.id)*/
+		printf("Lookup: %s\n", lookup_type($1.id));
+		//if ($$.type != NULL) printf("ID encontrado\n");
+		printf("[%i,%i] Const(Ids)\n", yylineno, colno); }
     | STRING_LITERAL { $$.type = strdup("String"); printf("[%i,%i] Const(STRING_LITERAL)\n", yylineno, colno); }
     | BOOLEAN_LITERAL { $$.type = strdup("Boolean"); printf("[%i,%i] Const(BOOLEAN_LITERAL)\n", yylineno, colno); }
     | SignedConst { $$.type = strdup($1.type); printf("[%i,%i] Const(SignedConst)\n", yylineno, colno); }
@@ -182,7 +190,7 @@ ExpList1 : { printf("[%i,%i] ExpList1(empty)\n", yylineno, colno); }
 ClassDefPart : { printf("[%i,%i] ConstDefPart(empty)\n", yylineno, colno); }
     | CLASSES ClassDef { printf("[%i,%i] ConstDefPart(empty)\n", yylineno, colno); } ;
 
-ClassDef : ID ClassInherance AttrDeclPart MethDeclPart ClassDefs { printf("[%i,%i] ClassDef\n", yylineno, colno); } ;
+ClassDef : ID {/*Insert type in table of types*/} ClassInherance AttrDeclPart MethDeclPart ClassDefs { printf("[%i,%i] ClassDef\n", yylineno, colno); } ;
 
 ClassInherance : { printf("[%i,%i] ClassInherance(empty)\n", yylineno, colno); }
     | '=' ID { printf("[%i,%i] ClassInherance(=)\n", yylineno, colno); } ;
@@ -242,10 +250,17 @@ VarDeclPart :  { printf("[%i,%i] VarDeclPart(empty)\n", yylineno, colno); }
     | VARIABLES VarDef { printf("[%i,%i] VarDeclPart(VARIABLES)\n", yylineno, colno); }
     ;
 
-VarDef : ID ':' Var VarDefs { printf("[%i,%i] VarDef(ID)\n", yylineno, colno); }
+VarDef : ID {
+		/*declare a temp scope*/
+		tmp_type = strdup($1);
+	} ':' Var VarDefs { printf("[%i,%i] VarDef(ID)\n", yylineno, colno); }
        ;
 
-Var : ID VarAssign VarList { printf("[%i,%i] Var(ID)\n", yylineno, colno); }
+Var : ID {
+		/*insert ID on table of symbols with temp scope type*/
+		tableEntry te; te.id = $1; te.type = tmp_type;
+		insert_symtable(te);
+	} VarAssign VarList { printf("[%i,%i] Var(ID)\n", yylineno, colno); }
     ;
 
 VarList : { printf("[%i,%i] VarList(empty)\n", yylineno, colno); }
@@ -298,12 +313,19 @@ ReturnStmt : RETURN Exp { printf("[%i,%i] ParSec(;)\n", yylineno, colno); } ;
 
 ForStmt : FOR AssignStmt TO Exp DO StmtsPart ;
 
-AssignStmt : Ids ASSIGN_SIGN Exp ;
+AssignStmt : Ids ASSIGN_SIGN Exp {
+        printf("[%i,%i] LogicExp(%s)\n", yylineno, colno, token_to_str(ASSIGN_SIGN));
+        $$.type = strdup($3.type);
+        printf("[%i,%i] Exp(%s)=%s\n", yylineno,colno,token_to_str(ASSIGN_SIGN),$$.type);
+};
 
 Ids : ID { $<strVal>$ = $1; } IdList AccessIndex {
-    $$.id = strcat($1, $3.id);
+	printf("[Ids]Start\n");
+    $$.id = strcat($<strVal>$, $3.id);
     /* Resolver accessindex antes $$.val = get_val(symtable, $$.id)[AccessIndex]; */
-    /*$$.type = get_type(symtable, $$.id); TODO: Implementar o método get_type*/ }
+    /*$$.type = get_type(symtable, $$.id); TODO: Implementar o método get_type*/ 
+	printf("[Ids]End\n");
+	}
     | THIS IdList AccessIndex {
         /*
           PROBLEMA Como resolver o this?
@@ -312,14 +334,14 @@ Ids : ID { $<strVal>$ = $1; } IdList AccessIndex {
          */
     } ;
 
-IdList : { $$.id = ""; /* Rever */ }
+IdList : { $$.id = strdup(""); /* Rever */ }
     | '.' ID { $<strVal>$ = $2; } MethCall IdList {
-        $$.id = strcat("_", $2);
+        $$.id = strcat(".", $<strVal>$);
         /* Resolver MethCall */
         $$.id = strcat($$.id, $4.id);
     };
 
-AccessIndex : 
+AccessIndex : {printf("[AccessIndex]Empty\n");}
     | ArrayLit AccessIndex ;
 
 MethCall : { $$.id = ""; /* Rever */ }
@@ -487,6 +509,7 @@ Termo : Fator  Termo1 { switch($2.sym){
         break;
     default:
         printf("[%i,%i] Termo(%s)\n", yylineno, colno, token_to_str($2.sym));
+		printf("Type1: %s; Type2: %s\n", $1.type, $2.type);
         assert(strcmp($1.type,$2.type) == 0);
         $$.type = strdup($1.type);
         break;
@@ -512,7 +535,10 @@ Termo1 : '*' Fator Termo1 {
                 }
     | {$$.sym = '\0';};
 
-Fator : Const { $$.type = strdup($1.type);}
+Fator : Const { 
+	printf("[%i,%i] Const()\n", yylineno, colno);
+	$$.type = strdup($1.type);
+	printf("[Fator]End\n");}
     | '(' ArithExp ')' {
                     $$.sym = '(' ;
                     printf("[%i,%i] TermoLogico1(%s)\n", yylineno, colno, token_to_str($$.sym));
@@ -555,7 +581,7 @@ int yyerror (char *msg) {
     return 0;
 }
 
-char *token_to_str(int tok)
+/*char *token_to_str(int tok)
 {
     switch (tok)
     {
@@ -702,4 +728,4 @@ char *token_to_str(int tok)
         break;
     }
     }
-}
+}*/
