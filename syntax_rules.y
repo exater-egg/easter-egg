@@ -45,62 +45,62 @@ typedef struct nonTermStruct {
 %token MORE_EQ_SIGN MOD EXP_SIGN NULL_TOK RETURN
 %token DOUBLE_PLUS_SIGN DOUBLE_MINUS_SIGN FINALLY
 
-%type <nonTermVal> Prog
-%type <nonTermVal> Pack
-%type <nonTermVal> Impt
-%type <nonTermVal> Impts
-%type <nonTermVal> ProgBody
-%type <nonTermVal> ConstDefPart
-%type <nonTermVal> ConstDef
-%type <nonTermVal> ConstDefs
+//%type <nonTermVal> Prog
+//%type <nonTermVal> Pack
+//%type <nonTermVal> Impt
+//%type <nonTermVal> Impts
+//%type <nonTermVal> ProgBody
+//%type <nonTermVal> ConstDefPart
+//%type <nonTermVal> ConstDef
+//%type <nonTermVal> ConstDefs
 %type <nonTermVal> Const
 %type <nonTermVal> SignedConst
 %type <nonTermVal> Num
-%type <nonTermVal> Sign
-%type <nonTermVal> ArrayLit
-%type <nonTermVal> ExpList
-%type <nonTermVal> ExpList1
-%type <nonTermVal> ClassDefPart
-%type <nonTermVal> ClassDef
-%type <nonTermVal> ClassInherance
-%type <nonTermVal> ClassDefs
-%type <nonTermVal> AttrDeclPart
-%type <nonTermVal> AttrInit
-%type <nonTermVal> AttrInits
-%type <nonTermVal> AttrDecl
-%type <nonTermVal> AttrVal
-%type <nonTermVal> AttrDecls
-%type <nonTermVal> MethDeclPart
-%type <nonTermVal> MethHead
-%type <nonTermVal> MethType
-%type <nonTermVal> MethHeads
-%type <nonTermVal> ParSec
-%type <nonTermVal> Param
-%type <nonTermVal> Params
-%type <nonTermVal> ParSecs
-%type <nonTermVal> VarDeclPart
-%type <nonTermVal> VarDef
-%type <nonTermVal> Var
-%type <nonTermVal> VarList
-%type <nonTermVal> VarAssign
-%type <nonTermVal> VarDefs
-%type <nonTermVal> MethDefPart
-%type <nonTermVal> MethDef
-%type <nonTermVal> MethDefs
-%type <nonTermVal> StmtsPart
-%type <nonTermVal> Stmts
-%type <nonTermVal> StmtsList
-%type <nonTermVal> Stmt
-%type <nonTermVal> IfStmt
-%type <nonTermVal> ElseIfStmt
-%type <nonTermVal> ElseStmt
-%type <nonTermVal> WhileStmt
-%type <nonTermVal> ReturnStmt
-%type <nonTermVal> ForStmt
-%type <nonTermVal> AssignStmt
+//%type <nonTermVal> Sign
+//%type <nonTermVal> ArrayLit
+//%type <nonTermVal> ExpList
+//%type <nonTermVal> ExpList1
+//%type <nonTermVal> ClassDefPart
+//%type <nonTermVal> ClassDef
+//%type <nonTermVal> ClassInherance
+//%type <nonTermVal> ClassDefs
+//%type <nonTermVal> AttrDeclPart
+//%type <nonTermVal> AttrInit
+//%type <nonTermVal> AttrInits
+//%type <nonTermVal> AttrDecl
+//%type <nonTermVal> AttrVal
+//%type <nonTermVal> AttrDecls
+//%type <nonTermVal> MethDeclPart
+//%type <nonTermVal> MethHead
+//%type <nonTermVal> MethType
+//%type <nonTermVal> MethHeads
+//%type <nonTermVal> ParSec
+//%type <nonTermVal> Param
+//%type <nonTermVal> Params
+//%type <nonTermVal> ParSecs
+//%type <nonTermVal> VarDeclPart
+//%type <nonTermVal> VarDef
+//%type <nonTermVal> Var
+//%type <nonTermVal> VarList
+//%type <nonTermVal> VarAssign
+//%type <nonTermVal> VarDefs
+//%type <nonTermVal> MethDefPart
+//%type <nonTermVal> MethDef
+//%type <nonTermVal> MethDefs
+//%type <nonTermVal> StmtsPart
+//%type <nonTermVal> Stmts
+//%type <nonTermVal> StmtsList
+//%type <nonTermVal> Stmt
+//%type <nonTermVal> IfStmt
+//%type <nonTermVal> ElseIfStmt
+//%type <nonTermVal> ElseStmt
+//%type <nonTermVal> WhileStmt
+//%type <nonTermVal> ReturnStmt
+//%type <nonTermVal> ForStmt
+//%type <nonTermVal> AssignStmt
 %type <nonTermVal> Ids
 %type <nonTermVal> IdList
-%type <nonTermVal> AccessIndex
+//%type <nonTermVal> AccessIndex
 %type <nonTermVal> MethCall
 %type <nonTermVal> Exp
 %type <nonTermVal> LogicExp
@@ -118,10 +118,10 @@ typedef struct nonTermStruct {
 %type <nonTermVal> ErrorStmt
 %type <nonTermVal> RaiseStmt
 %type <nonTermVal> TryBlk
-%type <nonTermVal> ExceptBlk
-%type <nonTermVal> DoStmt
-%type <nonTermVal> ExceptBlks
-%type <nonTermVal> FinalBlk
+//%type <nonTermVal> ExceptBlk
+//%type <nonTermVal> DoStmt
+//%type <nonTermVal> ExceptBlks
+//%type <nonTermVal> FinalBlk
 
 %start Prog
 
@@ -148,18 +148,18 @@ ConstDef : ID '=' Const ConstDefs { printf("ConstDef(ID)\n"); } ;
 ConstDefs : { printf("ConstDefs(empty)\n"); }
 	| ';' ConstDef { printf("ConstDefs(;)\n"); } ;
 
-Const : Num { printf("Const(Num)\n"); }
-	| Ids { printf("Const(Ids)\n"); }
-	| STRING_LITERAL { printf("Const(STRING_LITERAL)\n"); }
-	| BOOLEAN_LITERAL { printf("Const(BOOLEAN_LITERAL)\n"); }
-	| SignedConst { printf("Const(SignedConst)\n"); }
-	| ArrayLit { printf("Const(ArrayLit)\n"); }
-	| NULL_TOK { printf("Const(NULL_TOK)\n"); } ;
+Const : Num { $$.val = $1.val; printf("Const(Num)\n"); }
+	| Ids { $$.val = $1.val; printf("Const(Ids)\n"); }
+	| STRING_LITERAL { $$.val = "String"; printf("Const(STRING_LITERAL)\n"); }
+	| BOOLEAN_LITERAL { $$.val = "Boolean"; printf("Const(BOOLEAN_LITERAL)\n"); }
+	| SignedConst { $$.val = $1.val; printf("Const(SignedConst)\n"); }
+	| ArrayLit { $$.val = "Array"; printf("Const(ArrayLit)\n"); }
+	| NULL_TOK { $$.val = "NULL"; printf("Const(NULL_TOK)\n"); } ;
 
-SignedConst : Sign Const { printf("SignedConst\n"); } ;
+SignedConst : Sign Const { $$.val = $2.val; printf("SignedConst\n"); } ;
 
-Num : INT_LITERAL { printf("Num(INT_LITERA\nL)"); }
-	| FLOAT_LITERAL { printf("Num(FLOAT_LITERAL)\n"); } ;
+Num : INT_LITERAL { $$.val = "Integer"; printf("Num(INT_LITERA\nL)"); }
+	| FLOAT_LITERAL { $$.val = "Float"; printf("Num(FLOAT_LITERAL)\n"); } ;
 
 Sign : '+' { printf("Sign(+)\n"); }
 	| '-' { printf("Sign(-)\n"); } ;
@@ -276,9 +276,9 @@ ForStmt : FOR AssignStmt TO Exp DO StmtsPart ;
 AssignStmt : Ids ASSIGN_SIGN Exp ;
 
 Ids : ID IdList AccessIndex {
-    $$.id = strcat($1.id, $2.id);
+    $$.id = strcat($1.strVal, $2.id);
     /* Resolver accessindex antes $$.val = get_val(symtable, $$.id)[AccessIndex]; */
-    $$.val = get_val(symtable, $$.id); }
+    /*$$.val = get_val(symtable, $$.id); TODO: Implementar o método get_val*/ }
 	| THIS IdList AccessIndex {
         /*
           PROBLEMA Como resolver o this?
@@ -289,7 +289,7 @@ Ids : ID IdList AccessIndex {
 
 IdList : { $$.id = ""; /* Rever */ }
 	| '.' ID MethCall IdList {
-        $$.id = strcat("_", $2.id);
+        $$.id = strcat(".", $2.id);
         /* Resolver MethCall */
         $$.id = strcat($$.id, $3.id);
     };
@@ -297,8 +297,12 @@ IdList : { $$.id = ""; /* Rever */ }
 AccessIndex : 
 	| ArrayLit AccessIndex ;
 
-MethCall : 
-	| '(' ExpList ')' ;
+MethCall : { $$.id = ""; /* Rever */ }
+	| '(' ExpList ')' {
+		$$.id = "";//TODO: Verify if each Exp in ExpList match method types
+		//Sugestion: handle method as if it was a attibute by its return type
+		//The difference between a method and attribute is a list of param types
+	};
 
 Exp : TermoLogico LogicExp { switch($2.sym){
 	case OR:
@@ -321,7 +325,7 @@ LogicExp : OR Exp { $$.sym = OR ; $$.val = $2.val; printf("%i %i %s,%i\n", yylin
 colno,token_to_str($$.sym),$$.val);}
 	| XOR Exp { $$.sym = XOR ;  $$.val = $2.val;}
 	| ASSIGN_SIGN Exp {$$.sym = ASSIGN_SIGN; $$.val = $2.val;}
-	| ;
+	| {$$.val = "" /*TODO: Resolver*/} ;
 
 TermoLogico : FatorLogico TermoLogico1 { switch($2.sym){
 	case AND:
@@ -334,7 +338,7 @@ TermoLogico : FatorLogico TermoLogico1 { switch($2.sym){
 
 TermoLogico1 : AND TermoLogico { $$.sym = AND; $$.val = $2.val; printf("%i %i %s,%i\n", yylineno,
 colno,token_to_str($$.sym),$$.val);}
-	| ;
+	| {$$.val = ""/*TODO:Resolver*/};
 
 
 FatorLogico : RelExp { $$.val = $1.val;}
@@ -417,13 +421,14 @@ Termo1 : '*' Fator Termo1 { $$.sym = '*';
 						 $$.val = $2.val;printf("%i %i %s,%i\n", yylineno, colno,token_to_str($$.sym),$$.val);}
 	| MOD Fator Termo1 { $$.sym = MOD; 
 						 $$.val = $2.val;printf("%i %i %s,%i\n", yylineno, colno,token_to_str($$.sym),$$.val);}
-	| ;
+	| {$$.val = "";/*TODO:Resolver*/};
 
 Fator : Const { $$.val = $1.val;}
-	| '(' ArithExp ')' { $$.sym = '('; printf("%i %i %s,%i\n", yylineno,colno,token_to_str($$.sym),$$.val); 
-						$$.val = $2.val ; 
-						$$.sym = ')'; printf("%i %i %s,%i\n", yylineno,colno,token_to_str($$.sym),$$.val);
-                        }
+	| '(' ArithExp ')' { 
+		$$.sym = '('; printf("%i %i %s,%i\n", yylineno,colno,token_to_str($$.sym),$$.val); 
+		$$.val = $2.val ; 
+		$$.sym = ')'; printf("%i %i %s,%i\n", yylineno,colno,token_to_str($$.sym),$$.val);
+    }
     ;
 
 IncrStmt : DOUBLE_PLUS_SIGN ID { $$.sym = DOUBLE_PLUS_SIGN; 
@@ -439,7 +444,9 @@ ErrorStmt : RaiseStmt {$$.val = $1.val;}
 
 RaiseStmt : RAISE Exp {$$.sym = RAISE; $$.val = $2.val;};
 
-TryBlk : TRY StmtsPart EXCEPT ExceptBlk FinalBlk ;
+TryBlk : TRY StmtsPart EXCEPT ExceptBlk FinalBlk {
+	$$.val = ""; // TODO: Retornar algo mais significante
+};
 
 ExceptBlk : ON ID DoStmt ExceptBlks ;
 
