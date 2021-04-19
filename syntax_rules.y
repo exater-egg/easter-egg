@@ -155,7 +155,8 @@ Prog : {
 	insert_symtable(te);
 	te; te.id = strdup("Array"); te.type = strdup("Type");te.parent = strdup("Object");
 	insert_symtable(te);
-	/*printf("[%i,%i] Prog\n", yylineno, colno); if ($6.check) exit(0); else exit(1);*/ } Pack Impt PROGRAM ID ';' ProgBody '.'  ;
+    }
+    Pack Impt PROGRAM ID ';' ProgBody '.'  { /*printf("[%i,%i] Prog\n", yylineno, colno);*/ if ($7.check) exit(0); else exit(1);} ;
 
 Pack : { /*printf("[%i,%i] Pack(empty)\n", yylineno, colno);*/ }
      | PACKAGE ID ';' { /*printf("[%i,%i] Pack(PACKAGE)\n", yylineno, colno);*/ } ;
@@ -319,40 +320,47 @@ MethDefPart : { /*printf("[%i,%i] MethDef(empty)\n", yylineno, colno);*/ }
     | METHODS MethDef { /*printf("[%i,%i] MethDef(METHODS)\n", yylineno, colno);*/ }
     ;
 
-MethDef : ID '.' ID VarDeclPart StmtsPart MethDefs ;
+MethDef : ID '.' ID VarDeclPart StmtsPart MethDefs {} ;
 
-MethDefs : 
-    | ';' MethDef ;
+MethDefs : {}
+    | ';' MethDef {}
+    ;
 
-StmtsPart : BEGIN_TOK Stmts END_TOK ;
+StmtsPart : BEGIN_TOK Stmts END_TOK {} ;
 
-Stmts : 
-    | Stmt StmtsList ;
+Stmts : {}
+    | Stmt StmtsList {}
+    ;
 
-StmtsList : 
-    | ';' Stmt StmtsList ;
+StmtsList : {}
+    | ';' Stmt StmtsList {}
+    ;
 
-Stmt : IfStmt 
-    | WhileStmt 
-    | ForStmt 
-    |  ReturnStmt 
-    | Exp 
-    | IncrStmt 
-    | ErrorStmt ;
+Stmt :  {}
+    | IfStmt {}
+    | WhileStmt {}
+    | ForStmt {}
+    | ReturnStmt {}
+    | Exp {}
+    | IncrStmt {}
+    | ErrorStmt {}
+    ;
 
-IfStmt : IF Exp THEN StmtsPart ElseIfStmt ;
+IfStmt : IF Exp THEN StmtsPart ElseIfStmt {} ;
 
-ElseIfStmt : ElseStmt 
-    | ELSEIF StmtsPart ElseIfStmt;
+ElseIfStmt : ElseStmt {}
+    | ELSEIF StmtsPart ElseIfStmt {}
+    ;
 
-ElseStmt : 
-    | ELSE StmtsPart ;
+ElseStmt : {}
+    | ELSE StmtsPart {}
+    ;
 
-WhileStmt : WHILE Exp DO StmtsPart ;
+WhileStmt : WHILE Exp DO StmtsPart {} ;
 
 ReturnStmt : RETURN Exp { /*printf("[%i,%i] ParSec(;)\n", yylineno, colno);*/ } ;
 
-ForStmt : FOR AssignStmt TO Exp DO StmtsPart ;
+ForStmt : FOR AssignStmt TO Exp DO StmtsPart {} ;
 
 AssignStmt : Ids ASSIGN_SIGN Exp {
         /*printf("[%i,%i] LogicExp(%s)\n", yylineno, colno, token_to_str(ASSIGN_SIGN));*/
@@ -383,7 +391,7 @@ IdList : { $$.id = strdup(""); /* Rever */ }
     };
 
 AccessIndex : {/*printf("[AccessIndex]Empty\n");*/}
-    | ArrayLit AccessIndex ;
+    | ArrayLit AccessIndex {} ;
 
 MethCall : { $$.id = ""; /* Rever */ }
     | '(' ExpList ')' {
@@ -612,28 +620,31 @@ Fator : Const {
                 }
     ;
 
-IncrStmt : DOUBLE_PLUS_SIGN ID 
-    | DOUBLE_MINUS_SIGN ID
+IncrStmt : DOUBLE_PLUS_SIGN ID {}
+    | DOUBLE_MINUS_SIGN ID {}
     ;
 
-ErrorStmt : RaiseStmt
-    | TryBlk
+ErrorStmt : RaiseStmt {}
+    | TryBlk {}
     ;
 
-RaiseStmt : RAISE Exp
+RaiseStmt : RAISE Exp {}
 
-TryBlk : TRY StmtsPart EXCEPT ExceptBlk FinalBlk 
+TryBlk : TRY StmtsPart EXCEPT ExceptBlk FinalBlk {} ;
 
-ExceptBlk : ON ID DoStmt ExceptBlks ;
+ExceptBlk : ON ID DoStmt ExceptBlks {} ;
 
-DoStmt : 
-    | DO StmtsPart ;
+DoStmt : {}
+    | DO StmtsPart {}
+    ;
 
-ExceptBlks : 
-    | ExceptBlk ;
+ExceptBlks : {}
+    | ExceptBlk {}
+    ;
 
-FinalBlk : 
-    | FINALLY StmtsPart ;
+FinalBlk : {}
+    | FINALLY StmtsPart {}
+    ;
 
 %%
 

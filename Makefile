@@ -39,7 +39,7 @@ ALLOBJS=$(OBJS) $(PPRRD_OBJS) $(PPRDT_OBJS)
 
 all: $(BIN).out
 
-$(BIN).out: lex.yy.c y.tab.c mkdirs $(OBJS)
+$(BIN).out: mkdirs lex.yy.c $(OBJS) y.tab.c
 	# compile
 	gcc lex.yy.c y.tab.c $(OBJS) -o $@ -I $(LIBDIR)
 

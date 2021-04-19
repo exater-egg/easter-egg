@@ -3,8 +3,8 @@ program MergeSort;
 classes
 	MergeSortClass
 	methods
-		mergeSort(Array : vetor; Intenger : inicio, fim);
-		merge(ArrayIntenger: vetor; Intenger: inicio,meio,fim)
+		mergeSort(Array : vetor; Integer : inicio, fim);
+		merge(ArrayInteger: vetor; Integer: inicio,meio,fim)
 
 
 
@@ -17,9 +17,9 @@ methods
 	MergeSortClass.mergeSort
 	vars
 		ArrayInteger : vetor;
-		Intenger : meio = vetor.size()/2;
-		Intenger : inicio = 0;
-		Intenger : fim = vetor.size()
+		Integer : meio = vetor.size()/2;
+		Integer : inicio = 0;
+		Integer : fim = vetor.size()
 	begin 
 		if inicio < fim then
 		begin
@@ -31,9 +31,9 @@ methods
 
 	MergeSortClass.merge
 	vars
-		ArrayIntenger: vetor;
-		Intenger: inicio,meio,fim;
-		Intenger: ponteiroEsquerdo, ponteiroDireito, ponteiroAux, tamanho 
+		ArrayInteger: vetor;
+		Integer: inicio,meio,fim;
+		Integer: ponteiroEsquerdo, ponteiroDireito, ponteiroAux, tamanho 
 	begin
 		ponteiroEsquerdo := inicio;
 		ponteiroDireito := meio+1;
