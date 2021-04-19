@@ -387,7 +387,7 @@ IdList : { $$.id = strdup(""); /* Rever */ }
     | '.' ID { $<strVal>$ = $2; } MethCall IdList {
         $$.id = strcat(".", $<strVal>$);
         /* Resolver MethCall */
-        $$.id = strcat($$.id, $4.id);
+        $$.id = strcat($$.id, $5.id);
     };
 
 AccessIndex : {/*printf("[AccessIndex]Empty\n");*/}
