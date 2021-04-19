@@ -3,7 +3,7 @@ program QuickSort;
 classes
 	QuickSortClass
 	methods
-		quickSort(ArrayIntenger: vetor; Intenger: inicio, fim)
+		quickSort(ArrayInteger: vetor; Integer: inicio, fim)
 
 variables
 	QuickSortClass : quick_sort;
@@ -12,10 +12,10 @@ variables
 methods
 	QuickSortClass.quickSort
 	vars
-		ArrayIntenger: vetor;
-		Intenger: inicio;
-		Intenger: fim;
-		Intenger: i,j,pivo,aux
+		ArrayInteger: vetor;
+		Integer: inicio;
+		Integer: fim;
+		Integer: i,j,pivo,aux
 	begin 
 		i := inicio;
 		j := fim-1;
