@@ -336,8 +336,7 @@ StmtsList : {}
     | ';' Stmt StmtsList {}
     ;
 
-Stmt :  {}
-    | IfStmt {}
+Stmt : IfStmt {}
     | WhileStmt {}
     | ForStmt {}
     | ReturnStmt {}
