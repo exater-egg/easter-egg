@@ -151,6 +151,8 @@ Prog : {
 	insert_symtable(te);
 	te; te.id = strdup("String"); te.type = strdup("Type");te.parent = strdup("Object");
 	insert_symtable(te);
+	te; te.id = strdup("Boolean"); te.type = strdup("Type");te.parent = strdup("Object");
+	insert_symtable(te);
 	te; te.id = strdup("Array"); te.type = strdup("Type");te.parent = strdup("Object");
 	insert_symtable(te);
 	/*printf("[%i,%i] Prog\n", yylineno, colno); if ($6.check) exit(0); else exit(1);*/ } Pack Impt PROGRAM ID ';' ProgBody '.'  ;

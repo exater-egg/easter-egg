@@ -24,5 +24,6 @@ variables
 
 begin
   c := 2.0 * a + 3.0 *b;
+  ct + a;
   area := PI * r * r 
 end.
