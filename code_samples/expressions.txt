@@ -9,9 +9,18 @@ consts
   PI = 3.14159265;
   HELLO_WORLD = "Hello, World!"
 
+classes
+  ClassTest = String
+  attributes 
+    String : text = HELLO_WORLD
+  methods
+    print()
+
 variables
-  Integer: i, c;
-  Float: r=2, area, a=3, b=4
+  Integer: i;
+  Float: r=2, area, a=3, b=4, c;
+  ClassTest: ct;
+  AAA: a
 
 begin
   c := 2.0 * a + 3.0 *b;

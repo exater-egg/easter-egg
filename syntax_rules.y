@@ -2,6 +2,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
+#include "symtable.h"
 
 int yylex(void);
 int yyerror(char *s);
@@ -14,6 +15,8 @@ char *token_to_str(int tok);
 int tmps_int[4];
 int* tmps_int_result[3];
 char* tmp_type;
+char* tmp_str;
+typeEntry tye2;
 
 /**
  * TODO
@@ -28,13 +31,15 @@ char* tmp_type;
 
 %code requires {
 #include "symtable.h"
-    typedef struct nonTermStruct{
-        int sym;
-        void* val;
-        char* id;
-        char* type;
-		short check;
-    } nonTerm;
+
+typedef struct nonTermStruct{
+	int sym;
+	void* val;
+	char* id;
+	char* type;
+	short check;
+} nonTerm;
+typeEntry tye; 
 }
 
 %union {
@@ -137,7 +142,18 @@ char* tmp_type;
 
 %%
 
-Prog :  Pack Impt PROGRAM ID ';' ProgBody '.' { /*printf("[%i,%i] Prog\n", yylineno, colno); if ($6.check) exit(0); else exit(1);*/ } ;
+Prog : { 
+	tableEntry te; te.id = strdup("Object"); te.type = strdup("Type"); te.parent = NULL;
+	insert_symtable(te);
+	te; te.id = strdup("Integer"); te.type = strdup("Type"); te.parent = strdup("Object");
+	insert_symtable(te);
+	te; te.id = strdup("Float"); te.type = strdup("Type");te.parent = strdup("Integer");
+	insert_symtable(te);
+	te; te.id = strdup("String"); te.type = strdup("Type");te.parent = strdup("Object");
+	insert_symtable(te);
+	te; te.id = strdup("Array"); te.type = strdup("Type");te.parent = strdup("Object");
+	insert_symtable(te);
+	/*printf("[%i,%i] Prog\n", yylineno, colno); if ($6.check) exit(0); else exit(1);*/ } Pack Impt PROGRAM ID ';' ProgBody '.'  ;
 
 Pack : { /*printf("[%i,%i] Pack(empty)\n", yylineno, colno);*/ }
      | PACKAGE ID ';' { /*printf("[%i,%i] Pack(PACKAGE)\n", yylineno, colno);*/ } ;
@@ -196,10 +212,24 @@ ExpList1 : { /*printf("[%i,%i] ExpList1(empty)\n", yylineno, colno);*/ }
 ClassDefPart : { /*printf("[%i,%i] ConstDefPart(empty)\n", yylineno, colno);*/ }
     | CLASSES ClassDef { /*printf("[%i,%i] ConstDefPart(empty)\n", yylineno, colno);*/ } ;
 
-ClassDef : ID {/*Insert type in table of types*/} ClassInherance AttrDeclPart MethDeclPart ClassDefs { /*printf("[%i,%i] ClassDef\n", yylineno, colno);*/ } ;
+ClassDef : ID ClassInherance AttrDeclPart MethDeclPart ClassDefs { 
+    tableEntry te; te.id = strdup($1); te.parent = strdup($2.type);
+	te.next = NULL; insert_symtable(te);
+	/*printf("[%i,%i] ClassDef\n", yylineno, colno);*/ } ;
 
-ClassInherance : { /*printf("[%i,%i] ClassInherance(empty)\n", yylineno, colno);*/ }
-    | '=' ID { /*printf("[%i,%i] ClassInherance(=)\n", yylineno, colno);*/ } ;
+ClassInherance : { 
+		$$.type = strdup("Object");
+	/*printf("[%i,%i] ClassInherance(empty)\n", yylineno, colno);*/ }
+    | '=' ID { 
+		tmp_type = $2; 
+        tmp_str = lookup_type(tmp_type);
+		if (tmp_str != NULL && strcmp(tmp_str, "Type") == 0){
+			$$.type = strdup($2);
+		}
+		else {
+			printf("[%i,%i] Type \"%s\" not defined\n", yylineno, colno, tmp_type); $$.type = strdup("Object");
+		}
+		/*printf("[%i,%i] ClassInherance(=)\n", yylineno, colno);*/ } ;
 
 ClassDefs : { /*printf("[%i,%i] ClassDefs(empty)\n", yylineno, colno);*/ } 
     | ClassDef { /*printf("[%i,%i] ClassDefs(ClassDef)\n", yylineno, colno);*/ } ;
@@ -259,6 +289,10 @@ VarDeclPart :  { /*printf("[%i,%i] VarDeclPart(empty)\n", yylineno, colno);*/ }
 VarDef : ID {
 		/*declare a temp scope*/
 		tmp_type = strdup($1);
+        /*Check Type*/
+        tmp_str = lookup_type(tmp_type);
+        if (tmp_str == NULL)
+            printf("[%i,%i] Tipo \'%s\' não declarado\n", yylineno, colno, $1);
 	} ':' Var VarDefs { /*printf("[%i,%i] VarDef(ID)\n", yylineno, colno);*/ }
        ;
 
@@ -602,6 +636,9 @@ FinalBlk :
 %%
 
 int main (void) {
+	init_symtable();
+	init_typetable();
+
     return yyparse ( );
 }
 

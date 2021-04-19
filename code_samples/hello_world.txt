@@ -1,4 +1,4 @@
-program HelloWorld;'
+program HelloWorld;
 consts
   HELLO_WORLD = "Hello, World!"
 
