@@ -156,7 +156,14 @@ Prog : {
 	te; te.id = strdup("Array"); te.type = strdup("Type");te.parent = strdup("Object");
 	insert_symtable(te);
     }
-    Pack Impt PROGRAM ID ';' ProgBody '.'  { /*printf("[%i,%i] Prog\n", yylineno, colno);*/ if ($7.check) exit(0); else exit(1);} ;
+    Pack Impt PROGRAM ID ';' ProgBody '.'  { /*printf("[%i,%i] Prog\n", yylineno, colno);*/ 
+        if ($7.check){ 
+            printf("Successful\n");
+            exit(0);
+        } else {
+            printf("Failed\n");
+            exit(1);
+    }} ;
 
 Pack : { /*printf("[%i,%i] Pack(empty)\n", yylineno, colno);*/ }
      | PACKAGE ID ';' { /*printf("[%i,%i] Pack(PACKAGE)\n", yylineno, colno);*/ } ;
@@ -167,34 +174,42 @@ Impt : { /*printf("[%i,%i] Impt(empty)\n", yylineno, colno);*/ }
 Impts : { /*printf("[%i,%i] Impts(empty)\n", yylineno, colno);*/ } 
       | ';' Impt  { /*printf("[%i,%i] Impts(;)\n", yylineno, colno);*/ } ;
 
-ProgBody : ConstDefPart ClassDefPart VarDeclPart MethDefPart StmtsPart { /*printf("[%i,%i] ProgBody\n", yylineno, colno);*/ } ;
+ProgBody : ConstDefPart ClassDefPart VarDeclPart MethDefPart StmtsPart { $$.check = $1.check; /*printf("[%i,%i] ProgBody\n", yylineno, colno);*/ } ;
 
-ConstDefPart : { /*printf("[%i,%i] ConstDefPart(empty)\n", yylineno, colno);*/ }
-    | CONSTS ConstDef { /*printf("[%i,%i] ConstDefPart(CONSTS)\n", yylineno, colno);*/ } ;
+ConstDefPart : { $$.check = 1;/*printf("[%i,%i] ConstDefPart(empty)\n", yylineno, colno);*/ }
+    | CONSTS ConstDef { $$.check = $2.check;/*printf("[%i,%i] ConstDefPart(CONSTS)\n", yylineno, colno);*/ } ;
 
 ConstDef : ID '=' Const ConstDefs { 
-	tableEntry te; te.id = $1; te.type = $3.type;
-	insert_symtable(te);
+    char* t = lookup_type($1);
+    if (t == NULL){
+	    tableEntry te; te.id = $1; te.type = $3.type;
+    	insert_symtable(te);
+        $$.check = 1;
+    } else {
+        printf("Constant already defined\n");
+        $$.check = 0;
+    }
+    $$.check = $$.check && $3.check && $4.check;
 	/*printf("[%i,%i] ConstDef(ID)\n", yylineno, colno);*/ 
 };
 
-ConstDefs : { /*printf("[%i,%i] ConstDefs(empty)\n", yylineno, colno);*/ }
-    | ';' ConstDef { /*printf("[%i,%i] ConstDefs(;)\n", yylineno, colno);*/ } ;
+ConstDefs : { $$.check = 1;/*printf("[%i,%i] ConstDefs(empty)\n", yylineno, colno);*/ }
+    | ';' ConstDef { $$.check = $2.check;/*printf("[%i,%i] ConstDefs(;)\n", yylineno, colno);*/ } ;
 
-Const : Num { $$.type = strdup($1.type); /*printf("[%i,%i] Const(Num)\n", yylineno, colno);*/ }
+Const : Num { $$.type = strdup($1.type); $$.check = 1; /*printf("[%i,%i] Const(Num)\n", yylineno, colno);*/ }
     | Ids { 
 		tmp_type = lookup_type($1.id);
 		if (tmp_type == NULL){
-			$$.type = "";
-			yyerror("Identifier was not declared\n");}
+			$$.type = ""; $$.check = 0;
+			yyerror("Identifier was not declared");}
 		else 
-			$$.type = strdup(tmp_type);
+			$$.type = strdup(tmp_type); $$.check = 1;
 		/*printf("[%i,%i] Const(Ids)\n", yylineno, colno);*/ }
-    | STRING_LITERAL { $$.type = strdup("String"); /*printf("[%i,%i] Const(STRING_LITERAL)\n", yylineno, colno);*/ }
-    | BOOLEAN_LITERAL { $$.type = strdup("Boolean"); /*printf("[%i,%i] Const(BOOLEAN_LITERAL)\n", yylineno, colno);*/ }
-    | SignedConst { $$.type = strdup($1.type); /*printf("[%i,%i] Const(SignedConst)\n", yylineno, colno);*/ }
-    | ArrayLit { $$.type = strdup("Array"); /*printf("[%i,%i] Const(ArrayLit)\n", yylineno, colno);*/ }
-    | NULL_TOK { $$.type = strdup("Null"); /*printf("[%i,%i] Const(NULL_TOK)\n", yylineno, colno);*/ } ;
+    | STRING_LITERAL { $$.type = strdup("String"); $$.check = 1; /*printf("[%i,%i] Const(STRING_LITERAL)\n", yylineno, colno);*/ }
+    | BOOLEAN_LITERAL { $$.type = strdup("Boolean"); $$.check = 1; /*printf("[%i,%i] Const(BOOLEAN_LITERAL)\n", yylineno, colno);*/ }
+    | SignedConst { $$.type = strdup($1.type); $$.check = 1; /*printf("[%i,%i] Const(SignedConst)\n", yylineno, colno);*/ }
+    | ArrayLit { $$.type = strdup("Array"); $$.check = 1; /*printf("[%i,%i] Const(ArrayLit)\n", yylineno, colno);*/ }
+    | NULL_TOK { $$.type = strdup("Null"); $$.check = 1; /*printf("[%i,%i] Const(NULL_TOK)\n", yylineno, colno);*/ } ;
 
 SignedConst : Sign Const { $$.type = strdup($2.type); /*printf("[%i,%i] SignedConst\n", yylineno, colno);*/ } ;
 

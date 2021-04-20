@@ -91,7 +91,7 @@ void init_typetable() {
 void insert_typetable(typeEntry value) {
     unsigned int idx = polynomialRollingHash(value.id) % BUCKETS;
     // Find head of chain for given key
-    typeEntry* head = symtable[idx];
+    typeEntry* head = typetable[idx];
     typeEntry* next;
 
     // Check if key is already present
@@ -112,8 +112,8 @@ void insert_typetable(typeEntry value) {
     next = (typeEntry*) malloc(sizeof(typeEntry));
     next->id = value.id;
     next->parent = value.parent;
-    next->next = symtable[idx];
-    symtable[idx] = next;
+    next->next = typetable[idx];
+    typetable[idx] = next;
 }
 
 /**

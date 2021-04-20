@@ -19,11 +19,9 @@ classes
 variables
   Integer: i;
   Float: r=2, area, a=3, b=4, c;
-  ClassTest: ct;
-  AAA: a
+  ClassTest: ct
 
 begin
   c := 2.0 * a + 3.0 *b;
-  ct + a;
   area := PI * r * r 
 end.

@@ -19,7 +19,7 @@ typedef struct TypeEntryStruct
 {
     char* id;
     char* parent;
-    struct TableEntryStruct* next;
+    struct TypeEntryStruct* next;
 } typeEntry;
 
 void init_symtable();
